@@ -1,0 +1,310 @@
+---
+import Icon from "../ui/Icon.astro";
+import Btn from "../ui/Btn.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import { tr, url } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { services, ui } = getContent();
+const dialogId = (i: number) => `practice-${i + 1}`;
+---
+
+{
+  services.enabled && (
+    <section class="section services" id="services" aria-labelledby="services-title">
+      <div class="container">
+        <SectionTitle id="services-title" overline={tr(services.overline, lang)} title={tr(services.title, lang)} subtitle={tr(services.subtitle, lang)} />
+
+        {services.general.items.length > 0 && (
+          <div class="general glass">
+            <p class="t-overline">{tr(services.general.title, lang)}</p>
+            <ul class="general__list">
+              {services.general.items.map((g) => (
+                <li class="t-body-s">
+                  <Icon name="check" size={16} />
+                  <span>{tr(g, lang)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <ul class="practices">
+          {services.practices.map((p, i) => (
+            <li class="practice glass card card--hover">
+              <span class="icon-box">
+                <Icon name={p.icon} />
+              </span>
+              <h3 class="t-h4 practice__title">{tr(p.title, lang)}</h3>
+              <p class="t-body-s c-secondary practice__desc">{tr(p.description, lang)}</p>
+              <p class="t-body-s c-secondary practice__short">{tr(p.short, lang)}</p>
+              {p.items.length > 0 && (
+                <button type="button" class="btn btn--ghost btn--s practice__more" data-dialog-open={dialogId(i)} aria-haspopup="dialog">
+                  <span>{tr(ui.buttons.more, lang)}</span>
+                  <Icon name="arrow-right" />
+                </button>
+              )}
+              {p.items.length > 0 && <button type="button" class="practice__hit" data-dialog-open={dialogId(i)} aria-label={`${tr(p.title, lang)} — ${tr(ui.buttons.more, lang)}`} />}
+              <Icon name="arrow-right" class="practice__arrow" />
+            </li>
+          ))}
+        </ul>
+
+        <div class="services-cta glass-strong">
+          <div class="services-cta__text">
+            <h3 class="t-h4">{tr(services.cta.title, lang)}</h3>
+            <p class="t-body-m c-secondary">{tr(services.cta.text, lang)}</p>
+          </div>
+          <Btn href={url(lang, "consultation")}>{tr(getContent().home.hero.button, lang)}</Btn>
+        </div>
+      </div>
+
+      {services.practices.map((p, i) => (
+        <dialog class="dialog" id={dialogId(i)} aria-labelledby={`${dialogId(i)}-title`}>
+          <div class="dialog__head">
+            <span class="icon-box">
+              <Icon name={p.icon} />
+            </span>
+            <h3 class="t-h3" id={`${dialogId(i)}-title`}>{tr(p.title, lang)}</h3>
+            <button type="button" class="round-btn round-btn--touch" data-dialog-close aria-label={tr(ui.buttons.close, lang)}>
+              <Icon name="x" />
+            </button>
+          </div>
+          <div class="dialog__body">
+            <p class="t-body-m c-secondary">{tr(p.description, lang)}</p>
+            <p class="t-overline practice-list__title">{tr(ui.labels.practiceList, lang)}</p>
+            <ul class="practice-list">
+              {p.items.map((item) => (
+                <li class="t-body-m">
+                  <span class="practice-list__dot">
+                    <Icon name="check" size={14} />
+                  </span>
+                  <span>{tr(item, lang)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="dialog__foot">
+            <p class="t-body-s c-secondary">{tr(ui.labels.dialogCta, lang)}</p>
+            <Btn href={url(lang, "consultation")} data-dialog-close>{tr(getContent().home.hero.button, lang)}</Btn>
+          </div>
+        </dialog>
+      ))}
+    </section>
+  )
+}
+
+<style>
+  .general {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    border-radius: var(--radius-xl);
+  }
+
+  .general__list {
+    display: grid;
+    gap: 8px 24px;
+  }
+
+  .general__list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .general__list :global(.icon) {
+    margin-top: 3px;
+    color: var(--color-icon-accent);
+  }
+
+  .practices {
+    display: grid;
+    gap: 10px;
+  }
+
+  .practice {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "icon title arrow"
+      "icon short arrow";
+    align-items: center;
+    column-gap: 14px;
+    row-gap: 2px;
+    padding: 16px;
+  }
+
+  .practice .icon-box {
+    grid-area: icon;
+  }
+
+  .practice__title {
+    grid-area: title;
+    font-size: 18px;
+    align-self: end;
+  }
+
+  .practice__short {
+    grid-area: short;
+    align-self: start;
+  }
+
+  .practice__desc,
+  .practice__more {
+    display: none;
+  }
+
+  .practice :global(.practice__arrow) {
+    grid-area: arrow;
+    --icon-size: 20px;
+    color: var(--color-icon-secondary);
+  }
+
+  .practice__hit {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .services-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+    border-radius: var(--radius-2xl);
+  }
+
+  .services-cta__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .services-cta :global(.btn) {
+    width: 100%;
+  }
+
+  .practice-list__title {
+    margin: 24px 0 12px;
+  }
+
+  .practice-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .practice-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-divider);
+  }
+
+  .practice-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .practice-list__dot {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: var(--color-bg-accent-subtle);
+    color: var(--color-icon-accent);
+  }
+
+  @media (min-width: 600px) {
+    .general {
+      padding: 24px 28px;
+      border-radius: var(--radius-2xl);
+    }
+
+    .general__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .practices {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .practice {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 300px;
+      padding: 32px;
+    }
+
+    .practice .icon-box {
+      margin-bottom: 8px;
+    }
+
+    .practice__title {
+      font-size: var(--fs-h4);
+      align-self: auto;
+    }
+
+    .practice__desc {
+      display: block;
+    }
+
+    .practice__short,
+    .practice :global(.practice__arrow),
+    .practice__hit {
+      display: none;
+    }
+
+    .practice__more {
+      display: inline-flex;
+      margin-top: auto;
+    }
+
+    .practice__more::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-xl);
+    }
+
+    .services-cta {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 24px 24px 28px;
+    }
+
+    .services-cta :global(.btn) {
+      width: auto;
+      flex: none;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .general__list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .practices {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .practice {
+      min-height: 340px;
+    }
+  }
+</style>

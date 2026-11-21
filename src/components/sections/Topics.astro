@@ -1,0 +1,63 @@
+---
+import Icon from "../ui/Icon.astro";
+import Btn from "../ui/Btn.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import { tr, url } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { consultation, ui } = getContent();
+const topics = consultation.topics;
+---
+
+{
+  topics.enabled && topics.items.length > 0 && (
+    <section class="section" id="topics" aria-labelledby="topics-title">
+      <div class="container">
+        <SectionTitle id="topics-title" overline={tr(topics.overline, lang)} title={tr(topics.title, lang)} />
+        <ul class="topics">
+          {topics.items.map((t) => (
+            <li class="topic glass-strong">
+              <Icon name={t.icon} size={18} />
+              <span class="t-label">{tr(t.label, lang)}</span>
+            </li>
+          ))}
+        </ul>
+        <Btn href={url(lang, "home", "services")} variant="ghost" class="topics__all">
+          {tr(ui.buttons.allPractices, lang)}
+        </Btn>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .topic {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 12px 20px 12px 16px;
+    border-radius: var(--radius-full);
+  }
+
+  .topic :global(.icon) {
+    color: var(--color-icon-accent);
+  }
+
+  .section :global(.topics__all) {
+    align-self: flex-start;
+    min-height: 44px;
+  }
+</style>

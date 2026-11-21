@@ -1,0 +1,3573 @@
+media:
+  input: src/assets/uploads
+  output: /uploads
+  extensions:
+    - jpg
+    - jpeg
+    - png
+    - webp
+    - avif
+content:
+  - name: settings
+    label: Контакты и ссылки
+    type: file
+    path: src/content/settings.yaml
+    format: yaml
+    fields:
+      - name: siteName
+        label: Название фирмы
+        type: string
+        required: true
+        options:
+          maxlength: 40
+      - name: phone
+        label: Телефон
+        type: string
+        required: true
+        pattern:
+          regex: ^\+998 \d{2} \d{3}-\d{2}-\d{2}$
+          message: Телефон в формате +998 90 123-45-67
+      - name: email
+        label: Email
+        type: string
+        required: true
+        pattern:
+          regex: ^[^\s@]+@[^\s@]+\.[^\s@]{2,}$
+          message: Email в формате name@example.uz
+      - name: telegram
+        label: Telegram
+        description: Имя пользователя без @. Кнопки Telegram откроют https://t.me/имя
+        type: string
+        required: true
+        pattern:
+          regex: ^[A-Za-z][A-Za-z0-9_]{4,31}$
+          message: Имя пользователя Telegram без @ и без ссылки, например pravoedelo
+      - name: whatsapp
+        label: WhatsApp
+        description: Номер только цифрами. Кнопки WhatsApp откроют чат с этим номером
+        type: string
+        required: true
+        pattern:
+          regex: ^998\d{9}$
+          message: Номер WhatsApp только цифрами, начиная с 998, например 998901234567
+      - name: formUrl
+        label: Ссылка на Google Форму заявки
+        description: Куда ведут кнопки «Заполнить заявку» и «Записаться на консультацию»
+        type: string
+        required: true
+        pattern:
+          regex: ^https:\/\/(forms\.gle\/|docs\.google\.com\/forms\/)\S+$
+          message: "Ссылка на Google Форму: https://forms.gle/… или https://docs.google.com/forms/…"
+      - name: address
+        label: Адрес
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 140
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 140
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 140
+      - name: hours
+        label: Часы работы
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 90
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 90
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 90
+      - name: mapQuery
+        label: Адрес для карты
+        description: "Как найти офис в Google Maps: адрес или название. Карта на сайте покажет эту точку"
+        type: string
+        required: true
+        options:
+          maxlength: 200
+      - name: practiceSince
+        label: Год начала адвокатской практики
+        description: Из него считается стаж. В текстах пишите {years} — число лет, {yearsWord} — слово «лет/год/года»
+        type: number
+        required: true
+        options:
+          min: 1950
+          max: 2100
+      - name: founded
+        label: Год основания бюро
+        type: number
+        required: true
+        options:
+          min: 1950
+          max: 2100
+      - name: socials
+        label: Соцсети
+        description: Иконки в подвале сайта
+        type: object
+        list:
+          max: 7
+          collapsible:
+            collapsed: true
+            summary: "{fields.network}"
+        fields:
+          - name: network
+            label: Соцсеть
+            type: select
+            required: true
+            options:
+              values:
+                - name: telegram
+                  label: Telegram
+                - name: whatsapp
+                  label: WhatsApp
+                - name: instagram
+                  label: Instagram
+                - name: facebook
+                  label: Facebook
+                - name: youtube
+                  label: YouTube
+                - name: x
+                  label: X (Twitter)
+                - name: tiktok
+                  label: TikTok
+          - name: url
+            label: Ссылка
+            type: string
+            required: true
+            pattern:
+              regex: ^https:\/\/\S+\.\S+$
+              message: Полная ссылка, начинается с https://
+      - name: privacyUrl
+        label: Ссылка на политику конфиденциальности
+        description: Если пусто — ссылка в подвале не показывается
+        type: string
+        pattern:
+          regex: ^https:\/\/\S+\.\S+$
+          message: Полная ссылка, начинается с https://
+      - name: seo
+        label: Поисковики и соцсети
+        type: object
+        fields:
+          - name: title
+            label: Заголовок вкладки и поисковой выдачи
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 70
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 70
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 70
+          - name: description
+            label: Описание для поисковой выдачи
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 180
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 180
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 180
+  - name: home
+    label: Главная
+    type: file
+    path: src/content/home.yaml
+    format: yaml
+    fields:
+      - name: hero
+        label: Первый экран
+        type: object
+        fields:
+          - name: badge
+            label: Бейдж над заголовком
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: title
+            label: Заголовок
+            description: Перенос строки (Enter) сохраняется на больших экранах
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: titleAccent
+            label: Заголовок — выделенная часть
+            description: Вторая строка заголовка с золотым градиентом
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: subtitle
+            label: Подзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 220
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 220
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 220
+          - name: button
+            label: Текст главной кнопки
+            description: Кнопка ведёт на страницу консультации
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 32
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 32
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 32
+      - name: stats
+        label: Цифры
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть цифры под первым экраном
+            type: boolean
+            default: true
+          - name: items
+            label: Цифры
+            type: object
+            list:
+              min: 2
+              max: 8
+              collapsible:
+                collapsed: true
+                summary: "{fields.value.ru} {fields.caption.ru}"
+            fields:
+              - name: value
+                label: Число
+                description: "Например: 1 200+ или {years}"
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 12
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 12
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 12
+              - name: caption
+                label: Подпись
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 40
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 40
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 40
+              - name: captionShort
+                label: Короткая подпись для телефона
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    options:
+                      maxlength: 24
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 24
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 24
+      - name: about
+        label: О нас
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть секцию «О нас»
+            type: boolean
+            default: true
+          - name: overline
+            label: Надзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: title
+            label: Заголовок
+            description: Перенос строки (Enter) сохраняется на больших экранах
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 70
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 70
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 70
+          - name: lead
+            label: Первый абзац
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 500
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 500
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 500
+          - name: text
+            label: Второй абзац
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                options:
+                  maxlength: 500
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 500
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 500
+          - name: badges
+            label: Бейджи
+            type: object
+            list:
+              max: 6
+              collapsible:
+                collapsed: true
+                summary: "{fields.ru}"
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: photo
+            label: Фото
+            description: Горизонтальное или квадратное фото, от 1200 px по ширине
+            type: image
+            required: true
+            options:
+              extensions:
+                - jpg
+                - jpeg
+                - png
+                - webp
+                - avif
+          - name: photoAlt
+            label: Описание фото для незрячих и поисковиков
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 140
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 140
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 140
+          - name: photoCaption
+            label: Подпись на фото
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+          - name: photoNote
+            label: Вторая строка подписи
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+      - name: advantages
+        label: Преимущества
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть три карточки преимуществ
+            type: boolean
+            default: true
+          - name: items
+            label: Карточки
+            type: object
+            list:
+              min: 1
+              max: 6
+              collapsible:
+                collapsed: true
+                summary: "{fields.title.ru}"
+            fields:
+              - name: icon
+                label: Иконка
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: shield-check
+                      label: Щит с галочкой — защита, уголовные дела
+                    - name: scale
+                      label: Весы — суд, гражданские дела
+                    - name: gavel
+                      label: Молоток судьи — судебные процессы
+                    - name: briefcase
+                      label: Портфель — бизнес
+                    - name: receipt
+                      label: Чек — налоги
+                    - name: coins
+                      label: Монеты — долги, деньги
+                    - name: banknote
+                      label: Купюра — платежи, банки
+                    - name: building-2
+                      label: Здание — недвижимость, компании
+                    - name: house
+                      label: Дом — жильё, семья
+                    - name: key-round
+                      label: Ключ — сделки с жильём
+                    - name: landmark
+                      label: Госучреждение — споры с госорганами
+                    - name: users
+                      label: Люди — семья, команда
+                    - name: heart-handshake
+                      label: Рукопожатие с сердцем — семейные дела
+                    - name: baby
+                      label: Ребёнок — дети, алименты
+                    - name: handshake
+                      label: Рукопожатие — сделки, медиация
+                    - name: hard-hat
+                      label: Каска — трудовые споры
+                    - name: car
+                      label: Автомобиль — ДТП
+                    - name: globe
+                      label: Глобус — миграция, гражданство
+                    - name: scroll-text
+                      label: Свиток — наследство, завещания
+                    - name: file-text
+                      label: Документ — заявления, жалобы
+                    - name: file-search
+                      label: Лупа над документом — проверка документов
+                    - name: lock
+                      label: Замок — конфиденциальность
+                    - name: award
+                      label: Медаль — опыт, профессионализм
+                    - name: target
+                      label: Мишень — результат
+                    - name: clock
+                      label: Часы — сроки
+                    - name: message-circle
+                      label: Облако сообщения — связь
+                    - name: phone
+                      label: Телефон — звонок
+                    - name: shield
+                      label: Щит — безопасность
+                    - name: check
+                      label: Галочка
+              - name: title
+                label: Заголовок
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 40
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 40
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 40
+              - name: text
+                label: Текст
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: text
+                    required: true
+                    options:
+                      maxlength: 240
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: text
+                    options:
+                      maxlength: 240
+                  - name: en
+                    label: EN · English
+                    type: text
+                    options:
+                      maxlength: 240
+      - name: consult
+        label: Блок «Бесплатная консультация»
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть блок с приглашением на консультацию
+            type: boolean
+            default: true
+          - name: badge
+            label: Бейдж
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: titleAccent
+            label: Заголовок — выделенная часть
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: text
+            label: Текст
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 300
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 300
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 300
+          - name: button
+            label: Кнопка заявки
+            description: Ведёт на Google Форму
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 36
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 36
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 36
+          - name: link
+            label: Ссылка на страницу консультации
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: steps
+            label: Шаги
+            type: object
+            list:
+              min: 1
+              max: 6
+              collapsible:
+                collapsed: true
+                summary: "{fields.title.ru}"
+            fields:
+              - name: title
+                label: Шаг
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 40
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 40
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 40
+              - name: text
+                label: Пояснение
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 90
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 90
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 90
+      - name: contacts
+        label: Контакты
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть секцию контактов с картой
+            type: boolean
+            default: true
+          - name: overline
+            label: Надзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 70
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 70
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 70
+  - name: services
+    label: Услуги
+    type: file
+    path: src/content/services.yaml
+    format: yaml
+    fields:
+      - name: enabled
+        label: Показывать на сайте
+        description: Выключите, чтобы скрыть секцию услуг
+        type: boolean
+        default: true
+      - name: overline
+        label: Надзаголовок
+        description: Мелкая строка над заголовком секции
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 40
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 40
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 40
+      - name: title
+        label: Заголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 70
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 70
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 70
+      - name: subtitle
+        label: Подзаголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: text
+            options:
+              maxlength: 260
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: text
+            options:
+              maxlength: 260
+          - name: en
+            label: EN · English
+            type: text
+            options:
+              maxlength: 260
+      - name: general
+        label: Общие услуги
+        description: "Строка над карточками: то, что входит в любое направление"
+        type: object
+        fields:
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+          - name: items
+            label: Услуги
+            type: object
+            list:
+              max: 12
+              collapsible:
+                collapsed: true
+                summary: "{fields.ru}"
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 160
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 160
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 160
+      - name: practices
+        label: Направления (карточки)
+        type: object
+        list:
+          min: 1
+          max: 12
+          collapsible:
+            collapsed: true
+            summary: "{fields.title.ru}"
+        fields:
+          - name: icon
+            label: Иконка
+            type: select
+            required: true
+            options:
+              values:
+                - name: shield-check
+                  label: Щит с галочкой — защита, уголовные дела
+                - name: scale
+                  label: Весы — суд, гражданские дела
+                - name: gavel
+                  label: Молоток судьи — судебные процессы
+                - name: briefcase
+                  label: Портфель — бизнес
+                - name: receipt
+                  label: Чек — налоги
+                - name: coins
+                  label: Монеты — долги, деньги
+                - name: banknote
+                  label: Купюра — платежи, банки
+                - name: building-2
+                  label: Здание — недвижимость, компании
+                - name: house
+                  label: Дом — жильё, семья
+                - name: key-round
+                  label: Ключ — сделки с жильём
+                - name: landmark
+                  label: Госучреждение — споры с госорганами
+                - name: users
+                  label: Люди — семья, команда
+                - name: heart-handshake
+                  label: Рукопожатие с сердцем — семейные дела
+                - name: baby
+                  label: Ребёнок — дети, алименты
+                - name: handshake
+                  label: Рукопожатие — сделки, медиация
+                - name: hard-hat
+                  label: Каска — трудовые споры
+                - name: car
+                  label: Автомобиль — ДТП
+                - name: globe
+                  label: Глобус — миграция, гражданство
+                - name: scroll-text
+                  label: Свиток — наследство, завещания
+                - name: file-text
+                  label: Документ — заявления, жалобы
+                - name: file-search
+                  label: Лупа над документом — проверка документов
+                - name: lock
+                  label: Замок — конфиденциальность
+                - name: award
+                  label: Медаль — опыт, профессионализм
+                - name: target
+                  label: Мишень — результат
+                - name: clock
+                  label: Часы — сроки
+                - name: message-circle
+                  label: Облако сообщения — связь
+                - name: phone
+                  label: Телефон — звонок
+                - name: shield
+                  label: Щит — безопасность
+                - name: check
+                  label: Галочка
+          - name: title
+            label: Название
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: short
+            label: Коротко — для телефона
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+          - name: description
+            label: Описание на карточке
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 200
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 200
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 200
+          - name: items
+            label: Услуги направления
+            description: Полный список открывается по кнопке «Подробнее»
+            type: object
+            list:
+              max: 80
+              collapsible:
+                collapsed: true
+                summary: "{fields.ru}"
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 200
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 200
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 200
+      - name: cta
+        label: Плашка под карточками
+        type: object
+        fields:
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: text
+            label: Текст
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 160
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 160
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 160
+  - name: cases
+    label: Кейсы
+    type: file
+    path: src/content/cases.yaml
+    format: yaml
+    fields:
+      - name: enabled
+        label: Показывать на сайте
+        description: Выключите, чтобы скрыть секцию кейсов
+        type: boolean
+        default: true
+      - name: overline
+        label: Надзаголовок
+        description: Мелкая строка над заголовком секции
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 40
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 40
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 40
+      - name: title
+        label: Заголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 70
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 70
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 70
+      - name: subtitle
+        label: Подзаголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: text
+            options:
+              maxlength: 260
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: text
+            options:
+              maxlength: 260
+          - name: en
+            label: EN · English
+            type: text
+            options:
+              maxlength: 260
+      - name: visible
+        label: Сколько кейсов видно сразу
+        description: Остальные открываются кнопкой «Показать ещё»
+        type: number
+        required: true
+        options:
+          min: 1
+          max: 30
+      - name: items
+        label: Кейсы
+        type: object
+        list:
+          max: 30
+          collapsible:
+            collapsed: true
+            summary: "{fields.title.ru}"
+        fields:
+          - name: category
+            label: Категория
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+          - name: situation
+            label: Ситуация
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 320
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 320
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 320
+          - name: result
+            label: Результат
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 320
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 320
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 320
+  - name: team
+    label: Команда
+    type: file
+    path: src/content/team.yaml
+    format: yaml
+    fields:
+      - name: enabled
+        label: Показывать на сайте
+        description: Выключите, чтобы скрыть секцию команды
+        type: boolean
+        default: true
+      - name: overline
+        label: Надзаголовок
+        description: Мелкая строка над заголовком секции
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 40
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 40
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 40
+      - name: title
+        label: Заголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 70
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 70
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 70
+      - name: subtitle
+        label: Подзаголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: text
+            options:
+              maxlength: 260
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: text
+            options:
+              maxlength: 260
+          - name: en
+            label: EN · English
+            type: text
+            options:
+              maxlength: 260
+      - name: members
+        label: Юристы
+        type: object
+        list:
+          min: 1
+          max: 20
+          collapsible:
+            collapsed: true
+            summary: "{fields.name.ru}"
+        fields:
+          - name: photo
+            label: Фото
+            description: Вертикальное фото, лицо в верхней трети кадра. Если пусто — будет аккуратная заглушка
+            type: image
+            options:
+              extensions:
+                - jpg
+                - jpeg
+                - png
+                - webp
+                - avif
+          - name: name
+            label: Имя
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+          - name: role
+            label: Должность
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: bio
+            label: Коротко о юристе
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 260
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 260
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 260
+          - name: bioFull
+            label: Полная биография
+            description: Если заполнено — на карточке появится кнопка «Подробнее»
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                options:
+                  maxlength: 5000
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 5000
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 5000
+  - name: reviews
+    label: Отзывы
+    type: file
+    path: src/content/reviews.yaml
+    format: yaml
+    fields:
+      - name: enabled
+        label: Показывать на сайте
+        description: Выключите, чтобы скрыть секцию отзывов
+        type: boolean
+        default: true
+      - name: overline
+        label: Надзаголовок
+        description: Мелкая строка над заголовком секции
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 40
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 40
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 40
+      - name: title
+        label: Заголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 70
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 70
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 70
+      - name: subtitle
+        label: Подзаголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: text
+            options:
+              maxlength: 260
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: text
+            options:
+              maxlength: 260
+          - name: en
+            label: EN · English
+            type: text
+            options:
+              maxlength: 260
+      - name: visible
+        label: Сколько отзывов видно сразу
+        type: number
+        required: true
+        options:
+          min: 1
+          max: 40
+      - name: items
+        label: Отзывы
+        type: object
+        list:
+          max: 40
+          collapsible:
+            collapsed: true
+            summary: "{fields.name.ru}"
+        fields:
+          - name: text
+            label: Отзыв
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 420
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 420
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 420
+          - name: name
+            label: Имя клиента
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: company
+            label: Должность или компания
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+      - name: clients
+        label: Логотипы клиентов
+        type: object
+        fields:
+          - name: title
+            label: Подпись
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: items
+            label: Клиенты
+            type: object
+            list:
+              max: 20
+              collapsible:
+                collapsed: true
+                summary: "{fields.name}"
+            fields:
+              - name: name
+                label: Название
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: logo
+                label: Логотип
+                description: PNG или WebP на прозрачном фоне
+                type: image
+                options:
+                  extensions:
+                    - jpg
+                    - jpeg
+                    - png
+                    - webp
+                    - avif
+  - name: faq
+    label: FAQ
+    type: file
+    path: src/content/faq.yaml
+    format: yaml
+    fields:
+      - name: enabled
+        label: Показывать на сайте
+        description: Выключите, чтобы скрыть секцию FAQ
+        type: boolean
+        default: true
+      - name: overline
+        label: Надзаголовок
+        description: Мелкая строка над заголовком секции
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 40
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 40
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 40
+      - name: title
+        label: Заголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: string
+            required: true
+            options:
+              maxlength: 70
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: string
+            options:
+              maxlength: 70
+          - name: en
+            label: EN · English
+            type: string
+            options:
+              maxlength: 70
+      - name: subtitle
+        label: Подзаголовок
+        type: object
+        fields:
+          - name: ru
+            label: RU · Русский
+            type: text
+            options:
+              maxlength: 260
+          - name: uz
+            label: UZ · Oʻzbekcha
+            type: text
+            options:
+              maxlength: 260
+          - name: en
+            label: EN · English
+            type: text
+            options:
+              maxlength: 260
+      - name: items
+        label: Вопросы
+        type: object
+        list:
+          min: 1
+          max: 20
+          collapsible:
+            collapsed: true
+            summary: "{fields.question.ru}"
+        fields:
+          - name: question
+            label: Вопрос
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 140
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 140
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 140
+          - name: answer
+            label: Ответ
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 1200
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 1200
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 1200
+  - name: consultation
+    label: Страница консультации
+    type: file
+    path: src/content/consultation.yaml
+    format: yaml
+    fields:
+      - name: seo
+        label: Поисковики и соцсети
+        type: object
+        fields:
+          - name: title
+            label: Заголовок вкладки
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 70
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 70
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 70
+          - name: description
+            label: Описание для поисковой выдачи
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 180
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 180
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 180
+      - name: hero
+        label: Первый экран
+        type: object
+        fields:
+          - name: badge
+            label: Бейдж
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 30
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 30
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 30
+          - name: titleAccent
+            label: Заголовок — выделенная часть
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 30
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 30
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 30
+          - name: subtitle
+            label: Подзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 240
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 240
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 240
+          - name: button
+            label: Кнопка заявки
+            description: Ведёт на Google Форму
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 32
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 32
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 32
+          - name: getTitle
+            label: Заголовок карточки «Что вы получите»
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: get
+            label: Что вы получите
+            type: object
+            list:
+              min: 1
+              max: 6
+              collapsible:
+                collapsed: true
+                summary: "{fields.ru}"
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 80
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 80
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 80
+          - name: confidential
+            label: Строка про конфиденциальность
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+      - name: steps
+        label: Как проходит
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть шаги консультации
+            type: boolean
+            default: true
+          - name: overline
+            label: Надзаголовок
+            description: Мелкая строка над заголовком секции
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 70
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 70
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 70
+          - name: subtitle
+            label: Подзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                options:
+                  maxlength: 260
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 260
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 260
+          - name: items
+            label: Шаги
+            type: object
+            list:
+              min: 1
+              max: 6
+              collapsible:
+                collapsed: true
+                summary: "{fields.title.ru}"
+            fields:
+              - name: icon
+                label: Иконка
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: shield-check
+                      label: Щит с галочкой — защита, уголовные дела
+                    - name: scale
+                      label: Весы — суд, гражданские дела
+                    - name: gavel
+                      label: Молоток судьи — судебные процессы
+                    - name: briefcase
+                      label: Портфель — бизнес
+                    - name: receipt
+                      label: Чек — налоги
+                    - name: coins
+                      label: Монеты — долги, деньги
+                    - name: banknote
+                      label: Купюра — платежи, банки
+                    - name: building-2
+                      label: Здание — недвижимость, компании
+                    - name: house
+                      label: Дом — жильё, семья
+                    - name: key-round
+                      label: Ключ — сделки с жильём
+                    - name: landmark
+                      label: Госучреждение — споры с госорганами
+                    - name: users
+                      label: Люди — семья, команда
+                    - name: heart-handshake
+                      label: Рукопожатие с сердцем — семейные дела
+                    - name: baby
+                      label: Ребёнок — дети, алименты
+                    - name: handshake
+                      label: Рукопожатие — сделки, медиация
+                    - name: hard-hat
+                      label: Каска — трудовые споры
+                    - name: car
+                      label: Автомобиль — ДТП
+                    - name: globe
+                      label: Глобус — миграция, гражданство
+                    - name: scroll-text
+                      label: Свиток — наследство, завещания
+                    - name: file-text
+                      label: Документ — заявления, жалобы
+                    - name: file-search
+                      label: Лупа над документом — проверка документов
+                    - name: lock
+                      label: Замок — конфиденциальность
+                    - name: award
+                      label: Медаль — опыт, профессионализм
+                    - name: target
+                      label: Мишень — результат
+                    - name: clock
+                      label: Часы — сроки
+                    - name: message-circle
+                      label: Облако сообщения — связь
+                    - name: phone
+                      label: Телефон — звонок
+                    - name: shield
+                      label: Щит — безопасность
+                    - name: check
+                      label: Галочка
+              - name: title
+                label: Шаг
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 40
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 40
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 40
+              - name: text
+                label: Описание
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: text
+                    required: true
+                    options:
+                      maxlength: 160
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: text
+                    options:
+                      maxlength: 160
+                  - name: en
+                    label: EN · English
+                    type: text
+                    options:
+                      maxlength: 160
+              - name: time
+                label: Сколько занимает
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 30
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 30
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 30
+          - name: terms
+            label: Условия
+            type: object
+            list:
+              max: 6
+              collapsible:
+                collapsed: true
+                summary: "{fields.title.ru}"
+            fields:
+              - name: icon
+                label: Иконка
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: shield-check
+                      label: Щит с галочкой — защита, уголовные дела
+                    - name: scale
+                      label: Весы — суд, гражданские дела
+                    - name: gavel
+                      label: Молоток судьи — судебные процессы
+                    - name: briefcase
+                      label: Портфель — бизнес
+                    - name: receipt
+                      label: Чек — налоги
+                    - name: coins
+                      label: Монеты — долги, деньги
+                    - name: banknote
+                      label: Купюра — платежи, банки
+                    - name: building-2
+                      label: Здание — недвижимость, компании
+                    - name: house
+                      label: Дом — жильё, семья
+                    - name: key-round
+                      label: Ключ — сделки с жильём
+                    - name: landmark
+                      label: Госучреждение — споры с госорганами
+                    - name: users
+                      label: Люди — семья, команда
+                    - name: heart-handshake
+                      label: Рукопожатие с сердцем — семейные дела
+                    - name: baby
+                      label: Ребёнок — дети, алименты
+                    - name: handshake
+                      label: Рукопожатие — сделки, медиация
+                    - name: hard-hat
+                      label: Каска — трудовые споры
+                    - name: car
+                      label: Автомобиль — ДТП
+                    - name: globe
+                      label: Глобус — миграция, гражданство
+                    - name: scroll-text
+                      label: Свиток — наследство, завещания
+                    - name: file-text
+                      label: Документ — заявления, жалобы
+                    - name: file-search
+                      label: Лупа над документом — проверка документов
+                    - name: lock
+                      label: Замок — конфиденциальность
+                    - name: award
+                      label: Медаль — опыт, профессионализм
+                    - name: target
+                      label: Мишень — результат
+                    - name: clock
+                      label: Часы — сроки
+                    - name: message-circle
+                      label: Облако сообщения — связь
+                    - name: phone
+                      label: Телефон — звонок
+                    - name: shield
+                      label: Щит — безопасность
+                    - name: check
+                      label: Галочка
+              - name: title
+                label: Заголовок
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 40
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 40
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 40
+              - name: text
+                label: Текст
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: text
+                    required: true
+                    options:
+                      maxlength: 200
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: text
+                    options:
+                      maxlength: 200
+                  - name: en
+                    label: EN · English
+                    type: text
+                    options:
+                      maxlength: 200
+      - name: topics
+        label: С какими вопросами обращаться
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть список тем
+            type: boolean
+            default: true
+          - name: overline
+            label: Надзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 70
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 70
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 70
+          - name: items
+            label: Темы
+            type: object
+            list:
+              max: 30
+              collapsible:
+                collapsed: true
+                summary: "{fields.label.ru}"
+            fields:
+              - name: icon
+                label: Иконка
+                type: select
+                required: true
+                options:
+                  values:
+                    - name: shield-check
+                      label: Щит с галочкой — защита, уголовные дела
+                    - name: scale
+                      label: Весы — суд, гражданские дела
+                    - name: gavel
+                      label: Молоток судьи — судебные процессы
+                    - name: briefcase
+                      label: Портфель — бизнес
+                    - name: receipt
+                      label: Чек — налоги
+                    - name: coins
+                      label: Монеты — долги, деньги
+                    - name: banknote
+                      label: Купюра — платежи, банки
+                    - name: building-2
+                      label: Здание — недвижимость, компании
+                    - name: house
+                      label: Дом — жильё, семья
+                    - name: key-round
+                      label: Ключ — сделки с жильём
+                    - name: landmark
+                      label: Госучреждение — споры с госорганами
+                    - name: users
+                      label: Люди — семья, команда
+                    - name: heart-handshake
+                      label: Рукопожатие с сердцем — семейные дела
+                    - name: baby
+                      label: Ребёнок — дети, алименты
+                    - name: handshake
+                      label: Рукопожатие — сделки, медиация
+                    - name: hard-hat
+                      label: Каска — трудовые споры
+                    - name: car
+                      label: Автомобиль — ДТП
+                    - name: globe
+                      label: Глобус — миграция, гражданство
+                    - name: scroll-text
+                      label: Свиток — наследство, завещания
+                    - name: file-text
+                      label: Документ — заявления, жалобы
+                    - name: file-search
+                      label: Лупа над документом — проверка документов
+                    - name: lock
+                      label: Замок — конфиденциальность
+                    - name: award
+                      label: Медаль — опыт, профессионализм
+                    - name: target
+                      label: Мишень — результат
+                    - name: clock
+                      label: Часы — сроки
+                    - name: message-circle
+                      label: Облако сообщения — связь
+                    - name: phone
+                      label: Телефон — звонок
+                    - name: shield
+                      label: Щит — безопасность
+                    - name: check
+                      label: Галочка
+              - name: label
+                label: Тема
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 50
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 50
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 50
+      - name: faq
+        label: Вопросы о консультации
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть FAQ консультации
+            type: boolean
+            default: true
+          - name: overline
+            label: Надзаголовок
+            description: Мелкая строка над заголовком секции
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 70
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 70
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 70
+          - name: subtitle
+            label: Подзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                options:
+                  maxlength: 260
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 260
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 260
+          - name: items
+            label: Вопросы
+            type: object
+            list:
+              min: 1
+              max: 20
+              collapsible:
+                collapsed: true
+                summary: "{fields.question.ru}"
+            fields:
+              - name: question
+                label: Вопрос
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: string
+                    required: true
+                    options:
+                      maxlength: 140
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: string
+                    options:
+                      maxlength: 140
+                  - name: en
+                    label: EN · English
+                    type: string
+                    options:
+                      maxlength: 140
+              - name: answer
+                label: Ответ
+                type: object
+                fields:
+                  - name: ru
+                    label: RU · Русский
+                    type: text
+                    required: true
+                    options:
+                      maxlength: 1200
+                  - name: uz
+                    label: UZ · Oʻzbekcha
+                    type: text
+                    options:
+                      maxlength: 1200
+                  - name: en
+                    label: EN · English
+                    type: text
+                    options:
+                      maxlength: 1200
+      - name: final
+        label: Финальный призыв
+        type: object
+        fields:
+          - name: enabled
+            label: Показывать на сайте
+            description: Выключите, чтобы скрыть финальный блок
+            type: boolean
+            default: true
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: titleAccent
+            label: Заголовок — выделенная часть
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: subtitle
+            label: Подзаголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 120
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 120
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 120
+  - name: ui
+    label: Подписи интерфейса
+    type: file
+    path: src/content/ui.yaml
+    format: yaml
+    fields:
+      - name: nav
+        label: Меню
+        type: object
+        fields:
+          - name: services
+            label: Услуги
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: about
+            label: О нас
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: cases
+            label: Кейсы
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: team
+            label: Команда
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: reviews
+            label: Отзывы
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: faq
+            label: FAQ
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: contacts
+            label: Контакты
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: consultation
+            label: Бесплатная консультация
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+      - name: buttons
+        label: Кнопки
+        type: object
+        fields:
+          - name: consultShort
+            label: Кнопка в шапке
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 18
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 18
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 18
+          - name: more
+            label: Подробнее
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: showMore
+            label: Показать ещё
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 24
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 24
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 24
+          - name: back
+            label: На главную
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 24
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 24
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 24
+          - name: allPractices
+            label: Все направления
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: openMap
+            label: Открыть карту
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 30
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 30
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 30
+          - name: close
+            label: Закрыть
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: menu
+            label: Меню
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: call
+            label: Позвонить
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+      - name: labels
+        label: Подписи
+        type: object
+        fields:
+          - name: address
+            label: Адрес
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: phone
+            label: Телефон
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: email
+            label: Email
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: hours
+            label: Часы работы
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: situation
+            label: Ситуация
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: result
+            label: Результат
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: practiceList
+            label: Заголовок списка услуг в окне направления
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: dialogCta
+            label: Призыв в окне направления
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 120
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 120
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 120
+          - name: themeLight
+            label: "Подсказка: включить светлую тему"
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: themeDark
+            label: "Подсказка: включить тёмную тему"
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: language
+            label: "Подсказка: язык"
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: skip
+            label: Ссылка «к содержанию» для клавиатуры
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: photoSoon
+            label: Подпись вместо фото юриста
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+      - name: footer
+        label: Подвал
+        type: object
+        fields:
+          - name: tagline
+            label: Описание под логотипом
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: text
+                required: true
+                options:
+                  maxlength: 140
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: text
+                options:
+                  maxlength: 140
+              - name: en
+                label: EN · English
+                type: text
+                options:
+                  maxlength: 140
+          - name: sections
+            label: Колонка «Разделы»
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: clients
+            label: Колонка «Клиентам»
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: contact
+            label: Колонка «Связь»
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 20
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 20
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 20
+          - name: privacy
+            label: Политика конфиденциальности
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 40
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 40
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 40
+          - name: rights
+            label: Все права защищены
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 60
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 60
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 60
+      - name: notFound
+        label: Страница 404
+        type: object
+        fields:
+          - name: title
+            label: Заголовок
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 50
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 50
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 50
+          - name: text
+            label: Текст
+            type: object
+            fields:
+              - name: ru
+                label: RU · Русский
+                type: string
+                required: true
+                options:
+                  maxlength: 160
+              - name: uz
+                label: UZ · Oʻzbekcha
+                type: string
+                options:
+                  maxlength: 160
+              - name: en
+                label: EN · English
+                type: string
+                options:
+                  maxlength: 160

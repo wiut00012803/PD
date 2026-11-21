@@ -1,0 +1,223 @@
+---
+import { Picture } from "astro:assets";
+import Icon from "../ui/Icon.astro";
+import { lines, tr } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent, getImage } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { home } = getContent();
+const { about, advantages } = home;
+const photo = getImage(about.photo);
+const caption = tr(about.photoCaption, lang);
+const note = tr(about.photoNote, lang);
+---
+
+{
+  (about.enabled || advantages.enabled) && (
+    <section class="section about" id="about" aria-labelledby={about.enabled ? "about-title" : undefined}>
+      <div class="container">
+        {about.enabled && (
+          <div class="about__row">
+            <div class="about__text">
+              <p class="t-overline">{tr(about.overline, lang)}</p>
+              <h2 class="t-h1" id="about-title" set:html={lines(about.title, lang)} />
+              <p class="t-body-l c-secondary">{tr(about.lead, lang)}</p>
+              {about.text.ru && <p class="t-body-m c-secondary">{tr(about.text, lang)}</p>}
+              {about.badges.length > 0 && (
+                <ul class="about__badges">
+                  {about.badges.map((b) => (
+                    <li class="pill glass-strong">
+                      <Icon name="check" />
+                      {tr(b, lang)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {photo && (
+              <figure class="photo-card">
+                <Picture
+                  src={photo}
+                  alt={tr(about.photoAlt, lang)}
+                  widths={[400, 700, 1000, 1400]}
+                  sizes="(min-width: 1280px) 560px, (min-width: 900px) 40vw, 100vw"
+                  formats={["avif", "webp"]}
+                  class="photo-card__img"
+                  loading="lazy"
+                />
+                {caption && (
+                  <figcaption class="photo-card__plate glass-strong">
+                    <span class="t-label">{caption}</span>
+                    {note && <span class="t-body-s c-secondary">{note}</span>}
+                  </figcaption>
+                )}
+              </figure>
+            )}
+          </div>
+        )}
+
+        {advantages.enabled && advantages.items.length > 0 && (
+          <ul class="advantages" style={`--count:${advantages.items.length}`}>
+            {advantages.items.map((a) => (
+              <li class="advantage glass card">
+                <span class="icon-box">
+                  <Icon name={a.icon} />
+                </span>
+                <div class="advantage__text">
+                  <h3 class="t-h4">{tr(a.title, lang)}</h3>
+                  <p class="t-body-m c-secondary">{tr(a.text, lang)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .about__row {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .about__text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .about__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .photo-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--color-border-glass-strong);
+    aspect-ratio: 350 / 280;
+    background: var(--color-bg-muted);
+  }
+
+  .photo-card :global(.photo-card__img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+  }
+
+  :root[data-theme="dark"] .photo-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(14 26 43 / 0) 50%, rgb(14 26 43 / 0.85) 100%);
+    pointer-events: none;
+  }
+
+  .photo-card__plate {
+    z-index: 1;
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 16px;
+    border-radius: var(--radius-lg);
+    max-width: calc(100% - 32px);
+  }
+
+  .advantages {
+    display: grid;
+    gap: 16px;
+  }
+
+  .advantage {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+  }
+
+  .advantage__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media (min-width: 600px) {
+    .about__badges :global(.pill) {
+      padding-block: 12px;
+    }
+
+    .photo-card {
+      aspect-ratio: 740 / 400;
+    }
+
+    .advantage {
+      flex-direction: row;
+      gap: 20px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .about__row {
+      flex-direction: row;
+      align-items: center;
+      gap: 48px;
+    }
+
+    .about__text {
+      flex: 1;
+    }
+
+    .about__badges :global(.pill) {
+      padding-block: 8px;
+    }
+
+    .photo-card {
+      flex: none;
+      width: 40%;
+      aspect-ratio: 380 / 480;
+    }
+
+    .advantages {
+      grid-template-columns: repeat(min(var(--count), 3), minmax(0, 1fr));
+    }
+
+    .advantage {
+      flex-direction: column;
+      gap: 14px;
+      padding: 24px;
+    }
+
+    .advantage .t-h4 {
+      font-size: 20px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .photo-card {
+      width: 560px;
+      aspect-ratio: 560 / 520;
+    }
+
+    .advantage {
+      padding: 28px;
+    }
+
+    .advantage .t-h4 {
+      font-size: 22px;
+    }
+  }
+</style>

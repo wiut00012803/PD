@@ -1,0 +1,265 @@
+---
+import Logo from "./ui/Logo.astro";
+import Icon from "./ui/Icon.astro";
+import { navLinks } from "../lib/nav.ts";
+import { contactLinks } from "../lib/links.ts";
+import { LANGS, LANG_SHORT, tr, url } from "../lib/i18n.ts";
+import type { Lang, PageKey } from "../lib/i18n.ts";
+import { getContent } from "../lib/content.ts";
+import { SOCIALS } from "../content/schema.ts";
+
+interface Props {
+  lang: Lang;
+  page: PageKey;
+}
+
+const { lang, page } = Astro.props;
+const { ui, settings } = getContent();
+const links = contactLinks();
+const nav = navLinks(lang, page);
+const sections = nav.filter((l) => ["services", "about", "cases", "team", "faq"].includes(l.id));
+const reviews = nav.find((l) => l.id === "reviews");
+const contacts = nav.find((l) => l.id === "contacts");
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href={url(lang, "home")} aria-label={settings.siteName} class="footer__logo">
+          <Logo height={40} label={settings.siteName} />
+        </a>
+        <p class="t-body-s c-secondary footer__tagline">{tr(ui.footer.tagline, lang)}</p>
+        {
+          settings.socials.length > 0 && (
+            <ul class="footer__socials">
+              {settings.socials.map((s) => (
+                <li>
+                  <a href={s.url} class="round-btn footer__social" target="_blank" rel="noopener" aria-label={SOCIALS[s.network]}>
+                    <Icon social={s.network} size={20} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+
+      <div class="footer__cols">
+        <div class="footer__col">
+          <p class="footer__heading">{tr(ui.footer.sections, lang)}</p>
+          <ul>
+            {sections.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          </ul>
+        </div>
+        <div class="footer__col">
+          <p class="footer__heading">{tr(ui.footer.clients, lang)}</p>
+          <ul>
+            <li><a href={url(lang, "consultation")}>{tr(ui.nav.consultation, lang)}</a></li>
+            {reviews && <li><a href={reviews.href}>{reviews.label}</a></li>}
+            {contacts && <li><a href={contacts.href}>{contacts.label}</a></li>}
+            {settings.privacyUrl && <li><a href={settings.privacyUrl} target="_blank" rel="noopener">{tr(ui.footer.privacy, lang)}</a></li>}
+          </ul>
+        </div>
+        <div class="footer__col">
+          <p class="footer__heading">{tr(ui.footer.contact, lang)}</p>
+          <ul>
+            <li><a href={links.phone}>{links.phoneDisplay}</a></li>
+            <li><a href={links.email}>{settings.email}</a></li>
+            <li>
+              <a href={links.telegram} target="_blank" rel="noopener">Telegram</a>
+              <span aria-hidden="true"> · </span>
+              <a href={links.whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__bottom t-body-s c-tertiary">
+      <p>© {year} {settings.siteName}. {tr(ui.footer.rights, lang)}</p>
+      <p class="footer__langs">
+        {
+          LANGS.map((l, i) => (
+            <>
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <a href={url(l, page)} hreflang={l} data-set-lang={l} aria-current={l === lang ? "true" : undefined}>
+                {LANG_SHORT[l]}
+              </a>
+            </>
+          ))
+        }
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--color-border-glass);
+    padding-block: 64px 40px;
+  }
+
+  :root[data-theme="light"] .footer {
+    border-top-color: var(--color-divider);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .footer__top {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 420px;
+  }
+
+  .footer__logo {
+    align-self: flex-start;
+  }
+
+  .footer__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer__social {
+    --round-size: 48px;
+    background: var(--color-surface-glass-strong);
+    border-color: var(--color-border-glass-strong);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+  }
+
+  .footer__cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 24px;
+  }
+
+  .footer__col {
+    flex: 1 1 140px;
+  }
+
+  .footer__heading {
+    font-size: var(--fs-overline);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 8px;
+  }
+
+  .footer__col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--fs-body-m);
+    color: var(--color-text-primary);
+  }
+
+  .footer__col li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 6px;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer__langs a {
+    padding: 6px 2px;
+  }
+
+  .footer__langs a[aria-current="true"] {
+    color: var(--color-text-primary);
+  }
+
+  @media (min-width: 600px) {
+    .footer__cols {
+      gap: 32px 48px;
+    }
+
+    .footer__col {
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .footer {
+      padding-block: 56px 32px;
+    }
+
+    .footer__inner {
+      gap: 32px;
+    }
+
+    .footer__top {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .footer__brand {
+      gap: 16px;
+      max-width: 300px;
+    }
+
+    .footer__social {
+      --round-size: 44px;
+    }
+
+    .footer__cols {
+      flex-wrap: nowrap;
+      gap: 40px;
+    }
+
+    .footer__heading {
+      font-size: var(--fs-label);
+      font-weight: 500;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--color-text-primary);
+      margin-bottom: 12px;
+    }
+
+    .footer__col ul {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer__col a {
+      min-height: 0;
+      font-size: var(--fs-body-s);
+      color: var(--color-text-secondary);
+      transition: color var(--dur) var(--ease-out);
+    }
+
+    .footer__col a:hover {
+      color: var(--color-text-primary);
+    }
+
+    .footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>

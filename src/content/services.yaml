@@ -1,0 +1,392 @@
+enabled: true
+overline:
+  ru: Практики
+  uz: Yoʻnalishlar
+  en: Practice areas
+title:
+  ru: Чем мы поможем
+  uz: Qanday yordam beramiz
+  en: How we can help
+subtitle:
+  ru: Каждое дело ведёт адвокат лично — от первой встречи до решения суда. Стоимость согласуем до начала работы.
+  uz: Har bir ishni advokat shaxsan olib boradi — birinchi uchrashuvdan sud qaroriga qadar. Narxni ish boshlanishidan oldin kelishib olamiz.
+  en: An advocate personally handles every case, from the first meeting to the court ruling. We agree on the fee before work begins.
+general:
+  title:
+    ru: Во всех направлениях
+    uz: Barcha yoʻnalishlarda
+    en: Across all practice areas
+  items:
+    - ru: Представительство и защита интересов граждан и юридических лиц
+      uz: Fuqarolar va yuridik shaxslar manfaatlarini himoya qilish va vakillik
+      en: Representing and protecting individuals and companies
+    - ru: Устные и письменные консультации
+      uz: Ogʻzaki va yozma maslahatlar
+      en: Oral and written consultations
+    - ru: Изучение и сбор документов
+      uz: Hujjatlarni oʻrganish va yigʻish
+      en: Reviewing and collecting documents
+    - ru: Составление, анализ и экспертиза правовых документов
+      uz: Huquqiy hujjatlarni tuzish, tahlil qilish va ekspertizadan oʻtkazish
+      en: Drafting, analysing and reviewing legal documents
+    - ru: Иски, заявления, апелляционные и кассационные жалобы
+      uz: Daʼvo arizalari, arizalar, apellyatsiya va kassatsiya shikoyatlari
+      en: Claims, applications, appeals and cassation complaints
+practices:
+  - icon: shield-check
+    title:
+      ru: Уголовные дела
+      uz: Jinoyat ishlari
+      en: Criminal defence
+    short:
+      ru: Защита на следствии и в суде
+      uz: Tergov va sudda himoya
+      en: Defence during investigation and trial
+    description:
+      ru: "Защита на всех стадиях: задержание, допрос, следствие, суд, обжалование приговора. Помощь потерпевшим."
+      uz: "Barcha bosqichlarda himoya: ushlash, soʻroq, tergov, sud, hukm ustidan shikoyat. Jabrlanuvchilarga yordam."
+      en: "Defence at every stage: arrest, questioning, investigation, trial and appeal. Support for victims."
+    items:
+      - ru: Выезд адвоката при задержании, обыске, допросе
+        uz: Ushlash, tintuv va soʻroq paytida advokatning yetib kelishi
+        en: An advocate on site during arrest, search or questioning
+      - ru: Участие адвоката в судебных процессах по уголовным делам
+        uz: Jinoyat ishlari boʻyicha sud jarayonlarida advokat ishtiroki
+        en: Representation in criminal trials
+      - ru: Представительство в прокуратуре и следственных органах
+        uz: Prokuratura va tergov organlarida vakillik
+        en: Representation before prosecutors and investigators
+      - ru: Обжалование меры пресечения (стража, залог, домашний арест)
+        uz: Ehtiyot chorasi ustidan shikoyat qilish (qamoqqa olish, garov, uy qamogʻi)
+        en: Challenging pre-trial measures (custody, bail, house arrest)
+      - ru: Обжалование решений правоохранительных органов и судебных приговоров
+        uz: Huquqni muhofaza qiluvchi organlar qarorlari va sud hukmlari ustidan shikoyat qilish
+        en: Appealing law-enforcement decisions and court sentences
+      - ru: Подготовка жалоб, заявлений и ходатайств
+        uz: Shikoyatlar, arizalar va iltimosnomalar tayyorlash
+        en: Preparing complaints, applications and motions
+      - ru: Защита прав потерпевшего в уголовном процессе
+        uz: Jinoyat protsessida jabrlanuvchi huquqlarini himoya qilish
+        en: Protecting the rights of victims in criminal proceedings
+      - ru: Защита при обвинениях в экономических преступлениях (хищение, растрата)
+        uz: Iqtisodiy jinoyatlar (talon-toroj, oʻzlashtirish) ayblovlarida himoya
+        en: Defence against economic crime charges (theft, embezzlement)
+      - ru: Защита при обвинениях в коррупции и взяточничестве
+        uz: Korrupsiya va poraxoʻrlik ayblovlarida himoya
+        en: Defence against corruption and bribery charges
+      - ru: Защита при уголовном преследовании за предпринимательскую деятельность
+        uz: Tadbirkorlik faoliyati uchun jinoiy taʼqibda himoya
+        en: Defence of entrepreneurs prosecuted for business activity
+      - ru: Защита при обвинениях в фальсификации документов
+        uz: Hujjatlarni qalbakilashtirish ayblovlarida himoya
+        en: Defence against document forgery charges
+      - ru: Защита при обвинениях в нарушении прав интеллектуальной собственности
+        uz: Intellektual mulk huquqlarini buzish ayblovlarida himoya
+        en: Defence against intellectual property infringement charges
+      - ru: Защита при обвинениях в нарушении санитарных и экологических норм
+        uz: Sanitariya va ekologiya meʼyorlarini buzish ayblovlarida himoya
+        en: Defence against sanitary and environmental violation charges
+      - ru: Помощь при мошенничестве, в том числе онлайн, и киберпреступлениях
+        uz: Firibgarlik, jumladan onlayn firibgarlik va kiberjinoyatlarda yordam
+        en: Help with fraud, including online fraud, and cybercrime
+      - ru: Помощь при уголовном преследовании за высказывания в интернете и соцсетях
+        uz: Internet va ijtimoiy tarmoqlardagi fikrlar uchun jinoiy taʼqibda yordam
+        en: Help when prosecuted for statements online and on social media
+      - ru: Помощь при самовольном захвате имущества (рейдерство)
+        uz: Mulkni oʻzboshimchalik bilan egallab olishda (reyderlik) yordam
+        en: Help with unlawful seizure of property (raiding)
+      - ru: Правовая помощь при домашнем насилии (жертвам и обвиняемым)
+        uz: Oiladagi zoʻravonlik holatlarida huquqiy yordam (jabrlanuvchilar va ayblanuvchilarga)
+        en: Legal help in domestic violence cases (for victims and the accused)
+      - ru: Защита несовершеннолетних в уголовном процессе
+        uz: Jinoyat protsessida voyaga yetmaganlarni himoya qilish
+        en: Defence of minors in criminal proceedings
+      - ru: Юридическая помощь военнослужащим
+        uz: Harbiy xizmatchilarga yuridik yordam
+        en: Legal help for military personnel
+      - ru: Защита при уголовном преследовании за уклонение от воинской обязанности
+        uz: Harbiy majburiyatdan boʻyin tovlash uchun jinoiy taʼqibda himoya
+        en: Defence against charges of evading military service
+      - ru: Представительство при экстрадиции и международно-правовой помощи
+        uz: Ekstraditsiya va xalqaro huquqiy yordamda vakillik
+        en: Representation in extradition and mutual legal assistance cases
+      - ru: Содействие в получении условно-досрочного освобождения
+        uz: Muddatidan ilgari shartli ozod qilinishga koʻmaklashish
+        en: Assistance with parole applications
+      - ru: Подача заявлений об амнистии и помиловании
+        uz: Amnistiya va avf etish toʻgʻrisida arizalar berish
+        en: Filing for amnesty and pardon
+      - ru: Реабилитация и восстановление прав незаконно осуждённых граждан
+        uz: Noqonuniy hukm qilingan fuqarolarni reabilitatsiya qilish va huquqlarini tiklash
+        en: Rehabilitation and restoring the rights of the wrongfully convicted
+  - icon: scale
+    title:
+      ru: Гражданские дела
+      uz: Fuqarolik ishlari
+      en: Civil cases
+    short:
+      ru: Долги, сделки, наследство
+      uz: Qarzlar, bitimlar, meros
+      en: Debts, contracts, inheritance
+    description:
+      ru: Взыскание долгов, споры по договорам, наследство, защита прав потребителей, споры с банками и страховыми.
+      uz: Qarzlarni undirish, shartnoma nizolari, meros, isteʼmolchilar huquqlarini himoya qilish, banklar va sugʻurta kompaniyalari bilan nizolar.
+      en: Debt recovery, contract disputes, inheritance, consumer protection, disputes with banks and insurers.
+    items:
+      - ru: Взыскание долга в судебном и досудебном порядке
+        uz: Qarzni sud va sudgacha tartibda undirish
+        en: Debt recovery in and out of court
+      - ru: Участие адвоката в судебных процессах по гражданским и экономическим делам
+        uz: Fuqarolik va iqtisodiy ishlar boʻyicha sud jarayonlarida advokat ishtiroki
+        en: Representation in civil and commercial court cases
+      - ru: Оценка юридических рисков при заключении сделок
+        uz: Bitimlar tuzishda yuridik xatarlarni baholash
+        en: Assessing legal risks before signing a deal
+      - ru: Договоры купли-продажи
+        uz: Oldi-sotdi shartnomalari
+        en: Sale and purchase agreements
+      - ru: Оспаривание и аннулирование сделок, признание их недействительными
+        uz: Bitimlarni nizolashish, bekor qilish va haqiqiy emas deb topish
+        en: Challenging, cancelling and invalidating transactions
+      - ru: Наследство, завещания
+        uz: Meros, vasiyatnomalar
+        en: Inheritance and wills
+      - ru: Защита прав потребителей
+        uz: Isteʼmolchilar huquqlarini himoya qilish
+        en: Consumer protection
+      - ru: "Споры с банками: незаконные списания, кредитные договоры, залог"
+        uz: "Banklar bilan nizolar: noqonuniy hisobdan chiqarishlar, kredit shartnomalari, garov"
+        en: "Disputes with banks: unlawful debits, loan agreements, collateral"
+      - ru: Взыскание страхового возмещения (ОСАГО, имущественное страхование)
+        uz: Sugʻurta tovonini undirish (OSAGO, mulk sugʻurtasi)
+        en: Recovering insurance payouts (motor liability, property insurance)
+      - ru: Защита прав при онлайн-мошенничестве и финансовых пирамидах
+        uz: Onlayn firibgarlik va moliyaviy piramidalarda huquqlarni himoya qilish
+        en: Protecting victims of online fraud and pyramid schemes
+      - ru: Защита прав при нарушениях в сфере коммунальных услуг, ЖКХ и управляющих компаний
+        uz: Kommunal xizmatlar va boshqaruv kompaniyalari sohasidagi qoidabuzarliklarda huquqlarni himoya qilish
+        en: Disputes with utility providers and property management companies
+      - ru: Установление фактов, имеющих юридическое значение
+        uz: Yuridik ahamiyatga ega faktlarni aniqlash
+        en: Establishing facts of legal significance
+      - ru: Признание гражданина безвестно отсутствующим или умершим
+        uz: Fuqaroni bedarak yoʻqolgan yoki vafot etgan deb topish
+        en: Declaring a person missing or deceased
+      - ru: Признание гражданина ограниченно дееспособным или недееспособным
+        uz: Fuqaroni muomala layoqati cheklangan yoki muomalaga layoqatsiz deb topish
+        en: Declaring a person to have limited or no legal capacity
+      - ru: Составление жалоб на действия и решения, нарушающие права и свободы граждан
+        uz: Fuqarolar huquq va erkinliklarini buzuvchi harakatlar va qarorlar ustidan shikoyatlar tuzish
+        en: Complaints against actions and decisions that violate citizens’ rights
+      - ru: Медиация и досудебное урегулирование споров
+        uz: Mediatsiya va nizolarni sudgacha hal qilish
+        en: Mediation and pre-trial dispute resolution
+  - icon: briefcase
+    title:
+      ru: Бизнес и налоги
+      uz: Biznes va soliqlar
+      en: Business and tax
+    short:
+      ru: Компании, налоги, проверки
+      uz: Kompaniyalar, soliqlar, tekshiruvlar
+      en: Companies, tax, inspections
+    description:
+      ru: Регистрация и ликвидация компаний, корпоративные и налоговые споры, проверки, банкротство, абонентское обслуживание.
+      uz: Kompaniyalarni roʻyxatdan oʻtkazish va tugatish, korporativ va soliq nizolari, tekshiruvlar, bankrotlik, abonent xizmati.
+      en: Company registration and liquidation, corporate and tax disputes, inspections, bankruptcy, ongoing legal support.
+    items:
+      - ru: Регистрация, перерегистрация и ликвидация юридических лиц
+        uz: Yuridik shaxslarni roʻyxatdan oʻtkazish, qayta roʻyxatdan oʻtkazish va tugatish
+        en: Registering, re-registering and liquidating companies
+      - ru: Юридический аутсорсинг для бизнеса (абонентское обслуживание)
+        uz: Biznes uchun yuridik autsorsing (abonent xizmati)
+        en: Outsourced legal support for businesses (retainer)
+      - ru: Корпоративные споры и защита прав акционеров
+        uz: Korporativ nizolar va aksiyadorlar huquqlarini himoya qilish
+        en: Corporate disputes and shareholder rights
+      - ru: Налоговые споры и консультации
+        uz: Soliq nizolari va maslahatlar
+        en: Tax disputes and advice
+      - ru: Представительство в налоговых органах, обжалование налоговых решений
+        uz: Soliq organlarida vakillik, soliq qarorlari ustidan shikoyat qilish
+        en: Representation before tax authorities and appealing tax decisions
+      - ru: Юридическое сопровождение при проведении налоговых и иных проверок
+        uz: Soliq va boshqa tekshiruvlarda yuridik kuzatib borish
+        en: Legal support during tax and other inspections
+      - ru: Таможенные споры и сертификация
+        uz: Bojxona nizolari va sertifikatlash
+        en: Customs disputes and certification
+      - ru: Банкротство физических и юридических лиц
+        uz: Jismoniy va yuridik shaxslarning bankrotligi
+        en: Personal and corporate bankruptcy
+      - ru: Юридическая помощь при инвестиционных спорах и проектах
+        uz: Investitsiya nizolari va loyihalarida yuridik yordam
+        en: Investment disputes and projects
+      - ru: Защита прав при нарушении условий государственного контракта или тендера
+        uz: Davlat shartnomasi yoki tender shartlari buzilganda huquqlarni himoya qilish
+        en: Disputes over public contracts and tenders
+      - ru: Сопровождение при получении государственных разрешений и лицензий
+        uz: Davlat ruxsatnomalari va litsenziyalarini olishda kuzatib borish
+        en: Support with government permits and licences
+      - ru: Регистрация и защита товарного знака, патента, бренда
+        uz: Tovar belgisi, patent va brendni roʻyxatdan oʻtkazish va himoya qilish
+        en: Registering and protecting trademarks, patents and brands
+      - ru: Защита прав интеллектуальной собственности (авторское право, товарный знак)
+        uz: Intellektual mulk huquqlarini himoya qilish (mualliflik huquqi, tovar belgisi)
+        en: Protecting intellectual property (copyright, trademarks)
+  - icon: building-2
+    title:
+      ru: Недвижимость и земля
+      uz: Koʻchmas mulk va yer
+      en: Real estate and land
+    short:
+      ru: Сделки, снос, земельные споры
+      uz: Bitimlar, buzish, yer nizolari
+      en: Deals, demolition, land disputes
+    description:
+      ru: Сделки с жильём и землёй, споры о границах и долях, выселение, снос и изъятие, долевое строительство.
+      uz: Uy-joy va yer bitimlari, chegara va ulush nizolari, koʻchirish, buzish va olib qoʻyish, ulushli qurilish.
+      en: Property and land deals, boundary and ownership-share disputes, eviction, demolition and expropriation, off-plan housing.
+    items:
+      - ru: Юридическая помощь, связанная с недвижимым и движимым имуществом
+        uz: Koʻchmas va koʻchar mulk bilan bogʻliq yuridik yordam
+        en: Legal help with real and movable property
+      - ru: Юридическое сопровождение сделок с недвижимостью
+        uz: Koʻchmas mulk bitimlarini yuridik kuzatib borish
+        en: Legal support for real estate transactions
+      - ru: Юридическое сопровождение ипотеки и долевого строительства
+        uz: Ipoteka va ulushli qurilishni yuridik kuzatib borish
+        en: Legal support for mortgages and off-plan purchases
+      - ru: Защита прав при долевом строительстве и банкротстве застройщика
+        uz: Ulushli qurilish va quruvchi bankrot boʻlganda huquqlarni himoya qilish
+        en: Protecting buyers in off-plan projects and developer bankruptcy
+      - ru: Приватизация
+        uz: Xususiylashtirish
+        en: Privatisation
+      - ru: Определение долей в имуществе
+        uz: Mulkdagi ulushlarni belgilash
+        en: Determining ownership shares
+      - ru: Земельные споры
+        uz: Yer nizolari
+        en: Land disputes
+      - ru: Определение права, порядка и границ пользования земельным участком, квартирой
+        uz: Yer uchastkasi, kvartiradan foydalanish huquqi, tartibi va chegaralarini belgilash
+        en: Establishing rights, terms and boundaries of use for land plots and flats
+      - ru: Защита прав при самовольном захвате земельного участка соседями
+        uz: Yer uchastkasini qoʻshnilar oʻzboshimchalik bilan egallab olganda huquqlarni himoya qilish
+        en: Protection when neighbours unlawfully occupy your land
+      - ru: Защита прав при принудительном изъятии земельного участка
+        uz: Yer uchastkasini majburan olib qoʻyishda huquqlarni himoya qilish
+        en: Protection against compulsory seizure of land
+      - ru: Защита при сносе и изъятии жилья для государственных нужд
+        uz: Davlat ehtiyojlari uchun uy-joyni buzish va olib qoʻyishda himoya
+        en: Protection when housing is demolished or seized for public needs
+      - ru: Возмещение ущерба при незаконном сносе недвижимости
+        uz: Koʻchmas mulk noqonuniy buzilganda zararni undirish
+        en: Compensation for unlawful demolition of property
+      - ru: Получение справки о сносе или несносе недвижимого имущества
+        uz: Koʻchmas mulkni buzish yoki buzmaslik toʻgʻrisida maʼlumotnoma olish
+        en: Obtaining a demolition status certificate for a property
+      - ru: Оспаривание незаконного выселения по решению застройщика или хокимията
+        uz: Quruvchi yoki hokimiyat qarori bilan noqonuniy koʻchirishni nizolashish
+        en: Challenging unlawful eviction ordered by a developer or khokimiyat
+      - ru: Вселение, выселение
+        uz: Uy-joyga kiritish va koʻchirish
+        en: Move-in and eviction cases
+      - ru: Признание утратившим право пользования жилым помещением
+        uz: Turar joydan foydalanish huquqini yoʻqotgan deb topish
+        en: Terminating a person’s right to use a residence
+      - ru: Признание права собственности на самовольно возведённые строения
+        uz: Oʻzboshimchalik bilan qurilgan imoratlarga mulk huquqini tan olish
+        en: Legalising ownership of unauthorised buildings
+      - ru: Оспаривание кадастровой стоимости недвижимости
+        uz: Koʻchmas mulkning kadastr qiymatini nizolashish
+        en: Challenging the cadastral value of property
+      - ru: Досрочное расторжение договора аренды
+        uz: Ijara shartnomasini muddatidan oldin bekor qilish
+        en: Early termination of a lease
+      - ru: Признание договора аренды недействительным
+        uz: Ijara shartnomasini haqiqiy emas deb topish
+        en: Invalidating a lease agreement
+  - icon: heart-handshake
+    title:
+      ru: Семейные дела
+      uz: Oilaviy ishlar
+      en: Family law
+    short:
+      ru: Развод, алименты, дети
+      uz: Ajrashish, aliment, bolalar
+      en: Divorce, alimony, children
+    description:
+      ru: Развод и раздел имущества, алименты, установление отцовства, усыновление, место жительства детей.
+      uz: Ajrashish va mulkni boʻlish, aliment, otalikni belgilash, farzandlikka olish, bolalarning yashash joyi.
+      en: Divorce and division of property, alimony, paternity, adoption and where children live.
+    items:
+      - ru: Бракоразводные процессы
+        uz: Ajrashish jarayonlari
+        en: Divorce proceedings
+      - ru: Взыскание и снижение алиментов
+        uz: Aliment undirish va uni kamaytirish
+        en: Claiming or reducing alimony
+      - ru: Установление отцовства
+        uz: Otalikni belgilash
+        en: Establishing paternity
+      - ru: Усыновление
+        uz: Farzandlikka olish
+        en: Adoption
+      - ru: Лишение родительских прав
+        uz: Ota-onalik huquqidan mahrum qilish
+        en: Termination of parental rights
+      - ru: Определение порядка и времени общения с ребёнком, определение его места жительства
+        uz: Bola bilan muloqot tartibi va vaqtini, uning yashash joyini belgilash
+        en: Contact arrangements and determining where a child lives
+      - ru: Оформление опекунства и попечительства
+        uz: Vasiylik va homiylikni rasmiylashtirish
+        en: Arranging guardianship and custodianship
+  - icon: landmark
+    title:
+      ru: Административные и трудовые дела
+      uz: Maʼmuriy va mehnat ishlari
+      en: Administrative and employment
+    short:
+      ru: Госорганы, работа, миграция
+      uz: Davlat organlari, ish, migratsiya
+      en: Authorities, employment, migration
+    description:
+      ru: Обжалование штрафов и решений госорганов, ДТП, трудовые споры, миграция и гражданство.
+      uz: Jarima va davlat organlari qarorlari ustidan shikoyat, YTH, mehnat nizolari, migratsiya va fuqarolik.
+      en: Appealing fines and decisions of authorities, road accidents, employment disputes, migration and citizenship.
+    items:
+      - ru: Обжалование постановлений об административных правонарушениях
+        uz: Maʼmuriy huquqbuzarliklar toʻgʻrisidagi qarorlar ustidan shikoyat qilish
+        en: Appealing administrative offence rulings
+      - ru: Помощь при незаконном административном задержании
+        uz: Noqonuniy maʼmuriy ushlab turishda yordam
+        en: Help with unlawful administrative detention
+      - ru: Обжалование действий Бюро принудительного исполнения
+        uz: Majburiy ijro byurosi harakatlari ustidan shikoyat qilish
+        en: Challenging actions of the Compulsory Enforcement Bureau
+      - ru: Помощь при ДТП
+        uz: Yoʻl-transport hodisalarida yordam
+        en: Help after road accidents
+      - ru: "Трудовые споры: незаконное увольнение, взыскание зарплаты, восстановление на работе"
+        uz: "Mehnat nizolari: noqonuniy ishdan boʻshatish, ish haqini undirish, ishga tiklash"
+        en: "Employment disputes: unfair dismissal, unpaid wages, reinstatement"
+      - ru: "Трудовые споры: дискриминация, охрана труда, производственные травмы"
+        uz: "Mehnat nizolari: kamsitish, mehnatni muhofaza qilish, ishlab chiqarishdagi jarohatlar"
+        en: "Employment disputes: discrimination, workplace safety, occupational injuries"
+      - ru: Защита прав при принудительном труде
+        uz: Majburiy mehnatda huquqlarni himoya qilish
+        en: Protection against forced labour
+      - ru: Вопросы миграции, гражданства и вида на жительство
+        uz: Migratsiya, fuqarolik va yashash guvohnomasi masalalari
+        en: Migration, citizenship and residence permits
+cta:
+  title:
+    ru: Не нашли свой вопрос?
+    uz: Savolingizni topmadingizmi?
+    en: Can’t find your issue?
+  text:
+    ru: Опишите ситуацию — юрист ответит в течение 24 часов и подскажет, как действовать.
+    uz: Vaziyatni yozib qoldiring — yurist 24 soat ichida javob beradi va qanday harakat qilishni maslahat beradi.
+    en: Describe your situation — a lawyer will reply within 24 hours and advise on next steps.

@@ -1,0 +1,54 @@
+---
+import Icon from "./ui/Icon.astro";
+import { contactLinks } from "../lib/links.ts";
+
+const links = contactLinks();
+---
+
+<div class="fab glass-strong" transition:persist="fab">
+  <a href={links.telegram} class="fab__btn" target="_blank" rel="noopener" aria-label="Telegram">
+    <Icon social="telegram" size={22} />
+  </a>
+  <a href={links.whatsapp} class="fab__btn" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <Icon social="whatsapp" size={22} />
+  </a>
+</div>
+
+<style>
+  .fab {
+    position: fixed;
+    z-index: 40;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-float);
+  }
+
+  .fab__btn {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-bg-accent);
+    color: var(--color-text-on-accent);
+    transition: background-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .fab__btn:hover {
+      background: var(--color-bg-accent-hover);
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (min-width: 600px) {
+    .fab {
+      right: 32px;
+      bottom: 32px;
+    }
+  }
+</style>

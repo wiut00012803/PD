@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wiut00012803.github.io/PD/sitemap-index.xml

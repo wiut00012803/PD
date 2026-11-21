@@ -1,0 +1,81 @@
+name: Публикация сайта
+run-name: "Публикация: ${{ github.event.head_commit.message || 'ручной запуск' }}"
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 1 * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Проверка и сборка
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получение файлов
+        uses: actions/checkout@v7
+
+      - name: Настройка Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Установка зависимостей
+        run: npm ci
+
+      - name: Проверка контента
+        id: content
+        run: npm run check:content
+
+      - name: Сборка сайта
+        run: npx astro build
+
+      - name: Отчёт о технической ошибке
+        if: failure() && steps.content.outcome != 'failure'
+        run: |
+          {
+            echo "## ❌ Изменения НЕ опубликованы"
+            echo
+            echo "Сайт показывает **предыдущую версию**. Если выше нет таблицы с ошибками в контенте — это техническая ошибка сборки: отправьте ссылку на эту страницу разработчику."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Подготовка к публикации
+        uses: actions/configure-pages@v6
+
+      - name: Упаковка сайта
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    name: Публикация
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Публикация на GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
+
+      - name: Итог
+        run: |
+          {
+            echo "## 🌐 Сайт обновлён"
+            echo
+            echo "Новая версия опубликована: ${{ steps.deployment.outputs.page_url }}"
+            echo
+            echo "Если изменений не видно — обновите страницу с очисткой кэша (Ctrl+F5) или подождите пару минут."
+          } >> "$GITHUB_STEP_SUMMARY"

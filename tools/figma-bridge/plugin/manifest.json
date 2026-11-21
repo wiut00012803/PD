@@ -1,0 +1,14 @@
+{
+  "name": "PD Bridge",
+  "id": "pd-bridge-local-dev",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": {
+    "allowedDomains": ["none"],
+    "devAllowedDomains": ["http://localhost:7788"],
+    "reasoning": "Local development bridge: receives scripts from a server running on this computer and returns results/screenshots to it."
+  }
+}

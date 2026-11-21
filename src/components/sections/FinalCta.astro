@@ -1,0 +1,78 @@
+---
+import Btn from "../ui/Btn.astro";
+import Messenger from "../ui/Messenger.astro";
+import { lines, tr } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+import { contactLinks } from "../../lib/links.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { consultation } = getContent();
+const f = consultation.final;
+const links = contactLinks();
+---
+
+{
+  f.enabled && (
+    <section class="section final" aria-labelledby="final-title">
+      <div class="container">
+        <div class="final__card glass-strong">
+          <h2 class="t-h1" id="final-title">
+            <span set:html={lines(f.title, lang)} /> <span class="gradient-text" set:html={lines(f.titleAccent, lang)} />
+          </h2>
+          <p class="t-body-l c-secondary">{tr(f.subtitle, lang)}</p>
+          <div class="final__actions">
+            <Btn href={links.form} external>{tr(consultation.hero.button, lang)}</Btn>
+            <Messenger platform="telegram" />
+            <Messenger platform="whatsapp" />
+            <Messenger platform="phone" />
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .final {
+    padding-top: calc(var(--py) / 3);
+  }
+
+  .final__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 40px 24px;
+    border-radius: var(--radius-2xl);
+    text-align: center;
+  }
+
+  .final__card .t-h1 {
+    max-width: 900px;
+  }
+
+  .final__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  @media (min-width: 600px) {
+    .final__card {
+      padding: 56px 48px;
+    }
+
+    .final__actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: auto;
+    }
+  }
+</style>

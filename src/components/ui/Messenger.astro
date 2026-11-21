@@ -1,0 +1,26 @@
+---
+import Icon from "./Icon.astro";
+import { contactLinks } from "../../lib/links.ts";
+
+interface Props {
+  platform: "telegram" | "whatsapp" | "phone";
+  block?: boolean;
+  class?: string;
+}
+
+const { platform, block = false, class: className } = Astro.props;
+const links = contactLinks();
+const href = platform === "telegram" ? links.telegram : platform === "whatsapp" ? links.whatsapp : links.phone;
+const label = platform === "telegram" ? "Telegram" : platform === "whatsapp" ? "WhatsApp" : links.phoneDisplay;
+const external = platform !== "phone";
+---
+
+<a
+  href={href}
+  class:list={["btn", "btn--messenger", "btn--m", block && "btn--block", className]}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener" : undefined}
+>
+  {platform === "phone" ? <Icon name="phone" /> : <Icon social={platform} />}
+  <span>{label}</span>
+</a>

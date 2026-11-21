@@ -1,0 +1,148 @@
+---
+import Btn from "../ui/Btn.astro";
+import Messenger from "../ui/Messenger.astro";
+import { lines, tr, url } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { home } = getContent();
+const { hero, stats } = home;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <p class="chip">{tr(hero.badge, lang)}</p>
+    <h1 class="t-display hero__title" id="hero-title">
+      <span set:html={lines(hero.title, lang)} />
+      <br />
+      <span class="gradient-text" set:html={lines(hero.titleAccent, lang)} />
+    </h1>
+    <p class="t-body-l hero__sub">{tr(hero.subtitle, lang)}</p>
+    <div class="hero__actions">
+      <Btn href={url(lang, "consultation")} class="hero__cta">{tr(hero.button, lang)}</Btn>
+      <div class="hero__messengers">
+        <Messenger platform="telegram" />
+        <Messenger platform="whatsapp" />
+      </div>
+    </div>
+
+    {
+      stats.enabled && stats.items.length > 0 && (
+        <ul class="hero__stats" style={`--count:${stats.items.length}`}>
+          {stats.items.map((s) => (
+            <li class="stat glass card">
+              <span class="t-stat">{tr(s.value, lang)}</span>
+              <span class="t-body-s c-secondary stat__caption">{tr(s.caption, lang)}</span>
+              <span class="t-body-s c-secondary stat__caption-short">{tr(s.captionShort?.ru ? s.captionShort : s.caption, lang)}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-top: calc(var(--header-top) + var(--header-h) + 64px);
+    padding-bottom: var(--py);
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .hero__sub {
+    max-width: 640px;
+    color: var(--color-text-secondary);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    padding-top: 8px;
+  }
+
+  .hero__messengers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px;
+  }
+
+  .stat__caption {
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    .hero {
+      padding-top: calc(var(--header-top) + var(--header-h) + 112px);
+    }
+
+    .hero__inner {
+      gap: 28px;
+    }
+
+    .hero__actions {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+    }
+
+    .hero__messengers {
+      display: flex;
+    }
+
+    .hero__stats {
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    .stat {
+      padding: 22px 24px;
+    }
+
+    .stat__caption {
+      display: block;
+    }
+
+    .stat__caption-short {
+      display: none;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero__stats {
+      grid-template-columns: repeat(min(var(--count), 4), minmax(0, 1fr));
+    }
+  }
+</style>

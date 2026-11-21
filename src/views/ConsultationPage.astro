@@ -1,0 +1,27 @@
+---
+import Base from "../layouts/Base.astro";
+import ConsultHero from "../components/sections/ConsultHero.astro";
+import ConsultSteps from "../components/sections/ConsultSteps.astro";
+import Topics from "../components/sections/Topics.astro";
+import Faq from "../components/sections/Faq.astro";
+import FinalCta from "../components/sections/FinalCta.astro";
+import { tr } from "../lib/i18n.ts";
+import type { Lang } from "../lib/i18n.ts";
+import { getContent } from "../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { consultation } = getContent();
+const faq = consultation.faq;
+---
+
+<Base lang={lang} page="consultation" title={tr(consultation.seo.title, lang)} description={tr(consultation.seo.description, lang)}>
+  <ConsultHero lang={lang} />
+  <ConsultSteps lang={lang} />
+  <Topics lang={lang} />
+  {faq.enabled && <Faq lang={lang} id="consult-faq" overline={faq.overline} title={faq.title} subtitle={faq.subtitle} items={faq.items} messenger="whatsapp" />}
+  <FinalCta lang={lang} />
+</Base>

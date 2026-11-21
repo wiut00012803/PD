@@ -1,0 +1,38 @@
+siteName: Pravoe Delo
+phone: +998 00 000-00-00
+email: info@pravoedelo.uz
+telegram: pravoedelo_zaglushka
+whatsapp: "998000000000"
+formUrl: https://forms.gle/zaglushka
+address:
+  ru: г. Ташкент, ул. Примерная, 1, офис 101
+  uz: Toshkent sh., Namuna koʻchasi, 1-uy, 101-ofis
+  en: 1 Sample St, office 101, Tashkent
+hours:
+  ru: Пн–Пт 9:00–19:00, Сб по записи
+  uz: Du–Ju 9:00–19:00, Sh — oldindan yozilib
+  en: Mon–Fri 9:00–19:00, Sat by appointment
+mapQuery: Ташкент, Узбекистан
+practiceSince: 2008
+founded: 2018
+socials:
+  - network: telegram
+    url: https://t.me/pravoedelo_zaglushka
+  - network: instagram
+    url: https://instagram.com/pravoedelo_zaglushka
+  - network: facebook
+    url: https://facebook.com/pravoedelo_zaglushka
+  - network: youtube
+    url: https://youtube.com/@pravoedelo_zaglushka
+  - network: whatsapp
+    url: https://wa.me/998000000000
+privacyUrl: ""
+seo:
+  title:
+    ru: Pravoe Delo — адвокатское бюро в Ташкенте
+    uz: Pravoe Delo — Toshkentdagi advokatlik byurosi
+    en: Pravoe Delo — law firm in Tashkent
+  description:
+    ru: Уголовные, гражданские, хозяйственные и административные дела. Руководитель бюро — адвокат с 2008 года. Бесплатная консультация, ответ в течение 24 часов.
+    uz: Jinoyat, fuqarolik, xoʻjalik va maʼmuriy ishlar. Byuro rahbari — 2008-yildan beri advokat. Bepul maslahat, 24 soat ichida javob.
+    en: Criminal, civil, commercial and administrative cases. The head of the firm has been an advocate since 2008. Free consultation, reply within 24 hours.

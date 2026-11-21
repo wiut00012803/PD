@@ -1,0 +1,169 @@
+---
+import { Picture } from "astro:assets";
+import Icon from "../ui/Icon.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Carousel from "../ui/Carousel.astro";
+import { paragraphs, tr } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent, getImage } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { team, ui } = getContent();
+const members = team.members.map((m, i) => ({ ...m, image: getImage(m.photo), dialog: `lawyer-${i + 1}`, full: paragraphs(m.bioFull, lang) }));
+---
+
+{
+  team.enabled && members.length > 0 && (
+    <section class="section" id="team" aria-labelledby="team-title">
+      <div class="container">
+        <SectionTitle id="team-title" overline={tr(team.overline, lang)} title={tr(team.title, lang)} subtitle={tr(team.subtitle, lang)} />
+        <Carousel id="team-list" count={members.length} cols={{ tablet: 2, desktop: 3, wide: 3 }} label={tr(team.title, lang)}>
+          {members.map((m) => (
+            <li class="lawyer glass card">
+              <div class="lawyer__photo">
+                {m.image ? (
+                  <Picture src={m.image} alt={tr(m.name, lang)} widths={[320, 480, 720]} sizes="(min-width: 1280px) 364px, (min-width: 900px) 30vw, (min-width: 600px) 45vw, 300px" formats={["avif", "webp"]} loading="lazy" />
+                ) : (
+                  <span class="lawyer__placeholder">
+                    <Icon name="users" size={44} />
+                    <span class="t-body-s">{tr(ui.labels.photoSoon, lang)}</span>
+                  </span>
+                )}
+              </div>
+              <div class="lawyer__text">
+                <p class="t-overline">{tr(m.role, lang)}</p>
+                <h3 class="t-h4">{tr(m.name, lang)}</h3>
+                <p class="t-body-s c-secondary">{tr(m.bio, lang)}</p>
+                {m.full.length > 0 && (
+                  <button type="button" class="btn btn--ghost btn--s lawyer__more" data-dialog-open={m.dialog} aria-haspopup="dialog">
+                    <span>{tr(ui.buttons.more, lang)}</span>
+                    <Icon name="arrow-right" />
+                  </button>
+                )}
+              </div>
+            </li>
+          ))}
+        </Carousel>
+      </div>
+
+      {members
+        .filter((m) => m.full.length > 0)
+        .map((m) => (
+          <dialog class="dialog" id={m.dialog} aria-labelledby={`${m.dialog}-title`}>
+            <div class="dialog__head">
+              <div class="bio-head">
+                <p class="t-overline">{tr(m.role, lang)}</p>
+                <h3 class="t-h3" id={`${m.dialog}-title`}>{tr(m.name, lang)}</h3>
+              </div>
+              <button type="button" class="round-btn round-btn--touch" data-dialog-close aria-label={tr(ui.buttons.close, lang)}>
+                <Icon name="x" />
+              </button>
+            </div>
+            <div class="dialog__body bio">
+              {m.image && (
+                <Picture src={m.image} alt={tr(m.name, lang)} widths={[240, 480]} sizes="200px" formats={["avif", "webp"]} class="bio__photo" loading="lazy" />
+              )}
+              {m.full.map((p) => (
+                <p class="t-body-m c-secondary">{p}</p>
+              ))}
+            </div>
+          </dialog>
+        ))}
+    </section>
+  )
+}
+
+<style>
+  .lawyer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 10px 24px;
+  }
+
+  .lawyer__photo {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    aspect-ratio: 364 / 400;
+    background: var(--color-bg-muted);
+  }
+
+  .lawyer__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 25%;
+  }
+
+  .lawyer__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 100%;
+    color: var(--color-icon-secondary);
+    background: linear-gradient(160deg, var(--color-surface-glass-strong), transparent);
+  }
+
+  .lawyer__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-inline: 14px;
+  }
+
+  .lawyer__more {
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+
+  .bio-head {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bio {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bio :global(.bio__photo) {
+    width: 160px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 25%;
+    border-radius: var(--radius-lg);
+  }
+
+  @media (min-width: 600px) {
+    .lawyer {
+      padding-bottom: 28px;
+    }
+
+    .lawyer__text {
+      padding-inline: 18px;
+    }
+
+    .bio {
+      display: block;
+    }
+
+    .bio :global(.bio__photo) {
+      float: right;
+      width: 200px;
+      margin: 0 0 16px 24px;
+    }
+
+    .bio p + p {
+      margin-top: 14px;
+    }
+  }
+</style>

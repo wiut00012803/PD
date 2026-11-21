@@ -1,0 +1,26 @@
+---
+import { LANGS, LANG_SHORT, url, tr } from "../../lib/i18n.ts";
+import type { Lang, PageKey } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+  page: PageKey;
+  touch?: boolean;
+  class?: string;
+}
+
+const { lang, page, touch = false, class: className } = Astro.props;
+const { ui } = getContent();
+const NAMES: Record<Lang, string> = { ru: "Русский", uz: "Oʻzbekcha", en: "English" };
+---
+
+<nav class:list={["lang-switch", touch && "lang-switch--touch", className]} aria-label={tr(ui.labels.language, lang)}>
+  {
+    LANGS.map((l) => (
+      <a href={url(l, page)} hreflang={l} lang={l} data-set-lang={l} aria-current={l === lang ? "true" : undefined} title={NAMES[l]}>
+        {LANG_SHORT[l]}
+      </a>
+    ))
+  }
+</nav>

@@ -1,0 +1,49 @@
+---
+import { nextLogoId } from "../../lib/logo-ids.ts";
+
+interface Props {
+  variant?: "horizontal" | "vertical" | "mark";
+  height?: number;
+  class?: string;
+  label?: string;
+}
+
+const { variant = "horizontal", height = 34, class: className, label = "Pravoe Delo" } = Astro.props;
+const files = import.meta.glob<string>("/src/assets/brand/*.svg", { query: "?raw", import: "default", eager: true });
+const raw = files[`/src/assets/brand/logo-${variant}.svg`];
+const suffix = nextLogoId();
+const svg = raw
+  ?.replace(/<\?xml[^>]*>/, "")
+  .replace(/\bid="([^"]+)"/g, (_m, id: string) => `id="${id}-${suffix}"`)
+  .replace(/url\(#([^)]+)\)/g, (_m, id: string) => `url(#${id}-${suffix})`)
+  .replace(/<svg\b([^>]*)>/, (_m, attrs: string) => {
+    const cleaned = attrs.replace(/\s(width|height)="[^"]*"/g, "");
+    return `<svg${cleaned} class="logo__svg" role="img" aria-label="${label}" focusable="false">`;
+  });
+---
+
+<span class:list={["logo", `logo--${variant}`, className]} style={`--logo-h:${height}px`}>
+  {svg ? <Fragment set:html={svg} /> : <span class="logo__text">{label}</span>}
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    height: var(--logo-h);
+    color: var(--color-text-primary);
+  }
+
+  .logo :global(.logo__svg) {
+    height: 100%;
+    width: auto;
+    overflow: visible;
+  }
+
+  .logo__text {
+    font-weight: 600;
+    font-size: calc(var(--logo-h) * 0.5);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+</style>

@@ -1,0 +1,141 @@
+---
+import Logo from "./ui/Logo.astro";
+import LangSwitch from "./ui/LangSwitch.astro";
+import ThemeToggle from "./ui/ThemeToggle.astro";
+import Icon from "./ui/Icon.astro";
+import { navLinks } from "../lib/nav.ts";
+import { tr, url } from "../lib/i18n.ts";
+import type { Lang, PageKey } from "../lib/i18n.ts";
+import { getContent } from "../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+  page: PageKey;
+}
+
+const { lang, page } = Astro.props;
+const { ui, settings } = getContent();
+const links = navLinks(lang, page).filter((l) => l.inHeader);
+---
+
+<header class="site-header glass" data-header transition:name="site-header">
+  <a class="site-header__logo" href={url(lang, "home")} aria-label={settings.siteName}>
+    <Logo height={34} class="logo-desktop" label={settings.siteName} />
+    <Logo height={28} class="logo-mobile" label={settings.siteName} />
+  </a>
+
+  <nav class="site-header__nav" aria-label={tr(ui.buttons.menu, lang)}>
+    {
+      links.map((l) => (
+        <a href={l.href} class:list={["t-label", l.compactHidden && "hide-compact"]}>
+          {l.label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="site-header__actions">
+    <LangSwitch lang={lang} page={page} class="only-desktop" />
+    <ThemeToggle lang={lang} class="only-desktop" />
+    <ThemeToggle lang={lang} touch class="only-touch" />
+    <a href={url(lang, "consultation")} class="btn btn--primary btn--s only-desktop" aria-current={page === "consultation" ? "page" : undefined}>
+      <span>{tr(ui.buttons.consultShort, lang)}</span>
+    </a>
+    <a href={url(lang, "consultation")} class="btn btn--primary btn--m only-tablet" aria-current={page === "consultation" ? "page" : undefined}>
+      <span>{tr(ui.buttons.consultShort, lang)}</span>
+    </a>
+    <button type="button" class="round-btn round-btn--touch only-touch" data-menu-open aria-haspopup="dialog" aria-controls="site-menu" aria-label={tr(ui.buttons.menu, lang)}>
+      <Icon name="menu" />
+    </button>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    z-index: 50;
+    top: var(--header-top);
+    left: 50%;
+    translate: -50% 0;
+    width: min(1100px, 100% - 2 * var(--header-gutter));
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 8px 0 18px;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-float);
+  }
+
+  .site-header__logo {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    border-radius: 8px;
+  }
+
+  .site-header__nav {
+    display: none;
+    gap: 28px;
+  }
+
+  .site-header__nav a {
+    color: var(--color-text-secondary);
+    transition: color var(--dur) var(--ease-out);
+    padding-block: 8px;
+  }
+
+  .site-header__nav a:hover {
+    color: var(--color-text-primary);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .site-header :global(.logo-desktop) {
+    display: none;
+  }
+
+  @media (min-width: 600px) {
+    .site-header {
+      padding: 0 10px 0 24px;
+    }
+
+    .site-header :global(.logo-mobile) {
+      display: none;
+    }
+
+    .site-header :global(.logo-desktop) {
+      display: inline-flex;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .site-header__nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .site-header__actions {
+      gap: 10px;
+    }
+
+    .hide-compact {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .site-header__nav {
+      gap: 28px;
+    }
+
+    .hide-compact {
+      display: inline;
+    }
+  }
+</style>

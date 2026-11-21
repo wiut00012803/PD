@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import Btn from "../components/ui/Btn.astro";
+import { tr, url } from "../lib/i18n.ts";
+import { getContent } from "../lib/content.ts";
+
+const { ui, home } = getContent();
+const lang = "ru";
+---
+
+<Base lang={lang} page="home" title={`404 — ${tr(ui.notFound.title, lang)}`} description={tr(ui.notFound.text, lang)} noindex>
+  <section class="section not-found">
+    <div class="container">
+      <p class="t-display gradient-text">404</p>
+      <h1 class="t-h1">{tr(ui.notFound.title, lang)}</h1>
+      <p class="t-body-l c-secondary">{tr(ui.notFound.text, lang)}</p>
+      <div class="row-wrap">
+        <Btn href={url(lang, "home")}>{tr(ui.buttons.back, lang)}</Btn>
+        <Btn href={url(lang, "consultation")} variant="secondary">{tr(home.hero.button, lang)}</Btn>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    min-height: 70dvh;
+    padding-top: calc(var(--header-top) + var(--header-h) + 96px);
+  }
+
+  .not-found .container {
+    gap: 20px;
+    align-items: flex-start;
+  }
+</style>

@@ -1,0 +1,26 @@
+---
+import Icon from "./Icon.astro";
+import type { UiIconName } from "../../icons/icons.ts";
+
+interface Props {
+  href: string;
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "m" | "s";
+  icon?: UiIconName | null;
+  iconStart?: UiIconName;
+  external?: boolean;
+  block?: boolean;
+  class?: string;
+  [attr: string]: unknown;
+}
+
+const { href, variant = "primary", size = "m", icon = variant === "secondary" ? null : "arrow-right", iconStart, external = false, block = false, class: className, ...rest } = Astro.props;
+const classes = ["btn", `btn--${variant}`, `btn--${size}`, block && "btn--block", className].filter(Boolean).join(" ");
+const target = external ? { target: "_blank", rel: "noopener" } : {};
+---
+
+<a href={href} class={classes} {...target} {...rest}>
+  {iconStart && <Icon name={iconStart} />}
+  <span><slot /></span>
+  {icon && <Icon name={icon} />}
+</a>

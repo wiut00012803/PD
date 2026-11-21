@@ -1,0 +1,276 @@
+seo:
+  title:
+    ru: Бесплатная консультация адвоката — Pravoe Delo
+    uz: Advokatning bepul maslahati — Pravoe Delo
+    en: Free consultation with an advocate — Pravoe Delo
+  description:
+    ru: Юрист изучит вашу ситуацию, оценит шансы и предложит план действий. Бесплатно, конфиденциально, ответ в течение 24 часов.
+    uz: Yurist vaziyatingizni oʻrganadi, imkoniyatlarni baholaydi va harakat rejasini taklif qiladi. Bepul, maxfiy, 24 soat ichida javob.
+    en: A lawyer will study your situation, assess your chances and propose an action plan. Free, confidential, reply within 24 hours.
+hero:
+  badge:
+    ru: Бесплатно · ответ в течение 24 часов
+    uz: Bepul · 24 soat ichida javob
+    en: Free · reply within 24 hours
+  title:
+    ru: Бесплатная
+    uz: Bepul
+    en: Free
+  titleAccent:
+    ru: консультация
+    uz: maslahat
+    en: consultation
+  subtitle:
+    ru: Юрист Pravoe Delo изучит вашу ситуацию, честно оценит шансы и предложит план действий. Без обязательств и скрытых платежей.
+    uz: Pravoe Delo yuristi vaziyatingizni oʻrganadi, imkoniyatlarni halol baholaydi va harakat rejasini taklif qiladi. Majburiyatlarsiz va yashirin toʻlovlarsiz.
+    en: A Pravoe Delo lawyer will study your situation, honestly assess your chances and propose an action plan. No obligations, no hidden fees.
+  button:
+    ru: Заполнить заявку
+    uz: Ariza toʻldirish
+    en: Fill in the request
+  getTitle:
+    ru: Что вы получите
+    uz: Nimalarga ega boʻlasiz
+    en: What you get
+  get:
+    - ru: Оценку шансов и рисков по вашему делу
+      uz: Ishingiz boʻyicha imkoniyat va xatarlar bahosi
+      en: An assessment of your chances and risks
+    - ru: План действий и сроки
+      uz: Harakat rejasi va muddatlar
+      en: An action plan and timeline
+    - ru: Ориентир по стоимости — до начала работы
+      uz: Taxminiy narx — ish boshlanishidan oldin
+      en: A fee estimate before any work starts
+    - ru: Ответы на все вопросы простым языком
+      uz: Barcha savollarga oddiy tilda javoblar
+      en: Answers to all your questions in plain language
+  confidential:
+    ru: Конфиденциально — адвокатская тайна
+    uz: Maxfiy — advokatlik siri
+    en: Confidential — attorney–client privilege
+steps:
+  enabled: true
+  overline:
+    ru: Как проходит
+    uz: Qanday oʻtadi
+    en: How it works
+  title:
+    ru: Четыре простых шага
+    uz: Toʻrtta oddiy qadam
+    en: Four simple steps
+  subtitle:
+    ru: От заявки до плана действий — обычно 1–2 дня.
+    uz: Arizadan harakat rejasigacha — odatda 1–2 kun.
+    en: From request to action plan — usually 1–2 days.
+  items:
+    - icon: file-text
+      title:
+        ru: Заявка
+        uz: Ariza
+        en: Request
+      text:
+        ru: Заполните короткую форму или напишите в Telegram / WhatsApp.
+        uz: Qisqa shaklni toʻldiring yoki Telegram / WhatsApp orqali yozing.
+        en: Fill in a short form or message us on Telegram / WhatsApp.
+      time:
+        ru: 2 минуты
+        uz: 2 daqiqa
+        en: 2 minutes
+    - icon: phone
+      title:
+        ru: Звонок юриста
+        uz: Yurist qoʻngʻirogʻi
+        en: A call from a lawyer
+      text:
+        ru: Юрист свяжется, уточнит детали и попросит документы, если нужны.
+        uz: Yurist bogʻlanadi, tafsilotlarni aniqlaydi va kerak boʻlsa hujjatlarni soʻraydi.
+        en: A lawyer will contact you, clarify the details and ask for documents if needed.
+      time:
+        ru: до 24 часов
+        uz: 24 soatgacha
+        en: within 24 hours
+    - icon: scale
+      title:
+        ru: Разбор ситуации
+        uz: Vaziyat tahlili
+        en: Case review
+      text:
+        ru: "Онлайн или в офисе: разбираем дело, оцениваем шансы и риски."
+        uz: "Onlayn yoki ofisda: ishni tahlil qilamiz, imkoniyat va xatarlarni baholaymiz."
+        en: "Online or in the office: we review the case and assess chances and risks."
+      time:
+        ru: 30–40 минут
+        uz: 30–40 daqiqa
+        en: 30–40 minutes
+    - icon: target
+      title:
+        ru: План действий
+        uz: Harakat rejasi
+        en: Action plan
+      text:
+        ru: Вы получаете план, сроки и стоимость. Решение — за вами.
+        uz: Siz reja, muddat va narxni olasiz. Qaror — sizniki.
+        en: You get a plan, timeline and fee. The decision is yours.
+      time:
+        ru: сразу после встречи
+        uz: uchrashuvdan soʻng darhol
+        en: right after the meeting
+  terms:
+    - icon: clock
+      title:
+        ru: Ответ в течение 24 часов
+        uz: 24 soat ichida javob
+        en: Reply within 24 hours
+      text:
+        ru: В рабочие дни обычно в течение 2–3 часов. Срочные вопросы — сразу в Telegram или по телефону.
+        uz: Ish kunlari odatda 2–3 soat ichida. Shoshilinch savollar — darhol Telegram yoki telefon orqali.
+        en: Usually within 2–3 hours on working days. Urgent matters — straight to Telegram or by phone.
+    - icon: lock
+      title:
+        ru: Адвокатская тайна
+        uz: Advokatlik siri
+        en: Attorney–client privilege
+      text:
+        ru: Всё, что вы расскажете, защищено законом. Данные не передаются третьим лицам.
+        uz: Aytganlaringizning barchasi qonun bilan himoyalangan. Maʼlumotlar uchinchi shaxslarga berilmaydi.
+        en: Everything you tell us is protected by law. Your details are never shared with third parties.
+    - icon: message-circle
+      title:
+        ru: Удобный формат
+        uz: Qulay format
+        en: A format that suits you
+      text:
+        ru: Телефон, Telegram, WhatsApp, видеозвонок или встреча в офисе — как вам удобнее.
+        uz: Telefon, Telegram, WhatsApp, video qoʻngʻiroq yoki ofisda uchrashuv — sizga qanday qulay boʻlsa.
+        en: Phone, Telegram, WhatsApp, video call or a meeting in the office — whatever works for you.
+topics:
+  enabled: true
+  overline:
+    ru: С чем приходят
+    uz: Qanday masalalar bilan kelishadi
+    en: Common requests
+  title:
+    ru: С какими вопросами можно обратиться
+    uz: Qanday savollar bilan murojaat qilish mumkin
+    en: What you can come to us with
+  items:
+    - icon: briefcase
+      label:
+        ru: Регистрация и договоры
+        uz: Roʻyxatdan oʻtkazish va shartnomalar
+        en: Registration and contracts
+    - icon: coins
+      label:
+        ru: Взыскание долгов
+        uz: Qarzlarni undirish
+        en: Debt recovery
+    - icon: receipt
+      label:
+        ru: Налоговые проверки и штрафы
+        uz: Soliq tekshiruvlari va jarimalar
+        en: Tax inspections and fines
+    - icon: shield-check
+      label:
+        ru: Уголовное преследование
+        uz: Jinoiy taʼqib
+        en: Criminal prosecution
+    - icon: heart-handshake
+      label:
+        ru: Развод и алименты
+        uz: Ajrashish va aliment
+        en: Divorce and alimony
+    - icon: scroll-text
+      label:
+        ru: Наследство
+        uz: Meros
+        en: Inheritance
+    - icon: building-2
+      label:
+        ru: Покупка недвижимости
+        uz: Koʻchmas mulk xaridi
+        en: Buying property
+    - icon: landmark
+      label:
+        ru: Споры с госорганами
+        uz: Davlat organlari bilan nizolar
+        en: Disputes with authorities
+    - icon: hard-hat
+      label:
+        ru: Трудовые споры
+        uz: Mehnat nizolari
+        en: Employment disputes
+    - icon: award
+      label:
+        ru: Защита прав потребителей
+        uz: Isteʼmolchilar huquqlarini himoya qilish
+        en: Consumer protection
+faq:
+  enabled: true
+  overline:
+    ru: FAQ
+    uz: FAQ
+    en: FAQ
+  title:
+    ru: О консультации
+    uz: Maslahat haqida
+    en: About the consultation
+  subtitle:
+    ru: Остались вопросы? Напишите — ответим лично.
+    uz: Savollar qoldimi? Yozing — shaxsan javob beramiz.
+    en: Still have questions? Message us — we’ll reply personally.
+  items:
+    - question:
+        ru: Это правда бесплатно?
+        uz: Bu haqiqatan ham bepulmi?
+        en: Is it really free?
+      answer:
+        ru: Да. Первая консультация бесплатна и ни к чему вас не обязывает. Если решите работать с нами, стоимость согласуем заранее и зафиксируем в договоре.
+        uz: Ha. Birinchi maslahat bepul va sizni hech narsaga majbur qilmaydi. Biz bilan ishlashga qaror qilsangiz, narxni oldindan kelishib, shartnomada qayd etamiz.
+        en: Yes. The first consultation is free and you’re under no obligation. If you decide to work with us, we’ll agree on the fee in advance and put it in the contract.
+    - question:
+        ru: Сколько длится консультация?
+        uz: Maslahat qancha davom etadi?
+        en: How long does a consultation take?
+      answer:
+        ru: Обычно 30–40 минут. Этого хватает, чтобы разобраться в ситуации, оценить шансы и наметить план. Если дело сложное, договоримся о следующей встрече.
+        uz: Odatda 30–40 daqiqa. Bu vaziyatni tushunish, imkoniyatlarni baholash va reja tuzish uchun yetarli. Ish murakkab boʻlsa, keyingi uchrashuvni kelishib olamiz.
+        en: Usually 30–40 minutes — enough to understand the situation, assess your chances and outline a plan. If the case is complex, we’ll arrange a follow-up meeting.
+    - question:
+        ru: Какие документы подготовить?
+        uz: Qanday hujjatlarni tayyorlash kerak?
+        en: What documents should I prepare?
+      answer:
+        ru: "Всё, что относится к делу: договоры, переписку, решения и постановления, повестки, квитанции. Если документов нет — ничего страшного: юрист подскажет, что и где получить."
+        uz: "Ishga tegishli hamma narsani: shartnomalar, yozishmalar, qarorlar, chaqiruv qogʻozlari, kvitansiyalar. Hujjatlar boʻlmasa — hechqisi yoʻq: yurist nimani va qayerdan olishni aytib beradi."
+        en: "Anything related to the case: contracts, correspondence, rulings, summonses, receipts. If you don’t have documents, that’s fine — the lawyer will tell you what to obtain and where."
+    - question:
+        ru: Можно ли проконсультироваться анонимно?
+        uz: Anonim maslahat olish mumkinmi?
+        en: Can I consult anonymously?
+      answer:
+        ru: Да. На первой консультации можно не называть имена и компании — достаточно описать ситуацию. В любом случае всё сказанное остаётся адвокатской тайной.
+        uz: Ha. Birinchi maslahatda ismlar va kompaniyalarni aytmasangiz ham boʻladi — vaziyatni tasvirlash kifoya. Har qanday holatda aytilganlar advokatlik siri boʻlib qoladi.
+        en: Yes. At the first consultation you don’t have to name people or companies — describing the situation is enough. Either way, everything you say stays privileged.
+    - question:
+        ru: Что происходит после консультации?
+        uz: Maslahatdan keyin nima boʻladi?
+        en: What happens after the consultation?
+      answer:
+        ru: "Вы получаете план действий, сроки и стоимость. Решение — за вами: можно взять паузу, задать дополнительные вопросы или сразу заключить договор."
+        uz: "Siz harakat rejasi, muddat va narxni olasiz. Qaror — sizniki: oʻylab koʻrishingiz, qoʻshimcha savollar berishingiz yoki darhol shartnoma tuzishingiz mumkin."
+        en: "You receive an action plan, timeline and fee. The decision is yours: take time to think, ask more questions or sign a contract straight away."
+final:
+  enabled: true
+  title:
+    ru: Опишите ситуацию —
+    uz: Vaziyatni yozing —
+    en: Describe your situation —
+  titleAccent:
+    ru: ответим в течение 24 часов
+    uz: 24 soat ichida javob beramiz
+    en: we’ll reply within 24 hours
+  subtitle:
+    ru: Бесплатно, конфиденциально и без обязательств.
+    uz: Bepul, maxfiy va majburiyatlarsiz.
+    en: Free, confidential and with no obligation.

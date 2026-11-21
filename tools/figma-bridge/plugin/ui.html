@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<body style="font: 12px/1.4 Inter, system-ui, sans-serif; margin: 12px; color: #0E1A2B;">
+  <div style="font-weight: 600;">PD Bridge</div>
+  <div id="status" style="margin-top: 6px; color: #5E6673;">Подключение к localhost:7788…</div>
+  <div id="last" style="margin-top: 6px; color: #5E6673;"></div>
+  <div style="margin-top: 8px; color: #9AA3AF;">Не закрывайте это окно, пока идёт работа.</div>
+<script>
+const SERVER = "http://localhost:7788";
+const statusEl = document.getElementById("status");
+const lastEl = document.getElementById("last");
+let busy = false;
+
+let busySince = 0;
+async function poll() {
+  // Safety net: never stay "busy" forever if the main thread never answered.
+  if (busy && Date.now() - busySince > 200000) { busy = false; lastEl.textContent = "Сброс: задача не ответила"; }
+  if (busy) return;
+  try {
+    const r = await fetch(SERVER + "/next");
+    statusEl.textContent = "Подключено ✓ ждёт задач";
+    if (r.status === 200) {
+      const job = await r.json();
+      busy = true; busySince = Date.now();
+      lastEl.textContent = "Выполняется: " + job.id;
+      parent.postMessage({ pluginMessage: { type: "job", id: job.id, code: job.code } }, "*");
+    }
+  } catch (e) {
+    statusEl.textContent = "Нет связи с сервером (localhost:7788)";
+  }
+}
+
+window.onmessage = async (event) => {
+  const msg = event.data && event.data.pluginMessage;
+  if (!msg || msg.type !== "result") return;
+  try {
+    await fetch(SERVER + "/result/" + msg.id, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(msg) });
+    lastEl.textContent = (msg.ok ? "Готово: " : "Ошибка: ") + msg.id;
+  } catch (e) {
+    lastEl.textContent = "Не удалось отправить результат " + msg.id;
+  }
+  busy = false;
+};
+
+setInterval(poll, 1000);
+poll();
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+nav:
+  services:
+    ru: Услуги
+    uz: Xizmatlar
+    en: Services
+  about:
+    ru: О нас
+    uz: Biz haqimizda
+    en: About
+  cases:
+    ru: Кейсы
+    uz: Keyslar
+    en: Cases
+  team:
+    ru: Команда
+    uz: Jamoa
+    en: Team
+  reviews:
+    ru: Отзывы
+    uz: Fikrlar
+    en: Testimonials
+  faq:
+    ru: FAQ
+    uz: FAQ
+    en: FAQ
+  contacts:
+    ru: Контакты
+    uz: Aloqa
+    en: Contacts
+  consultation:
+    ru: Бесплатная консультация
+    uz: Bepul maslahat
+    en: Free consultation
+buttons:
+  consultShort:
+    ru: Консультация
+    uz: Maslahat
+    en: Consultation
+  more:
+    ru: Подробнее
+    uz: Batafsil
+    en: Learn more
+  showMore:
+    ru: Показать ещё
+    uz: Yana koʻrsatish
+    en: Show more
+  back:
+    ru: На главную
+    uz: Bosh sahifa
+    en: Back to home
+  allPractices:
+    ru: Все направления на главной
+    uz: Barcha yoʻnalishlar bosh sahifada
+    en: All practice areas
+  openMap:
+    ru: Открыть в Google Maps
+    uz: Google Mapsda ochish
+    en: Open in Google Maps
+  close:
+    ru: Закрыть
+    uz: Yopish
+    en: Close
+  menu:
+    ru: Меню
+    uz: Menyu
+    en: Menu
+  call:
+    ru: Позвонить
+    uz: Qoʻngʻiroq qilish
+    en: Call
+labels:
+  address:
+    ru: Адрес
+    uz: Manzil
+    en: Address
+  phone:
+    ru: Телефон
+    uz: Telefon
+    en: Phone
+  email:
+    ru: Email
+    uz: Email
+    en: Email
+  hours:
+    ru: Часы работы
+    uz: Ish vaqti
+    en: Office hours
+  situation:
+    ru: Ситуация
+    uz: Vaziyat
+    en: Situation
+  result:
+    ru: Результат
+    uz: Natija
+    en: Result
+  practiceList:
+    ru: Что входит
+    uz: Nimalar kiradi
+    en: What’s included
+  dialogCta:
+    ru: Опишите ситуацию — юрист ответит в течение 24 часов и подскажет, как действовать.
+    uz: Vaziyatni yozing — yurist 24 soat ichida javob beradi va qanday harakat qilishni maslahat beradi.
+    en: Describe your situation — a lawyer will reply within 24 hours and advise on next steps.
+  themeLight:
+    ru: Включить светлую тему
+    uz: Yorugʻ mavzuni yoqish
+    en: Switch to light theme
+  themeDark:
+    ru: Включить тёмную тему
+    uz: Qorongʻi mavzuni yoqish
+    en: Switch to dark theme
+  language:
+    ru: Язык
+    uz: Til
+    en: Language
+  skip:
+    ru: Перейти к содержанию
+    uz: Asosiy mazmunga oʻtish
+    en: Skip to content
+  photoSoon:
+    ru: Фото скоро появится
+    uz: Surat tez orada
+    en: Photo coming soon
+footer:
+  tagline:
+    ru: Адвокатское бюро в Ташкенте. Уголовные, гражданские, хозяйственные и административные дела.
+    uz: Toshkentdagi advokatlik byurosi. Jinoyat, fuqarolik, xoʻjalik va maʼmuriy ishlar.
+    en: A law firm in Tashkent. Criminal, civil, commercial and administrative cases.
+  sections:
+    ru: Разделы
+    uz: Boʻlimlar
+    en: Sections
+  clients:
+    ru: Клиентам
+    uz: Mijozlarga
+    en: For clients
+  contact:
+    ru: Связь
+    uz: Aloqa
+    en: Contact
+  privacy:
+    ru: Политика конфиденциальности
+    uz: Maxfiylik siyosati
+    en: Privacy policy
+  rights:
+    ru: Все права защищены.
+    uz: Barcha huquqlar himoyalangan.
+    en: All rights reserved.
+notFound:
+  title:
+    ru: Страница не найдена
+    uz: Sahifa topilmadi
+    en: Page not found
+  text:
+    ru: Возможно, ссылка устарела. Вернитесь на главную или напишите нам — поможем.
+    uz: Ehtimol, havola eskirgan. Bosh sahifaga qayting yoki bizga yozing — yordam beramiz.
+    en: The link may be outdated. Go back to the home page or message us — we’ll help.

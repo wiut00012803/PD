@@ -1,0 +1,109 @@
+---
+import "@fontsource-variable/inter";
+import "../styles/tokens.css";
+import "../styles/base.css";
+import "../styles/components.css";
+import { ClientRouter } from "astro:transitions";
+import Header from "../components/Header.astro";
+import MobileMenu from "../components/MobileMenu.astro";
+import Footer from "../components/Footer.astro";
+import Glow from "../components/Glow.astro";
+import FloatingMessengers from "../components/FloatingMessengers.astro";
+import { HTML_LANG, LANGS, OG_LOCALE, asset, tr, url } from "../lib/i18n.ts";
+import type { Lang, PageKey } from "../lib/i18n.ts";
+import { getContent } from "../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+  page: PageKey;
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+
+const { lang, page, title, description, noindex = false } = Astro.props;
+const { settings, ui, team } = getContent();
+const site = Astro.site ?? new URL("https://example.com");
+const canonical = new URL(url(lang, page), site).href;
+const alternates = LANGS.map((l) => ({ lang: l, href: new URL(url(l, page), site).href }));
+const altPaths = Object.fromEntries(LANGS.map((l) => [l, url(l, page)]));
+const ogImage = new URL(asset("og.png"), site).href;
+const founder = team.members[0];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  name: settings.siteName,
+  url: new URL(url(lang, "home"), site).href,
+  description: tr(settings.seo.description, lang),
+  telephone: settings.phone.replace(/[^\d+]/g, ""),
+  email: settings.email,
+  address: { "@type": "PostalAddress", streetAddress: tr(settings.address, lang), addressLocality: "Tashkent", addressCountry: "UZ" },
+  areaServed: { "@type": "Country", name: "Uzbekistan" },
+  foundingDate: String(settings.founded),
+  image: ogImage,
+  sameAs: settings.socials.map((s) => s.url),
+  ...(founder ? { founder: { "@type": "Person", name: tr(founder.name, lang), jobTitle: tr(founder.role, lang) } } : {}),
+};
+---
+
+<!doctype html>
+<html lang={HTML_LANG[lang]} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script is:inline define:vars={{ lang, altPaths }}>
+      (function () {
+        var theme = null;
+        var stored = null;
+        try {
+          theme = localStorage.getItem("pd-theme");
+          stored = localStorage.getItem("pd-lang");
+        } catch (e) {}
+        if (theme !== "light" && theme !== "dark") theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = theme;
+        if (!window.__pdBooted && stored && stored !== lang && altPaths[stored] && location.hash === "") {
+          window.__pdBooted = true;
+          location.replace(altPaths[stored]);
+        }
+        window.__pdBooted = true;
+      })();
+    </script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+    <meta name="theme-color" content="#EFF1F5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E1A2B" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href={asset("favicon.svg")} type="image/svg+xml" />
+    <link rel="icon" href={asset("favicon-32.png")} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={asset("apple-touch-icon.png")} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={settings.siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={OG_LOCALE[lang]} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{tr(ui.labels.skip, lang)}</a>
+    <Glow />
+    <Header lang={lang} page={page} />
+    <MobileMenu lang={lang} page={page} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} page={page} />
+    <FloatingMessengers />
+    <script>
+      import { initSite } from "../scripts/ui.ts";
+      initSite();
+    </script>
+  </body>
+</html>

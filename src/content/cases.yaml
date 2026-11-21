@@ -1,0 +1,79 @@
+enabled: true
+overline:
+  ru: Успешные дела
+  uz: Muvaffaqiyatli ishlar
+  en: Case studies
+title:
+  ru: Результаты, а не обещания
+  uz: Vaʼdalar emas, natijalar
+  en: Results, not promises
+subtitle:
+  ru: Реальные истории без имён клиентов — с конкретными суммами и итогами.
+  uz: Mijozlar ismlarisiz haqiqiy voqealar — aniq summalar va natijalar bilan.
+  en: Real stories without client names — with specific amounts and outcomes.
+visible: 4
+items:
+  - category:
+      ru: Административное право
+      uz: Maʼmuriy huquq
+      en: Administrative law
+    title:
+      ru: Штраф $50 000 отменён
+      uz: $50 000 jarima bekor qilindi
+      en: $50,000 fine overturned
+    situation:
+      ru: Компании выписали штраф $50 000 за нарушение валютного законодательства по итогам проверки.
+      uz: Tekshiruv natijasida kompaniyaga valyuta qonunchiligini buzgani uchun $50 000 jarima solindi.
+      en: After an inspection, a company was fined $50,000 for breaching currency regulations.
+    result:
+      ru: Доказали процессуальные нарушения при проверке. Суд признал постановление незаконным, штраф отменён полностью.
+      uz: Tekshiruvdagi protsessual qoidabuzarliklarni isbotladik. Sud qarorni noqonuniy deb topdi, jarima toʻliq bekor qilindi.
+      en: We proved procedural violations during the inspection. The court ruled the decision unlawful and cancelled the fine in full.
+  - category:
+      ru: Гражданское право
+      uz: Fuqarolik huquqi
+      en: Civil law
+    title:
+      ru: Возвращено 380 млн сум
+      uz: 380 mln soʻm qaytarildi
+      en: UZS 380 million recovered
+    situation:
+      ru: Поставщик получил предоплату и полгода не исполнял договор, ссылаясь на форс-мажор.
+      uz: Yetkazib beruvchi oldindan toʻlovni olib, fors-major deb olti oy shartnomani bajarmadi.
+      en: A supplier took a prepayment and failed to deliver for six months, citing force majeure.
+    result:
+      ru: Собрали доказательства, что форс-мажора не было. Суд взыскал долг, неустойку и судебные расходы.
+      uz: Fors-major boʻlmaganini isbotlovchi dalillar toʻpladik. Sud qarz, penya va sud xarajatlarini undirdi.
+      en: We gathered evidence that there was no force majeure. The court awarded the debt, penalties and legal costs.
+  - category:
+      ru: Семейное право
+      uz: Oila huquqi
+      en: Family law
+    title:
+      ru: Дети остались с матерью
+      uz: Bolalar onasi bilan qoldi
+      en: Children stayed with their mother
+    situation:
+      ru: Отец пытался через суд определить место жительства детей с ним и запретить выезд за границу.
+      uz: Ota sud orqali bolalarning yashash joyini oʻzi bilan belgilash va chet elga chiqishni taqiqlashga urindi.
+      en: A father went to court to have the children live with him and to ban them from travelling abroad.
+    result:
+      ru: Подготовили заключения специалистов и свидетелей. Суд оставил детей с матерью, выезд разрешён.
+      uz: Mutaxassislar xulosalari va guvohlarni tayyorladik. Sud bolalarni onasi bilan qoldirdi, chet elga chiqishga ruxsat berildi.
+      en: We prepared expert opinions and witnesses. The court let the children stay with their mother and allowed travel.
+  - category:
+      ru: Уголовное право
+      uz: Jinoyat huquqi
+      en: Criminal law
+    title:
+      ru: Дело прекращено на следствии
+      uz: Ish tergov bosqichida tugatildi
+      en: Case dropped at the investigation stage
+    situation:
+      ru: Директору предъявили обвинение в растрате средств предприятия.
+      uz: Direktorga korxona mablagʻlarini oʻzlashtirishda ayb qoʻyildi.
+      en: A company director was charged with embezzling company funds.
+    result:
+      ru: Финансовая экспертиза подтвердила законность операций. Уголовное дело прекращено за отсутствием состава.
+      uz: Moliyaviy ekspertiza operatsiyalar qonuniyligini tasdiqladi. Jinoyat ishi tarkib yoʻqligi sababli tugatildi.
+      en: A financial audit confirmed the transactions were lawful. The case was dropped for lack of a crime.

@@ -1,0 +1,67 @@
+enabled: true
+overline:
+  ru: Отзывы
+  uz: Fikrlar
+  en: Testimonials
+title:
+  ru: Нам доверяют
+  uz: Bizga ishonishadi
+  en: Trusted by our clients
+subtitle:
+  ru: Публикуем отзывы только с согласия клиентов.
+  uz: Fikrlarni faqat mijozlar roziligi bilan eʼlon qilamiz.
+  en: We publish testimonials only with our clients’ consent.
+visible: 3
+items:
+  - text:
+      ru: Обратились с налоговым спором, который казался безнадёжным. Команда разобралась за неделю и выиграла дело в суде.
+      uz: Umidsiz tuyulgan soliq nizosi bilan murojaat qildik. Jamoa bir haftada masalani oʻrganib chiqdi va sudda ishni yutdi.
+      en: We came with a tax dispute that seemed hopeless. The team got to grips with it in a week and won the case in court.
+    name:
+      ru: Азиз Каримов
+      uz: Aziz Karimov
+      en: Aziz Karimov
+    company:
+      ru: Директор, ООО «Пример»
+      uz: Direktor, «Namuna» MChJ
+      en: Director, Primer LLC
+  - text:
+      ru: Сопровождали покупку коммерческой недвижимости. Нашли два риска, о которых продавец молчал, — сэкономили нам деньги и нервы.
+      uz: Tijorat koʻchmas mulkini xarid qilishni kuzatib borishdi. Sotuvchi yashirgan ikkita xatarni topishdi — pulimiz va asabimizni tejashdi.
+      en: They supported our purchase of commercial property and found two risks the seller had kept quiet about — saving us money and stress.
+    name:
+      ru: Нигора Расулова
+      uz: Nigora Rasulova
+      en: Nigora Rasulova
+    company:
+      ru: Учредитель, сеть клиник
+      uz: Taʼsischi, klinikalar tarmogʻi
+      en: Founder, clinic chain
+  - text:
+      ru: Деликатно и быстро помогли с разводом и разделом имущества. Всё объясняли простым языком и всегда были на связи.
+      uz: Ajrashish va mulkni boʻlishda nozik va tez yordam berishdi. Hammasini oddiy tilda tushuntirishdi va doim aloqada boʻlishdi.
+      en: They helped with my divorce and division of property quickly and tactfully, explained everything in plain language and were always available.
+    name:
+      ru: Дмитрий С.
+      uz: Dmitriy S.
+      en: Dmitry S.
+    company:
+      ru: Частный клиент
+      uz: Xususiy mijoz
+      en: Private client
+clients:
+  title:
+    ru: Среди клиентов
+    uz: Mijozlarimiz orasida
+    en: Our clients include
+  items:
+    - name: Логотип 1
+      logo: ""
+    - name: Логотип 2
+      logo: ""
+    - name: Логотип 3
+      logo: ""
+    - name: Логотип 4
+      logo: ""
+    - name: Логотип 5
+      logo: ""

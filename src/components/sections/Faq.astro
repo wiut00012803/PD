@@ -1,0 +1,176 @@
+---
+import Icon from "../ui/Icon.astro";
+import Messenger from "../ui/Messenger.astro";
+import { tr } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import type { LocalizedText } from "../../content/schema.ts";
+
+interface Props {
+  lang: Lang;
+  id: string;
+  overline: LocalizedText;
+  title: LocalizedText;
+  subtitle: LocalizedText;
+  items: { question: LocalizedText; answer: LocalizedText }[];
+  messenger: "telegram" | "whatsapp";
+}
+
+const { lang, id, overline, title, subtitle, items, messenger } = Astro.props;
+---
+
+<section class="section faq" id={id} aria-labelledby={`${id}-title`}>
+  <div class="container">
+    <div class="faq__row">
+      <div class="faq__intro">
+        <p class="t-overline">{tr(overline, lang)}</p>
+        <h2 class="t-h1" id={`${id}-title`}>{tr(title, lang)}</h2>
+        {subtitle.ru && <p class="t-body-m c-secondary">{tr(subtitle, lang)}</p>}
+        <Messenger platform={messenger} />
+      </div>
+      <div class="faq__list">
+        {
+          items.map((item, i) => (
+            <details class="faq-item glass" name={`${id}-items`} open={i === 0}>
+              <summary>
+                <span class="faq-item__q">{tr(item.question, lang)}</span>
+                <span class="faq-item__toggle" aria-hidden="true">
+                  <Icon name="plus" class="faq-item__plus" />
+                  <Icon name="minus" class="faq-item__minus" />
+                </span>
+              </summary>
+              <div class="faq-item__a t-body-m c-secondary">
+                <p>{tr(item.answer, lang)}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__row {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .faq__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-item {
+    border-radius: var(--radius-lg);
+    transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+  }
+
+  .faq-item[open] {
+    background: var(--color-surface-glass-strong);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 16px 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    border-radius: inherit;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item__q {
+    flex: 1;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+
+  .faq-item__toggle {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-surface-glass-strong);
+    border: 1px solid var(--color-border-glass);
+    color: var(--color-icon-primary);
+    transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+  }
+
+  .faq-item__toggle :global(.icon) {
+    --icon-size: 18px;
+  }
+
+  .faq-item :global(.faq-item__minus),
+  .faq-item[open] :global(.faq-item__plus) {
+    display: none;
+  }
+
+  .faq-item[open] :global(.faq-item__minus) {
+    display: block;
+  }
+
+  .faq-item[open] .faq-item__toggle {
+    background: var(--color-bg-accent);
+    border-color: transparent;
+    color: var(--color-text-on-accent);
+  }
+
+  @media (hover: hover) {
+    summary:hover .faq-item__toggle {
+      transform: scale(1.06);
+    }
+  }
+
+  .faq-item__a {
+    padding: 0 20px 20px;
+    max-width: 680px;
+  }
+
+  @media (min-width: 600px) {
+    summary {
+      padding: 22px 18px 22px 28px;
+    }
+
+    .faq-item__q {
+      font-size: 18px;
+    }
+
+    .faq-item__a {
+      padding: 0 28px 24px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .faq__row {
+      flex-direction: row;
+      gap: 64px;
+    }
+
+    .faq__intro {
+      flex: 0 0 auto;
+      max-width: 420px;
+    }
+
+    .faq__list {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>

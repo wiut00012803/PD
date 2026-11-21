@@ -1,0 +1,54 @@
+enabled: true
+overline:
+  ru: FAQ
+  uz: FAQ
+  en: FAQ
+title:
+  ru: Частые вопросы
+  uz: Koʻp beriladigan savollar
+  en: Frequently asked questions
+subtitle:
+  ru: Не нашли ответ? Напишите нам — ответим лично.
+  uz: Javob topmadingizmi? Bizga yozing — shaxsan javob beramiz.
+  en: Didn’t find the answer? Message us — we’ll reply personally.
+items:
+  - question:
+      ru: Сколько стоит консультация?
+      uz: Maslahat qancha turadi?
+      en: How much does a consultation cost?
+    answer:
+      ru: Первая онлайн-консультация бесплатна. Стоимость дальнейшей работы зависит от сложности дела и согласуется до подписания договора — без скрытых платежей.
+      uz: Birinchi onlayn maslahat bepul. Keyingi ish narxi ishning murakkabligiga bogʻliq va shartnoma imzolanishidan oldin kelishiladi — yashirin toʻlovlarsiz.
+      en: The first online consultation is free. The fee for further work depends on the complexity of the case and is agreed before signing the contract, with no hidden charges.
+  - question:
+      ru: Есть ли гарантия результата?
+      uz: Natijaga kafolat bormi?
+      en: Do you guarantee the outcome?
+    answer:
+      ru: "Гарантировать исход дела не вправе ни один адвокат — это запрещают правила адвокатской этики. Мы гарантируем другое: честную оценку шансов до начала работы, прозрачные условия и полную отдачу на каждом этапе."
+      uz: "Hech bir advokat ish natijasini kafolatlashga haqli emas — buni advokatlik odob-axloqi qoidalari taqiqlaydi. Biz boshqa narsani kafolatlaymiz: ish boshlanishidan oldin imkoniyatlarni halol baholash, shaffof shartlar va har bir bosqichda toʻliq fidoyilik."
+      en: No advocate may guarantee the outcome of a case — the rules of professional ethics forbid it. What we do guarantee is an honest assessment of your chances before we start, transparent terms and full commitment at every stage.
+  - question:
+      ru: Как быстро вы ответите на заявку?
+      uz: Murojaatga qanchalik tez javob berasiz?
+      en: How quickly will you reply?
+    answer:
+      ru: "В течение 24 часов, в рабочие дни обычно за 2–3 часа. Срочные вопросы — например, задержание или обыск — пишите в Telegram или звоните: адвокат выедет как можно быстрее."
+      uz: "24 soat ichida, ish kunlari odatda 2–3 soatda. Shoshilinch holatlarda — masalan, ushlash yoki tintuvda — Telegramga yozing yoki qoʻngʻiroq qiling: advokat imkon qadar tez yetib boradi."
+      en: Within 24 hours, usually within 2–3 hours on working days. For urgent matters such as an arrest or a search, message us on Telegram or call — an advocate will come as quickly as possible.
+  - question:
+      ru: Можно ли работать удалённо, из другого города?
+      uz: Boshqa shahardan masofaviy ishlash mumkinmi?
+      en: Can we work remotely from another city?
+    answer:
+      ru: Да. Консультации проводим по телефону, в Telegram, WhatsApp или по видеосвязи, документы принимаем в электронном виде. В суд и государственные органы адвокат приходит лично.
+      uz: Ha. Maslahatlarni telefon, Telegram, WhatsApp yoki video aloqa orqali oʻtkazamiz, hujjatlarni elektron shaklda qabul qilamiz. Sud va davlat organlariga advokat shaxsan boradi.
+      en: Yes. We consult by phone, Telegram, WhatsApp or video call and accept documents electronically. The advocate attends court and government agencies in person.
+  - question:
+      ru: Как вы защищаете конфиденциальность?
+      uz: Maxfiylikni qanday himoya qilasiz?
+      en: How do you protect confidentiality?
+    answer:
+      ru: Всё, что вы рассказываете адвокату, составляет адвокатскую тайну и защищено законом. Мы не передаём данные третьим лицам и не публикуем имена клиентов — даже в кейсах.
+      uz: Advokatga aytganlaringizning barchasi advokatlik siri hisoblanadi va qonun bilan himoyalangan. Maʼlumotlarni uchinchi shaxslarga bermaymiz va mijozlar ismlarini eʼlon qilmaymiz — hatto keyslarda ham.
+      en: Everything you tell your advocate is protected by attorney–client privilege under the law. We never share your details with third parties or publish client names, not even in case studies.

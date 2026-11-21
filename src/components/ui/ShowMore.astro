@@ -1,0 +1,24 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  target: string;
+  label: string;
+}
+
+const { target, label } = Astro.props;
+---
+
+<div class="show-more" data-show-more-wrap>
+  <button type="button" class="btn btn--secondary btn--m" data-show-more={target} aria-controls={target}>
+    <span>{label}</span>
+    <Icon name="chevron-down" />
+  </button>
+</div>
+
+<style>
+  .show-more {
+    display: flex;
+    justify-content: center;
+  }
+</style>

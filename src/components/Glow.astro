@@ -1,0 +1,31 @@
+<div class="page-glow" aria-hidden="true" data-glow transition:persist="page-glow"></div>
+
+<style>
+  .page-glow {
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: min(1000px, 90vw);
+    aspect-ratio: 2 / 1;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgb(192 138 62 / 0.9), rgb(192 138 62 / 0.45) 40%, rgb(192 138 62 / 0.12) 70%, rgb(192 138 62 / 0));
+    opacity: var(--glow-opacity);
+    translate: calc(50vw - 50%) -30%;
+    will-change: transform;
+    transition: opacity 400ms var(--ease-out);
+  }
+
+  @media (max-width: 599px) {
+    .page-glow {
+      width: 120vw;
+      aspect-ratio: 1.4 / 1;
+    }
+  }
+</style>
+
+<script>
+  import { initGlow } from "../scripts/glow.ts";
+  initGlow();
+</script>

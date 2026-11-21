@@ -1,0 +1,173 @@
+---
+import Icon from "../ui/Icon.astro";
+import Btn from "../ui/Btn.astro";
+import Messenger from "../ui/Messenger.astro";
+import { lines, tr, url } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+import { contactLinks } from "../../lib/links.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { consultation, ui } = getContent();
+const hero = consultation.hero;
+const links = contactLinks();
+---
+
+<section class="c-hero" aria-labelledby="consult-title">
+  <div class="container c-hero__row">
+    <div class="c-hero__main">
+      <Btn href={url(lang, "home")} variant="ghost" icon={null} iconStart="arrow-left" class="c-hero__back">{tr(ui.buttons.back, lang)}</Btn>
+      <p class="chip">{tr(hero.badge, lang)}</p>
+      <h1 class="t-display" id="consult-title">
+        <span set:html={lines(hero.title, lang)} />
+        <br />
+        <span class="gradient-text" set:html={lines(hero.titleAccent, lang)} />
+      </h1>
+      <p class="t-body-l c-secondary">{tr(hero.subtitle, lang)}</p>
+      <div class="c-hero__actions">
+        <Btn href={links.form} external>{tr(hero.button, lang)}</Btn>
+        <div class="c-hero__messengers">
+          <Messenger platform="telegram" />
+          <Messenger platform="whatsapp" />
+        </div>
+      </div>
+    </div>
+
+    <div class="get glass-strong">
+      <h2 class="t-h4">{tr(hero.getTitle, lang)}</h2>
+      <ul class="get__list">
+        {
+          hero.get.map((g) => (
+            <li class="t-body-m">
+              <span class="get__check">
+                <Icon name="check" size={16} />
+              </span>
+              <span>{tr(g, lang)}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="get__conf t-label c-secondary">
+        <Icon name="lock" size={18} />
+        {tr(hero.confidential, lang)}
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .c-hero {
+    position: relative;
+    padding-top: calc(var(--header-top) + var(--header-h) + 48px);
+    padding-bottom: var(--py);
+  }
+
+  .c-hero__row {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .c-hero__main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .c-hero__main :global(.c-hero__back) {
+    min-height: 44px;
+  }
+
+  .c-hero__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .c-hero__messengers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .get {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    border-radius: var(--radius-2xl);
+  }
+
+  .get__list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .get__list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .get__check {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-bg-accent-subtle);
+    color: var(--color-icon-accent);
+  }
+
+  .get__conf {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 4px;
+  }
+
+  .get__conf :global(.icon) {
+    color: var(--color-icon-accent);
+  }
+
+  @media (min-width: 600px) {
+    .c-hero {
+      padding-top: calc(var(--header-top) + var(--header-h) + 80px);
+    }
+
+    .c-hero__actions {
+      flex-direction: row;
+      align-items: center;
+      width: auto;
+    }
+
+    .c-hero__messengers {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .c-hero__row {
+      flex-direction: row;
+      align-items: center;
+      gap: 64px;
+    }
+
+    .c-hero__main {
+      flex: 1;
+    }
+
+    .get {
+      flex: none;
+      width: 440px;
+    }
+  }
+</style>

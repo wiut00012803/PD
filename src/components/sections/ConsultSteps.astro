@@ -1,0 +1,118 @@
+---
+import Icon from "../ui/Icon.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import { tr } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { steps } = getContent().consultation;
+---
+
+{
+  steps.enabled && (
+    <section class="section" id="how" aria-labelledby="how-title">
+      <div class="container">
+        <SectionTitle id="how-title" overline={tr(steps.overline, lang)} title={tr(steps.title, lang)} subtitle={tr(steps.subtitle, lang)} />
+        <ol class="steps" style={`--count:${steps.items.length}`}>
+          {steps.items.map((s, i) => (
+            <li class="c-step glass card">
+              <div class="c-step__top">
+                <span class="t-stat gradient-text c-step__num">{String(i + 1).padStart(2, "0")}</span>
+                <span class="icon-box">
+                  <Icon name={s.icon} />
+                </span>
+              </div>
+              <h3 class="t-h4">{tr(s.title, lang)}</h3>
+              <p class="t-body-s c-secondary">{tr(s.text, lang)}</p>
+              <p class="c-step__time t-label c-secondary">
+                <Icon name="clock" size={14} />
+                {tr(s.time, lang)}
+              </p>
+            </li>
+          ))}
+        </ol>
+        {steps.terms.length > 0 && (
+          <ul class="terms" style={`--count:${steps.terms.length}`}>
+            {steps.terms.map((t) => (
+              <li class="term glass card">
+                <span class="icon-box">
+                  <Icon name={t.icon} />
+                </span>
+                <div class="term__text">
+                  <h3 class="t-h4">{tr(t.title, lang)}</h3>
+                  <p class="t-body-s c-secondary">{tr(t.text, lang)}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .steps,
+  .terms {
+    display: grid;
+    gap: 12px;
+  }
+
+  .c-step {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+  }
+
+  .c-step__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .c-step__num {
+    font-size: 36px;
+  }
+
+  .c-step__time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+  }
+
+  .term {
+    display: flex;
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .term__text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  @media (min-width: 600px) {
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .steps {
+      grid-template-columns: repeat(min(var(--count), 4), minmax(0, 1fr));
+    }
+
+    .terms {
+      grid-template-columns: repeat(min(var(--count), 3), minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,147 @@
+---
+import { Image } from "astro:assets";
+import Icon from "../ui/Icon.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Carousel from "../ui/Carousel.astro";
+import ShowMore from "../ui/ShowMore.astro";
+import { initials, tr } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent, getImage } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { reviews, ui } = getContent();
+const clients = reviews.clients.items.map((c) => ({ ...c, image: getImage(c.logo) }));
+---
+
+{
+  reviews.enabled && reviews.items.length > 0 && (
+    <section class="section" id="reviews" aria-labelledby="reviews-title">
+      <div class="container">
+        <SectionTitle id="reviews-title" overline={tr(reviews.overline, lang)} title={tr(reviews.title, lang)} subtitle={tr(reviews.subtitle, lang)} />
+        <Carousel id="reviews-list" count={Math.min(reviews.items.length, reviews.visible)} cols={{ tablet: 2, desktop: 3, wide: 3 }} label={tr(reviews.title, lang)}>
+          {reviews.items.map((r, i) => (
+            <li class:list={["review glass card", i >= reviews.visible && "is-hidden-extra"]}>
+              <Icon name="quote" size={28} class="review__quote" />
+              <blockquote class="t-body-m review__text">{tr(r.text, lang)}</blockquote>
+              <div class="review__author">
+                <span class="review__avatar t-label" aria-hidden="true">
+                  {initials(tr(r.name, lang))}
+                </span>
+                <span class="review__who">
+                  <span class="t-label">{tr(r.name, lang)}</span>
+                  {r.company.ru && <span class="t-body-s c-secondary">{tr(r.company, lang)}</span>}
+                </span>
+              </div>
+            </li>
+          ))}
+        </Carousel>
+        {reviews.items.length > reviews.visible && <ShowMore target="reviews-list" label={tr(ui.buttons.showMore, lang)} />}
+
+        {clients.length > 0 && (
+          <div class="clients">
+            <p class="t-label c-tertiary">{tr(reviews.clients.title, lang)}</p>
+            <ul class="clients__grid">
+              {clients.map((c) => (
+                <li class="client glass">
+                  {c.image ? <Image src={c.image} alt={c.name} height={40} densities={[1, 2]} class="client__logo" loading="lazy" /> : <span class="t-label c-tertiary">{c.name}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .review {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+  }
+
+  .review :global(.review__quote) {
+    color: var(--color-icon-accent);
+  }
+
+  .review__text {
+    flex: 1;
+  }
+
+  .review__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border-glass-strong);
+  }
+
+  :root[data-theme="light"] .review__author {
+    border-top-color: var(--color-divider);
+  }
+
+  .review__avatar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-bg-accent-subtle);
+    color: var(--color-text-accent);
+  }
+
+  .review__who {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .clients {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .clients__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .client {
+    display: grid;
+    place-items: center;
+    height: 64px;
+    padding: 0 16px;
+    border-radius: var(--radius-lg);
+  }
+
+  .client :global(.client__logo) {
+    max-height: 32px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  @media (min-width: 600px) {
+    .review {
+      padding: 32px;
+    }
+
+    .clients__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .clients__grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+</style>

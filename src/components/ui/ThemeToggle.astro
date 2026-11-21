@@ -1,0 +1,22 @@
+---
+import Icon from "./Icon.astro";
+import { tr } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+
+interface Props {
+  lang: Lang;
+  touch?: boolean;
+  class?: string;
+}
+
+const { lang, touch = false, class: className } = Astro.props;
+const { ui } = getContent();
+const toLight = tr(ui.labels.themeLight, lang);
+const toDark = tr(ui.labels.themeDark, lang);
+---
+
+<button type="button" class:list={["round-btn", "theme-toggle", touch && "round-btn--touch", className]} data-theme-toggle data-label-light={toLight} data-label-dark={toDark} aria-label={toDark} title={toDark}>
+  <Icon name="moon" />
+  <Icon name="sun" />
+</button>

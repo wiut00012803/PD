@@ -1,0 +1,44 @@
+---
+interface Props {
+  id: string;
+  count: number;
+  cols: { tablet: number; desktop: number; wide: number };
+  label: string;
+  class?: string;
+}
+
+const { id, count, cols, label, class: className } = Astro.props;
+---
+
+<ul class:list={["carousel", "cards-track", className]} id={id} data-carousel aria-label={label} style={`--cols-tablet:${cols.tablet};--cols-desktop:${cols.desktop};--cols-wide:${cols.wide}`}>
+  <slot />
+</ul>
+{
+  count > 1 && (
+    <div class="dots" data-carousel-dots={id}>
+      {Array.from({ length: count }, (_, i) => (
+        <button type="button" aria-label={`${i + 1} / ${count}`} aria-current={i === 0 ? "true" : "false"} />
+      ))}
+    </div>
+  )
+}
+
+<style>
+  @media (min-width: 600px) {
+    .cards-track {
+      --cols: var(--cols-tablet);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .cards-track {
+      --cols: var(--cols-desktop);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .cards-track {
+      --cols: var(--cols-wide);
+    }
+  }
+</style>

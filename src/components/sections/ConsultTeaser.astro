@@ -1,0 +1,144 @@
+---
+import Btn from "../ui/Btn.astro";
+import { lines, tr, url } from "../../lib/i18n.ts";
+import type { Lang } from "../../lib/i18n.ts";
+import { getContent } from "../../lib/content.ts";
+import { contactLinks } from "../../lib/links.ts";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const { home } = getContent();
+const c = home.consult;
+const links = contactLinks();
+---
+
+{
+  c.enabled && (
+    <section class="section teaser" id="consultation" aria-labelledby="teaser-title">
+      <div class="container">
+        <div class="teaser__card glass-strong">
+          <div class="teaser__main">
+            <p class="chip">{tr(c.badge, lang)}</p>
+            <h2 class="t-h1" id="teaser-title">
+              <span set:html={lines(c.title, lang)} /> <span class="gradient-text" set:html={lines(c.titleAccent, lang)} />
+            </h2>
+            <p class="t-body-l c-secondary">{tr(c.text, lang)}</p>
+            <div class="teaser__actions">
+              <Btn href={links.form} external>{tr(c.button, lang)}</Btn>
+              <Btn href={url(lang, "consultation")} variant="ghost">{tr(c.link, lang)}</Btn>
+            </div>
+          </div>
+          {c.steps.length > 0 && (
+            <ol class="teaser__steps">
+              {c.steps.map((s, i) => (
+                <li class="step glass">
+                  <span class="step__num t-label">{i + 1}</span>
+                  <span class="step__text">
+                    <span class="t-label">{tr(s.title, lang)}</span>
+                    <span class="t-body-s c-secondary">{tr(s.text, lang)}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .teaser {
+    padding-block: calc(var(--py) / 2);
+  }
+
+  .teaser__card {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 32px 24px;
+    border-radius: var(--radius-2xl);
+  }
+
+  .teaser__main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .teaser__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .teaser__steps {
+    display: grid;
+    gap: 12px;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px 14px 14px;
+    border-radius: var(--radius-lg);
+  }
+
+  .step__num {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-bg-accent);
+    color: var(--color-text-on-accent);
+  }
+
+  .step__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  @media (min-width: 600px) {
+    .teaser__card {
+      padding: 56px;
+      gap: 40px;
+    }
+
+    .teaser__actions {
+      flex-direction: row;
+      align-items: center;
+      width: auto;
+    }
+
+    .teaser__steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .teaser__card {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .teaser__main {
+      flex: 1;
+    }
+
+    .teaser__steps {
+      flex: none;
+      width: 420px;
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

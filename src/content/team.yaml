@@ -1,0 +1,86 @@
+enabled: true
+overline:
+  ru: Команда
+  uz: Jamoa
+  en: Our team
+title:
+  ru: Адвокаты, которые ведут ваше дело
+  uz: Ishingizni olib boradigan advokatlar
+  en: The advocates who handle your case
+subtitle:
+  ru: Адвокаты бюро лично ведут каждое дело — от первой встречи до результата.
+  uz: Byuro advokatlari har bir ishni shaxsan olib boradi — birinchi uchrashuvdan natijagacha.
+  en: Our advocates handle every case personally, from the first meeting to the result.
+members:
+  - photo: /uploads/galimov-portrait.jpg
+    name:
+      ru: Галимов Руслан Феликсович
+      uz: Galimov Ruslan Feliksovich
+      en: Ruslan Galimov
+    role:
+      ru: Основатель и руководитель бюро
+      uz: Byuro asoschisi va rahbari
+      en: Founder and head of the firm
+    bio:
+      ru: Адвокат с 2008 года, до этого — следователь. Уголовные, гражданские, хозяйственные и административные дела.
+      uz: 2008-yildan beri advokat, undan oldin — tergovchi. Jinoyat, fuqarolik, xoʻjalik va maʼmuriy ishlar.
+      en: Advocate since 2008, formerly an investigator. Criminal, civil, commercial and administrative cases.
+    bioFull:
+      ru: |-
+        Родился в 1977 году в Ташкенте. Окончил Академию МВД Республики Узбекистан по направлению «Юриспруденция» (1997–2001), затем магистратуру Академии (2002–2004).
+
+        С 2004 по 2008 год работал следователем РУВД Чиланзарского района Ташкента: расследовал уголовные дела, собирал и анализировал доказательства, применял уголовное и уголовно-процессуальное законодательство.
+
+        В 2008 году начал адвокатскую практику. Работал в Коллегии по хозяйственным делам, адвокатском объединении «AKTUS ПРАВО» и другой адвокатской коллегии.
+
+        В 2018 году основал адвокатское бюро Pravoe Delo и руководит им по сей день. Ведёт уголовные, гражданские, хозяйственные (экономические) и административные дела, защищает права и законные интересы граждан и организаций.
+      uz: |-
+        1977-yilda Toshkentda tugʻilgan. Oʻzbekiston Respublikasi IIV Akademiyasini «Yurisprudensiya» yoʻnalishi boʻyicha (1997–2001), soʻngra Akademiya magistraturasini (2002–2004) tamomlagan.
+
+        2004–2008-yillarda Toshkent shahar Chilonzor tumani IIBda tergovchi boʻlib ishlagan: jinoyat ishlarini tergov qilgan, dalillarni toʻplagan va tahlil qilgan, jinoyat va jinoyat-protsessual qonunchiligini qoʻllagan.
+
+        2008-yildan advokatlik faoliyatini boshlagan. Xoʻjalik ishlari boʻyicha hayʼatda, «AKTUS PRAVO» advokatlik birlashmasida va boshqa advokatlik hayʼatida ishlagan.
+
+        2018-yilda Pravoe Delo advokatlik byurosiga asos solgan va hozirgacha unga rahbarlik qiladi. Jinoyat, fuqarolik, xoʻjalik (iqtisodiy) va maʼmuriy ishlarni yuritadi, fuqarolar va tashkilotlarning huquq va qonuniy manfaatlarini himoya qiladi.
+      en: |-
+        Born in 1977 in Tashkent. Graduated in Law from the Academy of the Ministry of Internal Affairs of Uzbekistan (1997–2001) and completed a master’s degree there (2002–2004).
+
+        From 2004 to 2008 he worked as an investigator in the Chilanzar district police department of Tashkent, investigating criminal cases, gathering and analysing evidence and applying criminal and criminal-procedure law.
+
+        In 2008 he began practising as an advocate, working at the Bar for Commercial Cases, the AKTUS PRAVO law association and another bar association.
+
+        In 2018 he founded Pravoe Delo and has headed the firm ever since. He handles criminal, civil, commercial and administrative cases, protecting the rights and lawful interests of individuals and organisations.
+  - photo: ""
+    name:
+      ru: Имя Фамилия
+      uz: Ism Familiya
+      en: Full Name
+    role:
+      ru: Партнёр
+      uz: Hamkor
+      en: Partner
+    bio:
+      ru: Корпоративные и налоговые споры, сопровождение крупных сделок.
+      uz: Korporativ va soliq nizolari, yirik bitimlarni kuzatib borish.
+      en: Corporate and tax disputes, support for major transactions.
+    bioFull:
+      ru: ""
+      uz: ""
+      en: ""
+  - photo: ""
+    name:
+      ru: Имя Фамилия
+      uz: Ism Familiya
+      en: Full Name
+    role:
+      ru: Старший юрист
+      uz: Katta yurist
+      en: Senior lawyer
+    bio:
+      ru: Семейные и гражданские дела. Медиатор, помогает решать споры без суда.
+      uz: Oilaviy va fuqarolik ishlari. Mediator, nizolarni sudsiz hal qilishga yordam beradi.
+      en: Family and civil cases. A mediator who helps resolve disputes out of court.
+    bioFull:
+      ru: ""
+      uz: ""
+      en: ""

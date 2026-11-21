@@ -1,0 +1,218 @@
+hero:
+  badge:
+    ru: Бесплатная онлайн-консультация
+    uz: Bepul onlayn maslahat
+    en: Free online consultation
+  title:
+    ru: Правовая защита
+    uz: Yangi darajadagi
+    en: Legal protection
+  titleAccent:
+    ru: нового уровня
+    uz: huquqiy himoya
+    en: of a new standard
+  subtitle:
+    ru: "Адвокатское бюро Pravoe Delo: уголовные, гражданские, хозяйственные и административные дела. Ответ на заявку — в течение 24 часов."
+    uz: "Pravoe Delo advokatlik byurosi: jinoyat, fuqarolik, xoʻjalik va maʼmuriy ishlar. Murojaatga 24 soat ichida javob beramiz."
+    en: "Pravoe Delo law firm: criminal, civil, commercial and administrative cases. We reply to every request within 24 hours."
+  button:
+    ru: Получить консультацию
+    uz: Maslahat olish
+    en: Get a consultation
+stats:
+  enabled: true
+  items:
+    - value:
+        ru: "{years}"
+        uz: "{years}"
+        en: "{years}"
+      caption:
+        ru: "{yearsWord} практики"
+        uz: yillik amaliyot
+        en: "{yearsWord} of practice"
+      captionShort:
+        ru: ""
+        uz: ""
+        en: ""
+    - value:
+        ru: 1 200+
+        uz: 1 200+
+        en: 1,200+
+      caption:
+        ru: выигранных дел
+        uz: yutilgan ishlar
+        en: cases won
+      captionShort:
+        ru: ""
+        uz: ""
+        en: ""
+    - value:
+        ru: 94%
+        uz: 94%
+        en: 94%
+      caption:
+        ru: решений в пользу клиента
+        uz: mijoz foydasiga qarorlar
+        en: rulings in the client’s favour
+      captionShort:
+        ru: в пользу клиента
+        uz: mijoz foydasiga
+        en: in the client’s favour
+    - value:
+        ru: 24 ч
+        uz: 24 soat
+        en: 24 h
+      caption:
+        ru: срок ответа на заявку
+        uz: murojaatga javob muddati
+        en: to reply to your request
+      captionShort:
+        ru: ответ на заявку
+        uz: javob muddati
+        en: reply time
+about:
+  enabled: true
+  overline:
+    ru: О нас
+    uz: Biz haqimizda
+    en: About us
+  title:
+    ru: |-
+      {years} {yearsWord} защищаем
+      бизнес и людей
+    uz: |-
+      {years} yildirki biznes
+      va insonlarni himoya qilamiz
+    en: |-
+      {years} {yearsWord} defending
+      businesses and people
+  lead:
+    ru: Адвокатское бюро Pravoe Delo основал в 2018 году Руслан Галимов — адвокат с 2008 года. До адвокатуры он четыре года работал следователем, поэтому знает, как строится обвинение, и выстраивает защиту с учётом этого опыта.
+    uz: Pravoe Delo advokatlik byurosiga 2018-yilda Ruslan Galimov asos solgan — u 2008-yildan beri advokat. Advokaturadan oldin toʻrt yil tergovchi boʻlib ishlagan, shuning uchun ayblov qanday qurilishini biladi va himoyani shu tajriba asosida tuzadi.
+    en: Pravoe Delo was founded in 2018 by Ruslan Galimov, an advocate since 2008. Before joining the bar he spent four years as an investigator, so he knows how a prosecution case is built and designs the defence around that experience.
+  text:
+    ru: Мы ведём уголовные, гражданские, хозяйственные и административные дела граждан и компаний. Честно оцениваем шансы, заранее согласуем стоимость и объясняем каждый шаг простым языком.
+    uz: Biz fuqarolar va kompaniyalarning jinoyat, fuqarolik, xoʻjalik va maʼmuriy ishlarini yuritamiz. Imkoniyatlarni halol baholaymiz, narxni oldindan kelishib olamiz va har bir qadamni oddiy tilda tushuntiramiz.
+    en: We handle criminal, civil, commercial and administrative cases for individuals and companies. We assess your chances honestly, agree on the fee in advance and explain every step in plain language.
+  badges:
+    - ru: Лицензия Минюста РУз
+      uz: Adliya vazirligi litsenziyasi
+      en: Licensed by the Ministry of Justice
+    - ru: Палата адвокатов РУз
+      uz: Oʻzbekiston Advokatlar palatasi
+      en: Chamber of Advocates of Uzbekistan
+    - ru: Адвокатская тайна
+      uz: Advokatlik siri
+      en: Attorney–client privilege
+  photo: /uploads/galimov-desk.jpg
+  photoAlt:
+    ru: Руслан Галимов, руководитель адвокатского бюро Pravoe Delo, в офисе
+    uz: Pravoe Delo advokatlik byurosi rahbari Ruslan Galimov ofisda
+    en: Ruslan Galimov, head of Pravoe Delo law firm, in the office
+  photoCaption:
+    ru: Руслан Галимов
+    uz: Ruslan Galimov
+    en: Ruslan Galimov
+  photoNote:
+    ru: основатель и руководитель бюро
+    uz: byuro asoschisi va rahbari
+    en: founder and head of the firm
+advantages:
+  enabled: true
+  items:
+    - icon: award
+      title:
+        ru: Профессионализм
+        uz: Professionallik
+        en: Expertise
+      text:
+        ru: Руководитель бюро — адвокат с 2008 года и бывший следователь. Каждое дело ведёт адвокат лично — от первой встречи до решения суда.
+        uz: Byuro rahbari — 2008-yildan beri advokat va sobiq tergovchi. Har bir ishni advokat shaxsan olib boradi — birinchi uchrashuvdan sud qaroriga qadar.
+        en: The head of the firm is an advocate since 2008 and a former investigator. An advocate handles every case personally, from the first meeting to the court ruling.
+    - icon: lock
+      title:
+        ru: Конфиденциальность
+        uz: Maxfiylik
+        en: Confidentiality
+      text:
+        ru: Адвокатская тайна с первой минуты разговора. Данные клиентов не публикуются — даже в кейсах.
+        uz: Suhbatning birinchi daqiqasidanoq advokatlik siri. Mijozlar maʼlumotlari eʼlon qilinmaydi — hatto keyslarda ham.
+        en: Attorney–client privilege from the first minute of the conversation. Client details are never published, not even in case studies.
+    - icon: target
+      title:
+        ru: Результат
+        uz: Natija
+        en: Results
+      text:
+        ru: Честно оцениваем шансы до начала работы. 94% дел завершаются в пользу клиента.
+        uz: Ish boshlanishidan oldin imkoniyatlarni halol baholaymiz. Ishlarning 94% mijoz foydasiga yakunlanadi.
+        en: We assess your chances honestly before we start. 94% of our cases end in the client’s favour.
+consult:
+  enabled: true
+  badge:
+    ru: Бесплатно · онлайн или в офисе
+    uz: Bepul · onlayn yoki ofisda
+    en: Free · online or in the office
+  title:
+    ru: Бесплатная консультация
+    uz: Advokat bilan
+    en: Free consultation
+  titleAccent:
+    ru: с адвокатом
+    uz: bepul maslahat
+    en: with an advocate
+  text:
+    ru: Расскажите о ситуации — юрист изучит её, оценит шансы и предложит план действий. Ответ в течение 24 часов, всё конфиденциально.
+    uz: Vaziyatingizni aytib bering — yurist uni oʻrganadi, imkoniyatlarni baholaydi va harakat rejasini taklif qiladi. 24 soat ichida javob, hammasi maxfiy.
+    en: Tell us about your situation — a lawyer will study it, assess your chances and propose an action plan. Reply within 24 hours, fully confidential.
+  button:
+    ru: Записаться на консультацию
+    uz: Maslahatga yozilish
+    en: Book a consultation
+  link:
+    ru: Как проходит консультация
+    uz: Maslahat qanday oʻtadi
+    en: How the consultation works
+  steps:
+    - title:
+        ru: Заявка
+        uz: Ariza
+        en: Request
+      text:
+        ru: Форма, Telegram или WhatsApp — 2 минуты
+        uz: Shakl, Telegram yoki WhatsApp — 2 daqiqa
+        en: Form, Telegram or WhatsApp — 2 minutes
+    - title:
+        ru: Звонок юриста
+        uz: Yurist qoʻngʻirogʻi
+        en: A call from a lawyer
+      text:
+        ru: Уточним детали в течение 24 часов
+        uz: 24 soat ichida tafsilotlarni aniqlaymiz
+        en: We clarify the details within 24 hours
+    - title:
+        ru: Разбор ситуации
+        uz: Vaziyat tahlili
+        en: Case review
+      text:
+        ru: Оценим шансы и риски
+        uz: Imkoniyat va xatarlarni baholaymiz
+        en: We assess chances and risks
+    - title:
+        ru: План действий
+        uz: Harakat rejasi
+        en: Action plan
+      text:
+        ru: Сроки и стоимость — до начала работы
+        uz: Muddat va narx — ish boshlanishidan oldin
+        en: Timeline and fee — before any work starts
+contacts:
+  enabled: true
+  overline:
+    ru: Контакты
+    uz: Aloqa
+    en: Contacts
+  title:
+    ru: Приходите или напишите
+    uz: Keling yoki yozing
+    en: Visit us or get in touch
