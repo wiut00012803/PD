@@ -114,14 +114,33 @@ const links = navLinks(lang, page).filter((l) => l.inHeader);
     }
   }
 
+  .site-header__actions :global(.btn--primary) {
+    min-width: 168px;
+  }
+
   @media (min-width: 900px) {
+    .site-header {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    .site-header__logo {
+      justify-self: start;
+    }
+
     .site-header__nav {
       display: flex;
       gap: 20px;
+      justify-self: center;
     }
 
     .site-header__actions {
       gap: 10px;
+      justify-self: end;
+    }
+
+    .site-header__actions :global(.btn--primary) {
+      min-width: 136px;
     }
 
     .hide-compact {

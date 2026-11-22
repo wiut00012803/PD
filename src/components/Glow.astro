@@ -1,27 +1,45 @@
-<div class="page-glow" aria-hidden="true" data-glow transition:persist="page-glow"></div>
+<div class="page-glow" aria-hidden="true" data-glow transition:persist="page-glow">
+  <canvas class="page-glow__canvas" data-glow-canvas></canvas>
+  <span class="page-glow__fallback" data-glow-fallback></span>
+</div>
 
 <style>
   .page-glow {
     position: fixed;
+    inset: 0;
     z-index: 0;
-    top: 0;
-    left: 0;
-    width: min(1000px, 90vw);
-    aspect-ratio: 2 / 1;
-    border-radius: 50%;
+    overflow: hidden;
     pointer-events: none;
-    background: radial-gradient(closest-side, rgb(192 138 62 / 0.9), rgb(192 138 62 / 0.45) 40%, rgb(192 138 62 / 0.12) 70%, rgb(192 138 62 / 0));
-    opacity: var(--glow-opacity);
-    translate: calc(50vw - 50%) -30%;
-    will-change: transform;
-    transition: opacity 400ms var(--ease-out);
   }
 
-  @media (max-width: 599px) {
-    .page-glow {
-      width: 120vw;
-      aspect-ratio: 1.4 / 1;
-    }
+  .page-glow__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 900ms var(--ease-out);
+  }
+
+  .page-glow.is-gl .page-glow__canvas {
+    opacity: 1;
+  }
+
+  .page-glow__fallback {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(192 138 62 / 0.9), rgb(192 138 62 / 0.4) 45%, rgb(192 138 62 / 0.1) 72%, transparent);
+    opacity: var(--glow-opacity);
+    transform: translate3d(-9999px, -9999px, 0);
+    will-change: transform;
+  }
+
+  .page-glow.is-gl .page-glow__fallback {
+    display: none;
   }
 </style>
 

@@ -124,7 +124,9 @@
   --color-surface-glass-strong: rgb(255 255 255 / 0.65);
   --color-surface-glass-active: var(--primitive-white);
   --color-glow-primary: var(--primitive-ochre-500);
-  --glow-opacity: 0.34;
+  --glow-opacity: 0.3;
+  --glow-color: #c08a3e;
+  --glow-peak: 0.3;
   --color-text-primary: var(--primitive-navy-900);
   --color-text-secondary: var(--primitive-gray-600);
   --color-text-tertiary: #6b7380;
@@ -159,7 +161,9 @@
   --color-surface-glass-strong: rgb(255 255 255 / 0.08);
   --color-surface-glass-active: rgb(255 255 255 / 0.16);
   --color-glow-primary: var(--primitive-ochre-500);
-  --glow-opacity: 0.32;
+  --glow-opacity: 0.38;
+  --glow-color: #c08a3e;
+  --glow-peak: 0.34;
   --color-text-primary: var(--primitive-white);
   --color-text-secondary: var(--primitive-gray-400);
   --color-text-tertiary: var(--primitive-gray-500);
