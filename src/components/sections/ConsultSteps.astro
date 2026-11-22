@@ -17,7 +17,7 @@ const { steps } = getContent().consultation;
   steps.enabled && (
     <section class="section" id="how" aria-labelledby="how-title">
       <div class="container">
-        <SectionTitle id="how-title" overline={tr(steps.overline, lang)} title={tr(steps.title, lang)} subtitle={tr(steps.subtitle, lang)} />
+        <SectionTitle id="how-title" lang={lang} head={steps} />
         <ol class="steps" style={`--count:${steps.items.length}`}>
           {steps.items.map((s, i) => (
             <li class="c-step glass card">
@@ -28,7 +28,7 @@ const { steps } = getContent().consultation;
                 </span>
               </div>
               <h3 class="t-h4">{tr(s.title, lang)}</h3>
-              <p class="t-body-s c-secondary">{tr(s.text, lang)}</p>
+              <p class="t-body-s t-pre c-secondary">{tr(s.text, lang)}</p>
               <p class="c-step__time t-label c-secondary">
                 <Icon name="clock" size={14} />
                 {tr(s.time, lang)}
@@ -45,7 +45,7 @@ const { steps } = getContent().consultation;
                 </span>
                 <div class="term__text">
                   <h3 class="t-h4">{tr(t.title, lang)}</h3>
-                  <p class="t-body-s c-secondary">{tr(t.text, lang)}</p>
+                  <p class="t-body-s t-pre c-secondary">{tr(t.text, lang)}</p>
                 </div>
               </li>
             ))}

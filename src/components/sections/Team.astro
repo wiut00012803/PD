@@ -1,11 +1,14 @@
 ---
 import { Picture } from "astro:assets";
 import Icon from "../ui/Icon.astro";
+import Btn from "../ui/Btn.astro";
+import Dialog from "../ui/Dialog.astro";
 import SectionTitle from "../ui/SectionTitle.astro";
 import Carousel from "../ui/Carousel.astro";
 import { paragraphs, tr } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent, getImage } from "../../lib/content.ts";
+import { sectionVisibility } from "../../lib/nav.ts";
 
 interface Props {
   lang: Lang;
@@ -17,11 +20,11 @@ const members = team.members.map((m, i) => ({ ...m, image: getImage(m.photo), di
 ---
 
 {
-  team.enabled && members.length > 0 && (
+  sectionVisibility().team && (
     <section class="section" id="team" aria-labelledby="team-title">
       <div class="container">
-        <SectionTitle id="team-title" overline={tr(team.overline, lang)} title={tr(team.title, lang)} subtitle={tr(team.subtitle, lang)} />
-        <Carousel id="team-list" count={members.length} cols={{ tablet: 2, desktop: 3, wide: 3 }} label={tr(team.title, lang)}>
+        <SectionTitle id="team-title" lang={lang} head={team} />
+        <Carousel id="team-list" count={members.length} cols={{ tablet: 2, desktop: 3 }} label={tr(team.title, lang)}>
           {members.map((m) => (
             <li class="lawyer glass card">
               <div class="lawyer__photo">
@@ -37,12 +40,11 @@ const members = team.members.map((m, i) => ({ ...m, image: getImage(m.photo), di
               <div class="lawyer__text">
                 <p class="t-overline">{tr(m.role, lang)}</p>
                 <h3 class="t-h4">{tr(m.name, lang)}</h3>
-                <p class="t-body-s c-secondary">{tr(m.bio, lang)}</p>
+                <p class="t-body-s t-pre c-secondary">{tr(m.bio, lang)}</p>
                 {m.full.length > 0 && (
-                  <button type="button" class="btn btn--ghost btn--s lawyer__more" data-dialog-open={m.dialog} aria-haspopup="dialog">
-                    <span>{tr(ui.buttons.more, lang)}</span>
-                    <Icon name="arrow-right" />
-                  </button>
+                  <Btn variant="ghost" size="s" class="lawyer__more" data-dialog-open={m.dialog} aria-haspopup="dialog">
+                    {tr(ui.buttons.more, lang)}
+                  </Btn>
                 )}
               </div>
             </li>
@@ -53,25 +55,18 @@ const members = team.members.map((m, i) => ({ ...m, image: getImage(m.photo), di
       {members
         .filter((m) => m.full.length > 0)
         .map((m) => (
-          <dialog class="dialog" id={m.dialog} aria-labelledby={`${m.dialog}-title`}>
-            <div class="dialog__head">
-              <div class="bio-head">
-                <p class="t-overline">{tr(m.role, lang)}</p>
-                <h3 class="t-h3" id={`${m.dialog}-title`}>{tr(m.name, lang)}</h3>
-              </div>
-              <button type="button" class="round-btn round-btn--touch" data-dialog-close aria-label={tr(ui.buttons.close, lang)}>
-                <Icon name="x" />
-              </button>
+          <Dialog id={m.dialog} closeLabel={tr(ui.buttons.close, lang)} bodyClass="bio">
+            <div class="bio-head" slot="head">
+              <p class="t-overline">{tr(m.role, lang)}</p>
+              <h3 class="t-h3" id={`${m.dialog}-title`}>
+                {tr(m.name, lang)}
+              </h3>
             </div>
-            <div class="dialog__body bio">
-              {m.image && (
-                <Picture src={m.image} alt={tr(m.name, lang)} widths={[240, 480]} sizes="200px" formats={["avif", "webp"]} class="bio__photo" loading="lazy" />
-              )}
-              {m.full.map((p) => (
-                <p class="t-body-m c-secondary">{p}</p>
-              ))}
-            </div>
-          </dialog>
+            {m.image && <Picture src={m.image} alt={tr(m.name, lang)} widths={[240, 480]} sizes="200px" formats={["avif", "webp"]} class="bio__photo" loading="lazy" />}
+            {m.full.map((p) => (
+              <p class="t-body-m t-pre c-secondary">{p}</p>
+            ))}
+          </Dialog>
         ))}
     </section>
   )
@@ -117,7 +112,7 @@ const members = team.members.map((m, i) => ({ ...m, image: getImage(m.photo), di
     padding-inline: 14px;
   }
 
-  .lawyer__more {
+  .lawyer__text :global(.lawyer__more) {
     align-self: flex-start;
     margin-top: 4px;
   }
@@ -129,13 +124,13 @@ const members = team.members.map((m, i) => ({ ...m, image: getImage(m.photo), di
     gap: 4px;
   }
 
-  .bio {
+  .section :global(.bio) {
     display: flex;
     flex-direction: column;
     gap: 14px;
   }
 
-  .bio :global(.bio__photo) {
+  .section :global(.bio__photo) {
     width: 160px;
     aspect-ratio: 4 / 5;
     object-fit: cover;
@@ -152,17 +147,17 @@ const members = team.members.map((m, i) => ({ ...m, image: getImage(m.photo), di
       padding-inline: 18px;
     }
 
-    .bio {
+    .section :global(.bio) {
       display: block;
     }
 
-    .bio :global(.bio__photo) {
+    .section :global(.bio__photo) {
       float: right;
       width: 200px;
       margin: 0 0 16px 24px;
     }
 
-    .bio p + p {
+    .section :global(.bio p + p) {
       margin-top: 14px;
     }
   }

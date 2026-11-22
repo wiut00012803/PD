@@ -1,7 +1,8 @@
 ---
 import Btn from "../ui/Btn.astro";
+import AccentTitle from "../ui/AccentTitle.astro";
 import Messenger from "../ui/Messenger.astro";
-import { lines, tr } from "../../lib/i18n.ts";
+import { tr } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
 import { contactLinks } from "../../lib/links.ts";
@@ -21,12 +22,12 @@ const links = contactLinks();
     <section class="section final" aria-labelledby="final-title">
       <div class="container">
         <div class="final__card glass-strong">
-          <h2 class="t-h1" id="final-title">
-            <span set:html={lines(f.title, lang)} /> <span class="gradient-text" set:html={lines(f.titleAccent, lang)} />
-          </h2>
+          <AccentTitle as="h2" id="final-title" class="t-h1" lang={lang} title={f.title} accent={f.titleAccent} />
           <p class="t-body-l c-secondary">{tr(f.subtitle, lang)}</p>
           <div class="final__actions">
-            <Btn href={links.form} external>{tr(consultation.hero.button, lang)}</Btn>
+            <Btn href={links.form} external>
+              {tr(consultation.hero.button, lang)}
+            </Btn>
             <Messenger platform="telegram" />
             <Messenger platform="whatsapp" />
             <Messenger platform="phone" />
@@ -52,7 +53,7 @@ const links = contactLinks();
     text-align: center;
   }
 
-  .final__card .t-h1 {
+  .final__card :global(.t-h1) {
     max-width: 900px;
   }
 

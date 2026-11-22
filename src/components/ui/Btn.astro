@@ -1,9 +1,10 @@
 ---
 import Icon from "./Icon.astro";
 import type { UiIconName } from "../../icons/icons.ts";
+import { externalLink } from "../../lib/html.ts";
 
 interface Props {
-  href: string;
+  href?: string;
   variant?: "primary" | "secondary" | "ghost";
   size?: "m" | "s";
   icon?: UiIconName | null;
@@ -15,12 +16,12 @@ interface Props {
 }
 
 const { href, variant = "primary", size = "m", icon = variant === "secondary" ? null : "arrow-right", iconStart, external = false, block = false, class: className, ...rest } = Astro.props;
-const classes = ["btn", `btn--${variant}`, `btn--${size}`, block && "btn--block", className].filter(Boolean).join(" ");
-const target = external ? { target: "_blank", rel: "noopener" } : {};
+const Tag = href ? "a" : "button";
+const tagAttrs: Record<string, string> = href ? { href, ...externalLink(external) } : { type: "button" };
 ---
 
-<a href={href} class={classes} {...target} {...rest}>
+<Tag class:list={["btn", `btn--${variant}`, `btn--${size}`, block && "btn--block", className]} {...tagAttrs} {...rest}>
   {iconStart && <Icon name={iconStart} />}
   <span><slot /></span>
   {icon && <Icon name={icon} />}
-</a>
+</Tag>

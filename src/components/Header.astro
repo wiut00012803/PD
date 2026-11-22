@@ -3,6 +3,7 @@ import Logo from "./ui/Logo.astro";
 import LangSwitch from "./ui/LangSwitch.astro";
 import ThemeToggle from "./ui/ThemeToggle.astro";
 import Icon from "./ui/Icon.astro";
+import Btn from "./ui/Btn.astro";
 import { navLinks } from "../lib/nav.ts";
 import { tr, url } from "../lib/i18n.ts";
 import type { Lang, PageKey } from "../lib/i18n.ts";
@@ -18,10 +19,9 @@ const { ui, settings } = getContent();
 const links = navLinks(lang, page).filter((l) => l.inHeader);
 ---
 
-<header class="site-header glass" data-header transition:name="site-header">
+<header class="site-header glass" transition:name="site-header">
   <a class="site-header__logo" href={url(lang, "home")} aria-label={settings.siteName}>
-    <Logo height={34} class="logo-desktop" label={settings.siteName} />
-    <Logo height={28} class="logo-mobile" label={settings.siteName} />
+    <Logo label={settings.siteName} />
   </a>
 
   <nav class="site-header__nav" aria-label={tr(ui.buttons.menu, lang)}>
@@ -35,16 +35,12 @@ const links = navLinks(lang, page).filter((l) => l.inHeader);
   </nav>
 
   <div class="site-header__actions">
-    <LangSwitch lang={lang} page={page} class="only-desktop" />
-    <ThemeToggle lang={lang} class="only-desktop" />
-    <ThemeToggle lang={lang} touch class="only-touch" />
-    <a href={url(lang, "consultation")} class="btn btn--primary btn--s only-desktop" aria-current={page === "consultation" ? "page" : undefined}>
-      <span>{tr(ui.buttons.consultShort, lang)}</span>
-    </a>
-    <a href={url(lang, "consultation")} class="btn btn--primary btn--m only-tablet" aria-current={page === "consultation" ? "page" : undefined}>
-      <span>{tr(ui.buttons.consultShort, lang)}</span>
-    </a>
-    <button type="button" class="round-btn round-btn--touch only-touch" data-menu-open aria-haspopup="dialog" aria-controls="site-menu" aria-label={tr(ui.buttons.menu, lang)}>
+    <LangSwitch lang={lang} page={page} class="site-header__lang" />
+    <ThemeToggle lang={lang} class="site-header__theme" />
+    <Btn href={url(lang, "consultation")} icon={null} class="site-header__cta" aria-current={page === "consultation" ? "page" : undefined}>
+      {tr(ui.buttons.consultShort, lang)}
+    </Btn>
+    <button type="button" class="round-btn round-btn--touch site-header__burger" data-menu-open aria-haspopup="dialog" aria-controls="site-menu" aria-label={tr(ui.buttons.menu, lang)}>
       <Icon name="menu" />
     </button>
   </div>
@@ -66,6 +62,7 @@ const links = navLinks(lang, page).filter((l) => l.inHeader);
     padding: 0 8px 0 18px;
     border-radius: var(--radius-full);
     box-shadow: var(--shadow-float);
+    --logo-h: 28px;
   }
 
   .site-header__logo {
@@ -96,26 +93,29 @@ const links = navLinks(lang, page).filter((l) => l.inHeader);
     gap: 8px;
   }
 
-  .site-header :global(.logo-desktop) {
+  .site-header__actions :global(.site-header__lang),
+  .site-header__actions :global(.site-header__cta) {
     display: none;
+  }
+
+  .site-header__actions :global(.site-header__theme) {
+    --round-size: 44px;
+  }
+
+  .site-header__actions :global(.site-header__theme .icon) {
+    --icon-size: 20px;
   }
 
   @media (min-width: 600px) {
     .site-header {
       padding: 0 10px 0 24px;
+      --logo-h: 34px;
     }
 
-    .site-header :global(.logo-mobile) {
-      display: none;
-    }
-
-    .site-header :global(.logo-desktop) {
+    .site-header__actions :global(.site-header__cta) {
       display: inline-flex;
+      min-width: 168px;
     }
-  }
-
-  .site-header__actions :global(.btn--primary) {
-    min-width: 168px;
   }
 
   @media (min-width: 900px) {
@@ -139,8 +139,27 @@ const links = navLinks(lang, page).filter((l) => l.inHeader);
       justify-self: end;
     }
 
-    .site-header__actions :global(.btn--primary) {
+    .site-header__actions :global(.site-header__lang) {
+      display: inline-flex;
+    }
+
+    .site-header__actions :global(.site-header__theme) {
+      --round-size: 36px;
+    }
+
+    .site-header__actions :global(.site-header__theme .icon) {
+      --icon-size: 18px;
+    }
+
+    .site-header__actions :global(.site-header__cta) {
       min-width: 136px;
+      min-height: 40px;
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+
+    .site-header__burger {
+      display: none;
     }
 
     .hide-compact {

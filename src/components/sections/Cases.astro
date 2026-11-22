@@ -1,10 +1,10 @@
 ---
 import SectionTitle from "../ui/SectionTitle.astro";
 import Carousel from "../ui/Carousel.astro";
-import ShowMore from "../ui/ShowMore.astro";
 import { tr } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
+import { sectionVisibility } from "../../lib/nav.ts";
 
 interface Props {
   lang: Lang;
@@ -12,31 +12,29 @@ interface Props {
 
 const { lang } = Astro.props;
 const { cases, ui } = getContent();
-const hidden = (i: number) => i >= cases.visible;
 ---
 
 {
-  cases.enabled && cases.items.length > 0 && (
+  sectionVisibility().cases && (
     <section class="section" id="cases" aria-labelledby="cases-title">
       <div class="container">
-        <SectionTitle id="cases-title" overline={tr(cases.overline, lang)} title={tr(cases.title, lang)} subtitle={tr(cases.subtitle, lang)} />
-        <Carousel id="cases-list" count={Math.min(cases.items.length, cases.visible)} cols={{ tablet: 1, desktop: 2, wide: 2 }} label={tr(cases.title, lang)}>
+        <SectionTitle id="cases-title" lang={lang} head={cases} />
+        <Carousel id="cases-list" count={cases.items.length} visible={cases.visible} cols={{ tablet: 1, desktop: 2 }} label={tr(cases.title, lang)} moreLabel={tr(ui.buttons.showMore, lang)}>
           {cases.items.map((c, i) => (
-            <li class:list={["case glass card", hidden(i) && "is-hidden-extra"]}>
+            <li class:list={["case glass card", i >= cases.visible && "is-hidden-extra"]}>
               <p class="t-overline">{tr(c.category, lang)}</p>
               <h3 class="t-h3 case__title">{tr(c.title, lang)}</h3>
               <div class="case__block">
                 <p class="t-label">{tr(ui.labels.situation, lang)}</p>
-                <p class="t-body-s c-secondary">{tr(c.situation, lang)}</p>
+                <p class="t-body-s t-pre c-secondary">{tr(c.situation, lang)}</p>
               </div>
               <div class="case__block">
                 <p class="t-label">{tr(ui.labels.result, lang)}</p>
-                <p class="t-body-s c-secondary">{tr(c.result, lang)}</p>
+                <p class="t-body-s t-pre c-secondary">{tr(c.result, lang)}</p>
               </div>
             </li>
           ))}
         </Carousel>
-        {cases.items.length > cases.visible && <ShowMore target="cases-list" label={tr(ui.buttons.showMore, lang)} />}
       </div>
     </section>
   )

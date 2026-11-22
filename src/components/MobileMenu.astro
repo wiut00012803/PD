@@ -1,9 +1,11 @@
 ---
 import Logo from "./ui/Logo.astro";
 import Icon from "./ui/Icon.astro";
+import Btn from "./ui/Btn.astro";
 import LangSwitch from "./ui/LangSwitch.astro";
 import ThemeToggle from "./ui/ThemeToggle.astro";
 import Messenger from "./ui/Messenger.astro";
+import MessengerPair from "./ui/MessengerPair.astro";
 import { navLinks } from "../lib/nav.ts";
 import { tr, url } from "../lib/i18n.ts";
 import type { Lang, PageKey } from "../lib/i18n.ts";
@@ -23,7 +25,7 @@ const links = navLinks(lang, page);
   <div class="menu__inner container">
     <div class="menu__head">
       <a href={url(lang, "home")} aria-label={settings.siteName} data-menu-close-link>
-        <Logo height={40} class="menu__logo" label={settings.siteName} />
+        <Logo label={settings.siteName} />
       </a>
       <button type="button" class="round-btn menu__close" data-menu-close aria-label={tr(ui.buttons.close, lang)}>
         <Icon name="x" size={22} />
@@ -46,14 +48,10 @@ const links = navLinks(lang, page);
         <LangSwitch lang={lang} page={page} touch />
         <ThemeToggle lang={lang} touch />
       </div>
-      <a href={url(lang, "consultation")} class="btn btn--primary btn--m btn--block" data-menu-close-link>
-        <span>{tr(ui.nav.consultation, lang)}</span>
-        <Icon name="arrow-right" />
-      </a>
-      <div class="menu__messengers">
-        <Messenger platform="telegram" block />
-        <Messenger platform="whatsapp" block />
-      </div>
+      <Btn href={url(lang, "consultation")} block data-menu-close-link>
+        {tr(ui.nav.consultation, lang)}
+      </Btn>
+      <MessengerPair />
       <Messenger platform="phone" block />
     </div>
   </div>
@@ -74,6 +72,7 @@ const links = navLinks(lang, page);
     color: var(--color-text-primary);
     overflow-y: auto;
     overscroll-behavior: contain;
+    --logo-h: 40px;
   }
 
   .menu[open] {
@@ -137,12 +136,8 @@ const links = navLinks(lang, page);
     justify-content: space-between;
     gap: 16px;
     padding-block: 14px;
-    border-bottom: 1px solid var(--color-border-glass);
+    border-bottom: 1px solid var(--color-separator);
     color: var(--color-text-primary);
-  }
-
-  :root[data-theme="light"] .menu__link {
-    border-bottom-color: var(--color-divider);
   }
 
   .menu__link .t-h3 {
@@ -164,12 +159,6 @@ const links = navLinks(lang, page);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-  }
-
-  .menu__messengers {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
 

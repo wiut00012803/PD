@@ -1,9 +1,22 @@
 import { z } from "zod";
+import type { SocialIconName, UiIconName } from "../icons/icons.ts";
 
 export const LANGS = ["ru", "uz", "en"] as const;
 export type Lang = (typeof LANGS)[number];
+export const DEFAULT_LANG: Lang = "ru";
+export const isLang = (value: unknown): value is Lang => (LANGS as readonly unknown[]).includes(value);
 
-export const LANG_LABELS: Record<Lang, string> = { ru: "RU · Русский", uz: "UZ · Oʻzbekcha", en: "EN · English" };
+export const LANG_META = {
+  ru: { short: "RU", name: "Русский", htmlLang: "ru", ogLocale: "ru_RU", hreflang: "ru" },
+  uz: { short: "UZ", name: "Oʻzbekcha", htmlLang: "uz-Latn", ogLocale: "uz_UZ", hreflang: "uz" },
+  en: { short: "EN", name: "English", htmlLang: "en", ogLocale: "en_US", hreflang: "en" },
+} as const satisfies Record<Lang, { short: string; name: string; htmlLang: string; ogLocale: string; hreflang: string }>;
+
+export const langLabel = (lang: Lang) => `${LANG_META[lang].short} · ${LANG_META[lang].name}`;
+
+export type LocalizedText = Record<Lang, string>;
+
+export const TEXT_TOKENS = ["years", "yearsWord"] as const;
 
 export const ICONS = {
   "shield-check": "Щит с галочкой — защита, уголовные дела",
@@ -35,7 +48,7 @@ export const ICONS = {
   phone: "Телефон — звонок",
   shield: "Щит — безопасность",
   check: "Галочка",
-} as const;
+} as const satisfies Partial<Record<UiIconName, string>>;
 export type IconName = keyof typeof ICONS;
 
 export const SOCIALS = {
@@ -46,10 +59,25 @@ export const SOCIALS = {
   youtube: "YouTube",
   x: "X (Twitter)",
   tiktok: "TikTok",
-} as const;
+} as const satisfies Partial<Record<SocialIconName, string>>;
 export type SocialName = keyof typeof SOCIALS;
 
-export const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "avif"];
+export const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "avif"] as const;
+export const UPLOADS_PREFIX = "uploads/";
+
+export type UploadStatus = "ok" | "outside" | "missing" | "extension-case" | "broken";
+
+export function uploadKey(value: string): string | null {
+  const path = value.trim().replace(/^\/+/, "");
+  return path.startsWith(UPLOADS_PREFIX) && path.length > UPLOADS_PREFIX.length ? path.slice(UPLOADS_PREFIX.length) : null;
+}
+
+const UPLOAD_MESSAGES: Record<Exclude<UploadStatus, "ok">, string> = {
+  outside: "выберите фото из медиатеки — путь должен начинаться с /uploads/",
+  missing: "файл не найден в медиатеке — загрузите фото ещё раз",
+  "extension-case": "переименуйте файл: расширение должно быть строчными буквами, например photo.jpg",
+  broken: "файл не открывается как картинка (повреждён или в формате HEIC) — сохраните его как JPG и загрузите снова",
+};
 
 const PATTERNS = {
   phone: { regex: /^\+998 \d{2} \d{3}-\d{2}-\d{2}$/, message: "Телефон в формате +998 90 123-45-67" },
@@ -57,11 +85,11 @@ const PATTERNS = {
   telegram: { regex: /^[A-Za-z][A-Za-z0-9_]{4,31}$/, message: "Имя пользователя Telegram без @ и без ссылки, например pravoedelo" },
   whatsapp: { regex: /^998\d{9}$/, message: "Номер WhatsApp только цифрами, начиная с 998, например 998901234567" },
   form: { regex: /^https:\/\/(forms\.gle\/|docs\.google\.com\/forms\/)\S+$/, message: "Ссылка на Google Форму: https://forms.gle/… или https://docs.google.com/forms/…" },
-  url: { regex: /^https:\/\/\S+\.\S+$/, message: "Полная ссылка, начинается с https://" },
+  url: { regex: /^https:\/\/[^\s<>"]+\.[^\s<>"]+$/, message: "Полная ссылка, начинается с https://" },
   image: { regex: new RegExp(`\\.(${IMAGE_EXTENSIONS.join("|")})$`, "i"), message: "Нужна картинка в формате JPG, PNG, WebP или AVIF" },
 } as const;
 
-export interface FieldMeta {
+export type FieldMeta = {
   label: string;
   description?: string;
   multiline?: boolean;
@@ -71,13 +99,39 @@ export interface FieldMeta {
   summary?: string;
   cmsPattern?: { regex: string; message: string };
   choices?: Record<string, string>;
-  [key: string]: unknown;
+};
+
+const withMeta = <T extends z.ZodType>(schema: T, meta: FieldMeta) => schema.meta(meta);
+
+function toText(value: unknown): unknown {
+  if (value === null || value === undefined) return "";
+  if (typeof value === "number" && Number.isSafeInteger(value)) return String(value);
+  return value;
 }
 
-const toText = (v: unknown) => (v === null || v === undefined ? "" : typeof v === "number" || typeof v === "boolean" ? String(v) : v);
-const orEmptyObject = (v: unknown) => (v === null || v === undefined ? {} : v);
-const orEmptyList = (v: unknown) => (v === null || v === undefined ? [] : v);
-const orUndefined = (v: unknown) => (v === null || v === "" ? undefined : v);
+function toInteger(value: unknown): unknown {
+  if (value === null || value === undefined) return undefined;
+  if (typeof value !== "string") return value;
+  const trimmed = value.trim();
+  if (trimmed === "") return undefined;
+  return /^-?\d+$/.test(trimmed) ? Number(trimmed) : value;
+}
+
+const orEmptyObject = (value: unknown) => (value === null || value === undefined ? {} : value);
+const orEmptyList = (value: unknown) => (value === null || value === undefined ? [] : value);
+const orUndefined = (value: unknown) => (value === null || value === "" ? undefined : value);
+
+function patternSource(regex: RegExp): string {
+  if (regex.flags.replace("u", "")) throw new Error(`schema: флаги регулярного выражения не поддерживаются формой CMS: /${regex.source}/${regex.flags}`);
+  return regex.source;
+}
+
+function requiredString(required: boolean, max?: number) {
+  let s = z.string().trim();
+  if (required) s = s.min(1);
+  if (max) s = s.max(max);
+  return s;
+}
 
 interface StrOptions {
   required?: boolean;
@@ -88,82 +142,85 @@ interface StrOptions {
 }
 
 function plain(label: string, o: StrOptions = {}) {
-  const required = o.required !== false;
-  let s = z.string().trim();
-  if (required) s = s.min(1);
-  if (o.max) s = s.max(o.max);
   const pattern = o.pattern;
-  const checked = pattern
-    ? s.refine((v) => v === "" || pattern.regex.test(v), { error: pattern.message })
-    : s;
-  const meta: FieldMeta = { label, description: o.description, multiline: o.multiline };
-  if (pattern) meta.cmsPattern = { regex: pattern.regex.source, message: pattern.message };
-  return z.preprocess(toText, checked).meta(meta);
+  const base = requiredString(o.required !== false, o.max);
+  const checked = pattern ? base.refine((v) => v === "" || pattern.regex.test(v), { error: pattern.message }) : base;
+  return withMeta(z.preprocess(toText, checked), {
+    label,
+    description: o.description,
+    multiline: o.multiline,
+    cmsPattern: pattern ? { regex: patternSource(pattern.regex), message: pattern.message } : undefined,
+  });
 }
 
-interface TextOptions {
-  required?: boolean;
-  max?: number;
-  multiline?: boolean;
-  description?: string;
-}
+type TextOptions = Omit<StrOptions, "pattern">;
 
 function text(label: string, o: TextOptions = {}) {
-  const part = (lang: Lang, required: boolean) =>
-    plain(LANG_LABELS[lang], { required, max: o.max, multiline: o.multiline });
-  const shape = z.object({
-    ru: part("ru", o.required !== false),
-    uz: part("uz", false),
-    en: part("en", false),
-  });
-  return z.preprocess(orEmptyObject, shape).meta({ label, description: o.description, i18n: true, multiline: o.multiline });
+  const required = o.required !== false;
+  const part = (lang: Lang) => plain(langLabel(lang), { required: required && lang === DEFAULT_LANG, max: o.max, multiline: o.multiline });
+  const shape = Object.fromEntries(LANGS.map((lang) => [lang, part(lang)])) as Record<Lang, ReturnType<typeof part>>;
+  const checked = z
+    .strictObject(shape)
+    .refine((v) => v[DEFAULT_LANG] !== "" || LANGS.every((lang) => v[lang] === ""), {
+      error: "заполните русский вариант — он показывается, когда перевода нет",
+      path: [DEFAULT_LANG],
+    });
+  return withMeta(z.preprocess(orEmptyObject, checked), { label, description: o.description, i18n: true, multiline: o.multiline });
 }
 
-function int(label: string, o: { min: number; max: number; fallback: number; description?: string }) {
-  return z
-    .preprocess((v) => (v === null || v === "" || v === undefined ? undefined : typeof v === "string" ? Number(v) : v), z.number().int().min(o.min).max(o.max).default(o.fallback))
-    .meta({ label, description: o.description });
+function int(label: string, o: { min: number; max: number; fallback?: number; description?: string }) {
+  const base = z.number().int().min(o.min).max(o.max);
+  return withMeta(z.preprocess(toInteger, o.fallback === undefined ? base : base.default(o.fallback)), { label, description: o.description });
+}
+
+function pastYear(label: string, description?: string) {
+  const year = z
+    .number()
+    .int()
+    .min(1950)
+    .max(2100)
+    .refine((v) => v <= new Date().getFullYear(), { error: "год не может быть в будущем" });
+  return withMeta(z.preprocess(toInteger, year), { label, description });
 }
 
 function flag(label: string, description?: string) {
-  return z.preprocess(orUndefined, z.boolean().default(true)).meta({ label, description });
+  return withMeta(z.preprocess(orUndefined, z.boolean().default(true)), { label, description });
 }
 
 function choice<T extends Record<string, string>>(label: string, choices: T, description?: string) {
   const keys = Object.keys(choices) as [keyof T & string, ...(keyof T & string)[]];
-  return z.enum(keys).meta({ label, description, choices });
-}
-
-function image(label: string, o: { required?: boolean; description?: string; exists: (path: string) => boolean }) {
-  const required = o.required !== false;
-  let s = z.string().trim();
-  if (required) s = s.min(1);
-  const checked = s
-    .refine((v) => v === "" || PATTERNS.image.regex.test(v), { error: PATTERNS.image.message })
-    .refine((v) => v === "" || !PATTERNS.image.regex.test(v) || o.exists(v), { error: "Файл не найден в медиатеке — загрузите фото ещё раз" });
-  return z.preprocess(toText, checked).meta({ label, description: o.description, image: true });
+  return withMeta(z.enum(keys), { label, description, choices });
 }
 
 function list<T extends z.ZodType>(label: string, item: T, o: { min?: number; max: number; itemLabel: string; summary?: string; description?: string }) {
   let arr = z.array(item).max(o.max);
   if (o.min) arr = arr.min(o.min);
-  return z.preprocess(orEmptyList, arr).meta({ label, description: o.description, itemLabel: o.itemLabel, summary: o.summary });
+  return withMeta(z.preprocess(orEmptyList, arr), { label, description: o.description, itemLabel: o.itemLabel, summary: o.summary });
 }
 
 function group<T extends z.ZodRawShape>(label: string, shape: T, description?: string) {
-  return z.preprocess(orEmptyObject, z.object(shape)).meta({ label, description });
+  return withMeta(z.preprocess(orEmptyObject, z.strictObject(shape)), { label, description });
 }
 
-const icon = (label = "Иконка") => choice(label, ICONS);
+const icon = () => choice("Иконка", ICONS);
 const enabled = (what: string) => flag("Показывать на сайте", `Выключите, чтобы скрыть ${what}`);
-const TITLE_HINT = "Перенос строки (Enter) сохраняется на больших экранах";
+const TITLE_HINT = "Enter — перенос строки на компьютере; на телефоне строки переносятся сами";
 
 export interface SchemaContext {
-  imageExists: (path: string) => boolean;
+  uploadStatus: (path: string) => UploadStatus;
 }
 
 export function createSchemas(ctx: SchemaContext) {
-  const photo = (label: string, required: boolean, description?: string) => image(label, { required, description, exists: ctx.imageExists });
+  const photo = (label: string, required: boolean, description?: string) => {
+    const checked = requiredString(required)
+      .refine((v) => v === "" || PATTERNS.image.regex.test(v), { error: PATTERNS.image.message })
+      .superRefine((v, issueCtx) => {
+        if (v === "" || !PATTERNS.image.regex.test(v)) return;
+        const status = ctx.uploadStatus(v);
+        if (status !== "ok") issueCtx.addIssue({ code: "custom", message: UPLOAD_MESSAGES[status] });
+      });
+    return withMeta(z.preprocess(toText, checked), { label, description, image: true });
+  };
 
   const sectionHead = {
     overline: text("Надзаголовок", { max: 40, description: "Мелкая строка над заголовком секции" }),
@@ -173,14 +230,14 @@ export function createSchemas(ctx: SchemaContext) {
 
   const faqItems = list(
     "Вопросы",
-    z.object({
+    z.strictObject({
       question: text("Вопрос", { max: 140 }),
       answer: text("Ответ", { max: 1200, multiline: true }),
     }),
     { min: 1, max: 20, itemLabel: "Вопрос", summary: "{fields.question.ru}" },
   );
 
-  const settings = z.object({
+  const settings = z.strictObject({
     siteName: plain("Название фирмы", { max: 40 }),
     phone: plain("Телефон", { pattern: PATTERNS.phone }),
     email: plain("Email", { pattern: PATTERNS.email }),
@@ -190,11 +247,11 @@ export function createSchemas(ctx: SchemaContext) {
     address: text("Адрес", { max: 140 }),
     hours: text("Часы работы", { max: 90 }),
     mapQuery: plain("Адрес для карты", { max: 200, description: "Как найти офис в Google Maps: адрес или название. Карта на сайте покажет эту точку" }),
-    practiceSince: int("Год начала адвокатской практики", { min: 1950, max: 2100, fallback: 2008, description: "Из него считается стаж. В текстах пишите {years} — число лет, {yearsWord} — слово «лет/год/года»" }),
-    founded: int("Год основания бюро", { min: 1950, max: 2100, fallback: 2018 }),
+    practiceSince: pastYear("Год начала адвокатской практики", "Из него считается стаж. В текстах пишите {years} — число лет, {yearsWord} — слово «лет/год/года»"),
+    founded: pastYear("Год основания бюро"),
     socials: list(
       "Соцсети",
-      z.object({ network: choice("Соцсеть", SOCIALS), url: plain("Ссылка", { pattern: PATTERNS.url }) }),
+      z.strictObject({ network: choice("Соцсеть", SOCIALS), url: plain("Ссылка", { pattern: PATTERNS.url }) }),
       { max: 7, itemLabel: "Соцсеть", summary: "{fields.network}", description: "Иконки в подвале сайта" },
     ),
     privacyUrl: plain("Ссылка на политику конфиденциальности", { required: false, pattern: PATTERNS.url, description: "Если пусто — ссылка в подвале не показывается" }),
@@ -204,10 +261,10 @@ export function createSchemas(ctx: SchemaContext) {
     }),
   });
 
-  const home = z.object({
+  const home = z.strictObject({
     hero: group("Первый экран", {
       badge: text("Бейдж над заголовком", { max: 50 }),
-      title: text("Заголовок", { max: 40, description: TITLE_HINT }),
+      title: text("Заголовок", { max: 40, multiline: true, description: TITLE_HINT }),
       titleAccent: text("Заголовок — выделенная часть", { max: 40, description: "Вторая строка заголовка с золотым градиентом" }),
       subtitle: text("Подзаголовок", { max: 220, multiline: true }),
       button: text("Текст главной кнопки", { max: 32, description: "Кнопка ведёт на страницу консультации" }),
@@ -216,7 +273,7 @@ export function createSchemas(ctx: SchemaContext) {
       enabled: enabled("цифры под первым экраном"),
       items: list(
         "Цифры",
-        z.object({
+        z.strictObject({
           value: text("Число", { max: 12, description: "Например: 1 200+ или {years}" }),
           caption: text("Подпись", { max: 40 }),
           captionShort: text("Короткая подпись для телефона", { max: 24, required: false }),
@@ -227,7 +284,7 @@ export function createSchemas(ctx: SchemaContext) {
     about: group("О нас", {
       enabled: enabled("секцию «О нас»"),
       overline: text("Надзаголовок", { max: 40 }),
-      title: text("Заголовок", { max: 70, description: TITLE_HINT }),
+      title: text("Заголовок", { max: 70, multiline: true, description: TITLE_HINT }),
       lead: text("Первый абзац", { max: 500, multiline: true }),
       text: text("Второй абзац", { max: 500, multiline: true, required: false }),
       badges: list("Бейджи", text("Бейдж", { max: 40 }), { max: 6, itemLabel: "Бейдж", summary: "{fields.ru}" }),
@@ -240,7 +297,7 @@ export function createSchemas(ctx: SchemaContext) {
       enabled: enabled("три карточки преимуществ"),
       items: list(
         "Карточки",
-        z.object({ icon: icon(), title: text("Заголовок", { max: 40 }), text: text("Текст", { max: 240, multiline: true }) }),
+        z.strictObject({ icon: icon(), title: text("Заголовок", { max: 40 }), text: text("Текст", { max: 240, multiline: true }) }),
         { min: 1, max: 6, itemLabel: "Карточка", summary: "{fields.title.ru}" },
       ),
     }),
@@ -254,7 +311,7 @@ export function createSchemas(ctx: SchemaContext) {
       link: text("Ссылка на страницу консультации", { max: 40 }),
       steps: list(
         "Шаги",
-        z.object({ title: text("Шаг", { max: 40 }), text: text("Пояснение", { max: 90 }) }),
+        z.strictObject({ title: text("Шаг", { max: 40 }), text: text("Пояснение", { max: 90 }) }),
         { min: 1, max: 6, itemLabel: "Шаг", summary: "{fields.title.ru}" },
       ),
     }),
@@ -265,16 +322,20 @@ export function createSchemas(ctx: SchemaContext) {
     }),
   });
 
-  const services = z.object({
+  const services = z.strictObject({
     enabled: enabled("секцию услуг"),
     ...sectionHead,
-    general: group("Общие услуги", {
-      title: text("Заголовок", { max: 60 }),
-      items: list("Услуги", text("Услуга", { max: 160 }), { max: 12, itemLabel: "Услуга", summary: "{fields.ru}" }),
-    }, "Строка над карточками: то, что входит в любое направление"),
+    general: group(
+      "Общие услуги",
+      {
+        title: text("Заголовок", { max: 60 }),
+        items: list("Услуги", text("Услуга", { max: 160 }), { max: 12, itemLabel: "Услуга", summary: "{fields.ru}" }),
+      },
+      "Строка над карточками: то, что входит в любое направление",
+    ),
     practices: list(
       "Направления (карточки)",
-      z.object({
+      z.strictObject({
         icon: icon(),
         title: text("Название", { max: 40 }),
         short: text("Коротко — для телефона", { max: 60 }),
@@ -289,13 +350,13 @@ export function createSchemas(ctx: SchemaContext) {
     }),
   });
 
-  const cases = z.object({
+  const cases = z.strictObject({
     enabled: enabled("секцию кейсов"),
     ...sectionHead,
     visible: int("Сколько кейсов видно сразу", { min: 1, max: 30, fallback: 4, description: "Остальные открываются кнопкой «Показать ещё»" }),
     items: list(
       "Кейсы",
-      z.object({
+      z.strictObject({
         category: text("Категория", { max: 40 }),
         title: text("Заголовок", { max: 60 }),
         situation: text("Ситуация", { max: 320, multiline: true }),
@@ -305,29 +366,29 @@ export function createSchemas(ctx: SchemaContext) {
     ),
   });
 
-  const team = z.object({
+  const team = z.strictObject({
     enabled: enabled("секцию команды"),
     ...sectionHead,
     members: list(
       "Юристы",
-      z.object({
+      z.strictObject({
         photo: photo("Фото", false, "Вертикальное фото, лицо в верхней трети кадра. Если пусто — будет аккуратная заглушка"),
         name: text("Имя", { max: 60 }),
         role: text("Должность", { max: 50 }),
         bio: text("Коротко о юристе", { max: 260, multiline: true }),
-        bioFull: text("Полная биография", { max: 5000, multiline: true, required: false, description: "Если заполнено — на карточке появится кнопка «Подробнее»" }),
+        bioFull: text("Полная биография", { max: 5000, multiline: true, required: false, description: "Если заполнено — на карточке появится кнопка «Подробнее». Пустая строка начинает новый абзац" }),
       }),
-      { min: 1, max: 20, itemLabel: "Юрист", summary: "{fields.name.ru}" },
+      { min: 1, max: 20, itemLabel: "Юрист", summary: "{fields.name.ru}", description: "Первым ставьте основателя бюро — для поисковиков он указывается основателем" },
     ),
   });
 
-  const reviews = z.object({
+  const reviews = z.strictObject({
     enabled: enabled("секцию отзывов"),
     ...sectionHead,
     visible: int("Сколько отзывов видно сразу", { min: 1, max: 40, fallback: 3 }),
     items: list(
       "Отзывы",
-      z.object({
+      z.strictObject({
         text: text("Отзыв", { max: 420, multiline: true }),
         name: text("Имя клиента", { max: 50 }),
         company: text("Должность или компания", { max: 60, required: false }),
@@ -338,19 +399,19 @@ export function createSchemas(ctx: SchemaContext) {
       title: text("Подпись", { max: 40 }),
       items: list(
         "Клиенты",
-        z.object({ name: plain("Название", { max: 40 }), logo: photo("Логотип", false, "PNG или WebP на прозрачном фоне") }),
+        z.strictObject({ name: plain("Название", { max: 40 }), logo: photo("Логотип", false, "PNG или WebP на прозрачном фоне") }),
         { max: 20, itemLabel: "Клиент", summary: "{fields.name}" },
       ),
     }),
   });
 
-  const faq = z.object({
+  const faq = z.strictObject({
     enabled: enabled("секцию FAQ"),
     ...sectionHead,
     items: faqItems,
   });
 
-  const consultation = z.object({
+  const consultation = z.strictObject({
     seo: group("Поисковики и соцсети", {
       title: text("Заголовок вкладки", { max: 70 }),
       description: text("Описание для поисковой выдачи", { max: 180, multiline: true }),
@@ -370,12 +431,12 @@ export function createSchemas(ctx: SchemaContext) {
       ...sectionHead,
       items: list(
         "Шаги",
-        z.object({ icon: icon(), title: text("Шаг", { max: 40 }), text: text("Описание", { max: 160, multiline: true }), time: text("Сколько занимает", { max: 30 }) }),
+        z.strictObject({ icon: icon(), title: text("Шаг", { max: 40 }), text: text("Описание", { max: 160, multiline: true }), time: text("Сколько занимает", { max: 30 }) }),
         { min: 1, max: 6, itemLabel: "Шаг", summary: "{fields.title.ru}" },
       ),
       terms: list(
         "Условия",
-        z.object({ icon: icon(), title: text("Заголовок", { max: 40 }), text: text("Текст", { max: 200, multiline: true }) }),
+        z.strictObject({ icon: icon(), title: text("Заголовок", { max: 40 }), text: text("Текст", { max: 200, multiline: true }) }),
         { max: 6, itemLabel: "Условие", summary: "{fields.title.ru}" },
       ),
     }),
@@ -383,7 +444,7 @@ export function createSchemas(ctx: SchemaContext) {
       enabled: enabled("список тем"),
       overline: text("Надзаголовок", { max: 40 }),
       title: text("Заголовок", { max: 70 }),
-      items: list("Темы", z.object({ icon: icon(), label: text("Тема", { max: 50 }) }), { max: 30, itemLabel: "Тема", summary: "{fields.label.ru}" }),
+      items: list("Темы", z.strictObject({ icon: icon(), label: text("Тема", { max: 50 }) }), { max: 30, itemLabel: "Тема", summary: "{fields.label.ru}" }),
     }),
     faq: group("Вопросы о консультации", {
       enabled: enabled("FAQ консультации"),
@@ -398,7 +459,7 @@ export function createSchemas(ctx: SchemaContext) {
     }),
   });
 
-  const ui = z.object({
+  const ui = z.strictObject({
     nav: group("Меню", {
       services: text("Услуги", { max: 20 }),
       about: text("О нас", { max: 20 }),
@@ -410,7 +471,7 @@ export function createSchemas(ctx: SchemaContext) {
       consultation: text("Бесплатная консультация", { max: 40 }),
     }),
     buttons: group("Кнопки", {
-      consultShort: text("Кнопка в шапке", { max: 18 }),
+      consultShort: text("Кнопка в шапке", { max: 14 }),
       more: text("Подробнее", { max: 20 }),
       showMore: text("Показать ещё", { max: 24 }),
       back: text("На главную", { max: 24 }),
@@ -455,16 +516,20 @@ export function createSchemas(ctx: SchemaContext) {
 export type Schemas = ReturnType<typeof createSchemas>;
 export type ContentKey = keyof Schemas;
 export type SiteContent = { [K in ContentKey]: z.output<Schemas[K]> };
-export type LocalizedText = { ru: string; uz: string; en: string };
 
-export const CONTENT_FILES: Record<ContentKey, { file: string; label: string; description: string }> = {
-  settings: { file: "settings.yaml", label: "Контакты и ссылки", description: "Телефон, мессенджеры, адрес, ссылка на форму заявки, соцсети, стаж" },
-  home: { file: "home.yaml", label: "Главная", description: "Первый экран, цифры, «О нас», преимущества, блок консультации, контакты" },
-  services: { file: "services.yaml", label: "Услуги", description: "Направления практики и полные списки услуг" },
-  cases: { file: "cases.yaml", label: "Кейсы", description: "Успешные дела без имён клиентов" },
-  team: { file: "team.yaml", label: "Команда", description: "Юристы: фото, должность, биография" },
-  reviews: { file: "reviews.yaml", label: "Отзывы", description: "Отзывы клиентов и логотипы компаний" },
-  faq: { file: "faq.yaml", label: "FAQ", description: "Частые вопросы на главной" },
-  consultation: { file: "consultation.yaml", label: "Страница консультации", description: "Всё содержимое страницы «Бесплатная консультация»" },
-  ui: { file: "ui.yaml", label: "Подписи интерфейса", description: "Меню, кнопки, подписи, подвал, страница 404" },
-};
+export const CONTENT_FILES = {
+  settings: { file: "settings.yaml", label: "Контакты и ссылки" },
+  home: { file: "home.yaml", label: "Главная" },
+  services: { file: "services.yaml", label: "Услуги" },
+  cases: { file: "cases.yaml", label: "Кейсы" },
+  team: { file: "team.yaml", label: "Команда" },
+  reviews: { file: "reviews.yaml", label: "Отзывы" },
+  faq: { file: "faq.yaml", label: "FAQ" },
+  consultation: { file: "consultation.yaml", label: "Страница консультации" },
+  ui: { file: "ui.yaml", label: "Подписи интерфейса" },
+} as const satisfies Record<ContentKey, { file: string; label: string }>;
+
+export const CONTENT_KEYS = Object.keys(CONTENT_FILES) as ContentKey[];
+
+export const isLocalizedText = (value: unknown): value is LocalizedText =>
+  typeof value === "object" && value !== null && LANGS.every((lang) => typeof (value as Record<string, unknown>)[lang] === "string");

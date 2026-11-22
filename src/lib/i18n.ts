@@ -1,22 +1,19 @@
-import { LANGS } from "../content/schema.ts";
+import { DEFAULT_LANG, LANGS, LANG_META } from "../content/schema.ts";
 import type { Lang, LocalizedText } from "../content/schema.ts";
 import { getContent } from "./content.ts";
+import { escapeHtml } from "./html.ts";
 import { typography } from "./typography.ts";
 
-export { LANGS };
+export { DEFAULT_LANG, LANGS, LANG_META };
 export type { Lang };
 
-export const HTML_LANG: Record<Lang, string> = { ru: "ru", uz: "uz-Latn", en: "en" };
-export const OG_LOCALE: Record<Lang, string> = { ru: "ru_RU", uz: "uz_UZ", en: "en_US" };
-export const LANG_SHORT: Record<Lang, string> = { ru: "RU", uz: "UZ", en: "EN" };
-
-export type PageKey = "home" | "consultation";
+export type PageKey = "home" | "consultation" | "notFound";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
 export function url(lang: Lang, page: PageKey = "home", hash = ""): string {
-  const prefix = lang === "ru" ? "" : `${lang}/`;
-  const path = page === "home" ? "" : `${page}/`;
+  const prefix = lang === DEFAULT_LANG ? "" : `${lang}/`;
+  const path = page === "consultation" ? "consultation/" : "";
   return `${BASE}${prefix}${path}${hash ? `#${hash}` : ""}`;
 }
 
@@ -24,18 +21,21 @@ export function asset(path: string): string {
   return `${BASE}${path.replace(/^\//, "")}`;
 }
 
-export function yearsOfPractice(): number {
-  return new Date().getFullYear() - getContent().settings.practiceSince;
+const YEAR_WORDS: Record<Lang, Partial<Record<Intl.LDMLPluralRule, string>> & { other: string }> = {
+  ru: { one: "год", few: "года", many: "лет", other: "года" },
+  uz: { other: "yil" },
+  en: { one: "year", other: "years" },
+};
+
+const PLURALS = Object.fromEntries(LANGS.map((lang) => [lang, new Intl.PluralRules(lang)])) as Record<Lang, Intl.PluralRules>;
+
+function yearsOfPractice(): number {
+  return Math.max(0, new Date().getFullYear() - getContent().settings.practiceSince);
 }
 
-export function yearsWord(n: number, lang: Lang): string {
-  if (lang === "uz") return "yil";
-  if (lang === "en") return n === 1 ? "year" : "years";
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return "год";
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "года";
-  return "лет";
+function yearsWord(n: number, lang: Lang): string {
+  const words = YEAR_WORDS[lang];
+  return words[PLURALS[lang].select(n)] ?? words.other;
 }
 
 function applyTokens(s: string, lang: Lang): string {
@@ -44,27 +44,23 @@ function applyTokens(s: string, lang: Lang): string {
   return s.replaceAll("{years}", String(years)).replaceAll("{yearsWord}", yearsWord(years, lang));
 }
 
-export function tr(value: LocalizedText | undefined, lang: Lang): string {
-  if (!value) return "";
-  const text = value[lang]?.trim() || value.ru?.trim() || "";
+export function tr(value: LocalizedText, lang: Lang): string {
+  if (!value) throw new Error(`tr(): нет текста для языка ${lang} — поле переименовано в схеме, но не в компоненте`);
+  const text = value[lang].trim() || value[DEFAULT_LANG].trim();
   return typography(applyTokens(text, lang), lang);
 }
 
-export function hasText(value: LocalizedText | undefined): boolean {
-  return Boolean(value?.ru?.trim());
+export function hasText(value: LocalizedText): boolean {
+  return value[DEFAULT_LANG].trim() !== "";
 }
 
-const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-export function lines(value: LocalizedText | undefined, lang: Lang): string {
+export function lines(value: LocalizedText, lang: Lang): string {
   return escapeHtml(tr(value, lang)).replace(/\s*\n\s*/g, ' <br class="br-wide" />');
 }
 
-export function paragraphs(value: LocalizedText | undefined, lang: Lang): string[] {
-  return tr(value, lang).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
-}
-
-export function initials(name: string): string {
-  const words = name.replace(/[«»"]/g, "").split(/\s+/).filter((w) => /^\p{L}/u.test(w));
-  return words.slice(0, 2).map((w) => w[0].toUpperCase()).join("");
+export function paragraphs(value: LocalizedText, lang: Lang): string[] {
+  return tr(value, lang)
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 }

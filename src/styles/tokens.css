@@ -61,11 +61,14 @@
   --header-h: 60px;
   --content-max: 1200px;
 
+  --color-bg-accent-subtle: rgb(192 138 62 / 0.14);
+  --color-border-accent-subtle: rgb(192 138 62 / 0.3);
+  --color-glow-primary: var(--primitive-ochre-500);
+  --glow-color: #c08a3e;
+
   --glass-blur: blur(16px) saturate(140%);
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --dur: 220ms;
-
-  color-scheme: light;
 }
 
 @media (min-width: 600px) {
@@ -119,13 +122,10 @@
   --color-bg-inverse: var(--primitive-navy-900);
   --color-bg-accent: var(--primitive-ochre-650);
   --color-bg-accent-hover: var(--primitive-ochre-700);
-  --color-bg-accent-subtle: rgb(192 138 62 / 0.14);
   --color-surface-glass: rgb(255 255 255 / 0.55);
   --color-surface-glass-strong: rgb(255 255 255 / 0.65);
   --color-surface-glass-active: var(--primitive-white);
-  --color-glow-primary: var(--primitive-ochre-500);
   --glow-opacity: 0.3;
-  --glow-color: #c08a3e;
   --glow-peak: 0.3;
   --color-text-primary: var(--primitive-navy-900);
   --color-text-secondary: var(--primitive-gray-600);
@@ -138,8 +138,8 @@
   --color-border-default: var(--primitive-gray-200);
   --color-border-glass: rgb(255 255 255 / 0.8);
   --color-border-glass-strong: var(--primitive-white);
-  --color-border-accent-subtle: rgb(192 138 62 / 0.3);
   --color-divider: rgb(14 26 43 / 0.08);
+  --color-separator: var(--color-divider);
   --color-icon-primary: var(--primitive-navy-900);
   --color-icon-secondary: var(--primitive-gray-600);
   --color-icon-accent: var(--primitive-ochre-700);
@@ -156,13 +156,10 @@
   --color-bg-inverse: var(--primitive-navy-800);
   --color-bg-accent: var(--primitive-ochre-500);
   --color-bg-accent-hover: var(--primitive-ochre-400);
-  --color-bg-accent-subtle: rgb(192 138 62 / 0.14);
   --color-surface-glass: rgb(255 255 255 / 0.04);
   --color-surface-glass-strong: rgb(255 255 255 / 0.08);
   --color-surface-glass-active: rgb(255 255 255 / 0.16);
-  --color-glow-primary: var(--primitive-ochre-500);
   --glow-opacity: 0.38;
-  --glow-color: #c08a3e;
   --glow-peak: 0.34;
   --color-text-primary: var(--primitive-white);
   --color-text-secondary: var(--primitive-gray-400);
@@ -175,8 +172,8 @@
   --color-border-default: var(--primitive-navy-700);
   --color-border-glass: rgb(255 255 255 / 0.08);
   --color-border-glass-strong: rgb(255 255 255 / 0.14);
-  --color-border-accent-subtle: rgb(192 138 62 / 0.3);
   --color-divider: rgb(255 255 255 / 0.08);
+  --color-separator: var(--color-border-glass);
   --color-icon-primary: var(--primitive-white);
   --color-icon-secondary: var(--primitive-gray-400);
   --color-icon-accent: var(--primitive-ochre-500);

@@ -7,6 +7,7 @@ media:
     - png
     - webp
     - avif
+  rename: safe
 content:
   - name: settings
     label: Контакты и ссылки
@@ -155,14 +156,14 @@ content:
             type: string
             required: true
             pattern:
-              regex: ^https:\/\/\S+\.\S+$
+              regex: ^https:\/\/[^\s<>"]+\.[^\s<>"]+$
               message: Полная ссылка, начинается с https://
       - name: privacyUrl
         label: Ссылка на политику конфиденциальности
         description: Если пусто — ссылка в подвале не показывается
         type: string
         pattern:
-          regex: ^https:\/\/\S+\.\S+$
+          regex: ^$|^https:\/\/[^\s<>"]+\.[^\s<>"]+$
           message: Полная ссылка, начинается с https://
       - name: seo
         label: Поисковики и соцсети
@@ -240,23 +241,23 @@ content:
                   maxlength: 50
           - name: title
             label: Заголовок
-            description: Перенос строки (Enter) сохраняется на больших экранах
+            description: Enter — перенос строки на компьютере; на телефоне строки переносятся сами
             type: object
             fields:
               - name: ru
                 label: RU · Русский
-                type: string
+                type: text
                 required: true
                 options:
                   maxlength: 40
               - name: uz
                 label: UZ · Oʻzbekcha
-                type: string
+                type: text
                 options:
                   maxlength: 40
               - name: en
                 label: EN · English
-                type: string
+                type: text
                 options:
                   maxlength: 40
           - name: titleAccent
@@ -431,23 +432,23 @@ content:
                   maxlength: 40
           - name: title
             label: Заголовок
-            description: Перенос строки (Enter) сохраняется на больших экранах
+            description: Enter — перенос строки на компьютере; на телефоне строки переносятся сами
             type: object
             fields:
               - name: ru
                 label: RU · Русский
-                type: string
+                type: text
                 required: true
                 options:
                   maxlength: 70
               - name: uz
                 label: UZ · Oʻzbekcha
-                type: string
+                type: text
                 options:
                   maxlength: 70
               - name: en
                 label: EN · English
-                type: string
+                type: text
                 options:
                   maxlength: 70
           - name: lead
@@ -1502,6 +1503,7 @@ content:
               maxlength: 260
       - name: members
         label: Юристы
+        description: Первым ставьте основателя бюро — для поисковиков он указывается основателем
         type: object
         list:
           min: 1
@@ -1583,7 +1585,7 @@ content:
                   maxlength: 260
           - name: bioFull
             label: Полная биография
-            description: Если заполнено — на карточке появится кнопка «Подробнее»
+            description: Если заполнено — на карточке появится кнопка «Подробнее». Пустая строка начинает новый абзац
             type: object
             fields:
               - name: ru
@@ -2968,17 +2970,17 @@ content:
                 type: string
                 required: true
                 options:
-                  maxlength: 18
+                  maxlength: 14
               - name: uz
                 label: UZ · Oʻzbekcha
                 type: string
                 options:
-                  maxlength: 18
+                  maxlength: 14
               - name: en
                 label: EN · English
                 type: string
                 options:
-                  maxlength: 18
+                  maxlength: 14
           - name: more
             label: Подробнее
             type: object

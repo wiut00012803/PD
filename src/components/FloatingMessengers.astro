@@ -1,17 +1,21 @@
 ---
 import Icon from "./ui/Icon.astro";
 import { contactLinks } from "../lib/links.ts";
+import { externalLink } from "../lib/html.ts";
+import { SOCIALS } from "../content/schema.ts";
 
 const links = contactLinks();
+const messengers = ["telegram", "whatsapp"] as const;
 ---
 
 <div class="fab glass-strong" transition:persist="fab">
-  <a href={links.telegram} class="fab__btn" target="_blank" rel="noopener" aria-label="Telegram">
-    <Icon social="telegram" size={22} />
-  </a>
-  <a href={links.whatsapp} class="fab__btn" target="_blank" rel="noopener" aria-label="WhatsApp">
-    <Icon social="whatsapp" size={22} />
-  </a>
+  {
+    messengers.map((m) => (
+      <a href={links[m]} class="fab__btn" aria-label={SOCIALS[m]} {...externalLink(true)}>
+        <Icon social={m} size={22} />
+      </a>
+    ))
+  }
 </div>
 
 <style>

@@ -1,53 +1,52 @@
 ---
 import Icon from "../ui/Icon.astro";
 import Messenger from "../ui/Messenger.astro";
-import { tr } from "../../lib/i18n.ts";
+import { hasText, lines, tr } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
-import type { LocalizedText } from "../../content/schema.ts";
+import type { SiteContent } from "../../content/schema.ts";
 
 interface Props {
   lang: Lang;
   id: string;
-  overline: LocalizedText;
-  title: LocalizedText;
-  subtitle: LocalizedText;
-  items: { question: LocalizedText; answer: LocalizedText }[];
+  content: SiteContent["faq"];
   messenger: "telegram" | "whatsapp";
 }
 
-const { lang, id, overline, title, subtitle, items, messenger } = Astro.props;
+const { lang, id, content, messenger } = Astro.props;
 ---
 
-<section class="section faq" id={id} aria-labelledby={`${id}-title`}>
-  <div class="container">
-    <div class="faq__row">
-      <div class="faq__intro">
-        <p class="t-overline">{tr(overline, lang)}</p>
-        <h2 class="t-h1" id={`${id}-title`}>{tr(title, lang)}</h2>
-        {subtitle.ru && <p class="t-body-m c-secondary">{tr(subtitle, lang)}</p>}
-        <Messenger platform={messenger} />
+{
+  content.enabled && content.items.length > 0 && (
+    <section class="section faq" id={id} aria-labelledby={`${id}-title`}>
+      <div class="container">
+        <div class="faq__row">
+          <div class="faq__intro">
+            <p class="t-overline">{tr(content.overline, lang)}</p>
+            <h2 class="t-h1" id={`${id}-title`} set:html={lines(content.title, lang)} />
+            {hasText(content.subtitle) && <p class="t-body-m c-secondary">{tr(content.subtitle, lang)}</p>}
+            <Messenger platform={messenger} />
+          </div>
+          <div class="faq__list">
+            {content.items.map((item, i) => (
+              <details class="faq-item glass" name={`${id}-items`} open={i === 0}>
+                <summary>
+                  <span class="faq-item__q">{tr(item.question, lang)}</span>
+                  <span class="faq-item__toggle" aria-hidden="true">
+                    <Icon name="plus" class="faq-item__plus" />
+                    <Icon name="minus" class="faq-item__minus" />
+                  </span>
+                </summary>
+                <div class="faq-item__a t-body-m c-secondary">
+                  <p class="t-pre">{tr(item.answer, lang)}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
       </div>
-      <div class="faq__list">
-        {
-          items.map((item, i) => (
-            <details class="faq-item glass" name={`${id}-items`} open={i === 0}>
-              <summary>
-                <span class="faq-item__q">{tr(item.question, lang)}</span>
-                <span class="faq-item__toggle" aria-hidden="true">
-                  <Icon name="plus" class="faq-item__plus" />
-                  <Icon name="minus" class="faq-item__minus" />
-                </span>
-              </summary>
-              <div class="faq-item__a t-body-m c-secondary">
-                <p>{tr(item.answer, lang)}</p>
-              </div>
-            </details>
-          ))
-        }
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
+  )
+}
 
 <style>
   .faq__row {

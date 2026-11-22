@@ -1,6 +1,8 @@
 ---
 import Icon from "./Icon.astro";
 import { contactLinks } from "../../lib/links.ts";
+import { externalLink } from "../../lib/html.ts";
+import { SOCIALS } from "../../content/schema.ts";
 
 interface Props {
   platform: "telegram" | "whatsapp" | "phone";
@@ -10,17 +12,15 @@ interface Props {
 
 const { platform, block = false, class: className } = Astro.props;
 const links = contactLinks();
-const href = platform === "telegram" ? links.telegram : platform === "whatsapp" ? links.whatsapp : links.phone;
-const label = platform === "telegram" ? "Telegram" : platform === "whatsapp" ? "WhatsApp" : links.phoneDisplay;
-const external = platform !== "phone";
+const PLATFORMS = {
+  telegram: { href: links.telegram, label: SOCIALS.telegram, external: true },
+  whatsapp: { href: links.whatsapp, label: SOCIALS.whatsapp, external: true },
+  phone: { href: links.phone, label: links.phoneDisplay, external: false },
+};
+const { href, label, external } = PLATFORMS[platform];
 ---
 
-<a
-  href={href}
-  class:list={["btn", "btn--messenger", "btn--m", block && "btn--block", className]}
-  target={external ? "_blank" : undefined}
-  rel={external ? "noopener" : undefined}
->
+<a href={href} class:list={["btn", "btn--messenger", "btn--m", block && "btn--block", className]} {...externalLink(external)}>
   {platform === "phone" ? <Icon name="phone" /> : <Icon social={platform} />}
   <span>{label}</span>
 </a>

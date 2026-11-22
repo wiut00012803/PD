@@ -1,36 +1,31 @@
 ---
+import logoSvg from "../../assets/brand/logo-horizontal.svg?raw";
 import { nextLogoId } from "../../lib/logo-ids.ts";
+import { escapeHtml } from "../../lib/html.ts";
 
 interface Props {
-  variant?: "horizontal" | "vertical" | "mark";
-  height?: number;
+  label: string;
   class?: string;
-  label?: string;
 }
 
-const { variant = "horizontal", height = 34, class: className, label = "Pravoe Delo" } = Astro.props;
-const files = import.meta.glob<string>("/src/assets/brand/*.svg", { query: "?raw", import: "default", eager: true });
-const raw = files[`/src/assets/brand/logo-${variant}.svg`];
+const { label, class: className } = Astro.props;
 const suffix = nextLogoId();
-const svg = raw
-  ?.replace(/<\?xml[^>]*>/, "")
+const svg = logoSvg
+  .replace(/<\?xml[^>]*>/, "")
   .replace(/\bid="([^"]+)"/g, (_m, id: string) => `id="${id}-${suffix}"`)
   .replace(/url\(#([^)]+)\)/g, (_m, id: string) => `url(#${id}-${suffix})`)
-  .replace(/<svg\b([^>]*)>/, (_m, attrs: string) => {
-    const cleaned = attrs.replace(/\s(width|height)="[^"]*"/g, "");
-    return `<svg${cleaned} class="logo__svg" role="img" aria-label="${label}" focusable="false">`;
-  });
+  .replace(/<svg\b([^>]*)>/, (_m, attrs: string) => `<svg${attrs.replace(/\s(width|height)="[^"]*"/g, "")} class="logo__svg" role="img" aria-label="${escapeHtml(label)}" focusable="false">`);
 ---
 
-<span class:list={["logo", `logo--${variant}`, className]} style={`--logo-h:${height}px`}>
-  {svg ? <Fragment set:html={svg} /> : <span class="logo__text">{label}</span>}
+<span class:list={["logo", className]}>
+  <Fragment set:html={svg} />
 </span>
 
 <style>
   .logo {
     display: inline-flex;
     align-items: center;
-    height: var(--logo-h);
+    height: var(--logo-h, 34px);
     color: var(--color-text-primary);
   }
 
@@ -38,12 +33,5 @@ const svg = raw
     height: 100%;
     width: auto;
     overflow: visible;
-  }
-
-  .logo__text {
-    font-weight: 600;
-    font-size: calc(var(--logo-h) * 0.5);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
   }
 </style>

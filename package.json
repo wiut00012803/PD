@@ -8,13 +8,17 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "check": "astro check",
     "check:content": "node scripts/check-content.ts",
     "build": "node scripts/check-content.ts && astro build",
     "preview": "astro preview",
+    "test": "npm run test:content && npm run test:smoke",
+    "test:content": "node --test tests/content.test.ts",
+    "test:smoke": "node --test tests/smoke.test.ts",
     "cms:generate": "node scripts/generate-cms-config.ts",
+    "cms:check": "node scripts/generate-cms-config.ts --check",
     "icons:generate": "node scripts/generate-icons.ts",
-    "shots": "node scripts/screenshots.ts",
-    "check": "astro check"
+    "shots": "node scripts/screenshots.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.6",

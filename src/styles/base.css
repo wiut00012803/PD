@@ -87,7 +87,7 @@ p {
 }
 
 ::selection {
-  background: rgb(192 138 62 / 0.35);
+  background: color-mix(in srgb, var(--color-glow-primary) 35%, transparent);
 }
 
 .sr-only {
@@ -206,8 +206,8 @@ p {
   color: var(--color-text-tertiary);
 }
 
-.c-accent {
-  color: var(--color-text-accent);
+.t-pre {
+  white-space: pre-line;
 }
 
 .gradient-text {

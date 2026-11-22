@@ -5,6 +5,7 @@ import SectionTitle from "../ui/SectionTitle.astro";
 import { tr, url } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
+import { sectionVisibility } from "../../lib/nav.ts";
 
 interface Props {
   lang: Lang;
@@ -13,13 +14,14 @@ interface Props {
 const { lang } = Astro.props;
 const { consultation, ui } = getContent();
 const topics = consultation.topics;
+const showServicesLink = sectionVisibility().services;
 ---
 
 {
   topics.enabled && topics.items.length > 0 && (
     <section class="section" id="topics" aria-labelledby="topics-title">
       <div class="container">
-        <SectionTitle id="topics-title" overline={tr(topics.overline, lang)} title={tr(topics.title, lang)} />
+        <SectionTitle id="topics-title" lang={lang} head={topics} />
         <ul class="topics">
           {topics.items.map((t) => (
             <li class="topic glass-strong">
@@ -28,9 +30,11 @@ const topics = consultation.topics;
             </li>
           ))}
         </ul>
-        <Btn href={url(lang, "home", "services")} variant="ghost" class="topics__all">
-          {tr(ui.buttons.allPractices, lang)}
-        </Btn>
+        {showServicesLink && (
+          <Btn href={url(lang, "home", "services")} variant="ghost" class="topics__all">
+            {tr(ui.buttons.allPractices, lang)}
+          </Btn>
+        )}
       </div>
     </section>
   )

@@ -3,10 +3,11 @@ import { Image } from "astro:assets";
 import Icon from "../ui/Icon.astro";
 import SectionTitle from "../ui/SectionTitle.astro";
 import Carousel from "../ui/Carousel.astro";
-import ShowMore from "../ui/ShowMore.astro";
-import { initials, tr } from "../../lib/i18n.ts";
+import { hasText, tr } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
+import { initials } from "../../lib/text.ts";
 import { getContent, getImage } from "../../lib/content.ts";
+import { sectionVisibility } from "../../lib/nav.ts";
 
 interface Props {
   lang: Lang;
@@ -18,28 +19,27 @@ const clients = reviews.clients.items.map((c) => ({ ...c, image: getImage(c.logo
 ---
 
 {
-  reviews.enabled && reviews.items.length > 0 && (
+  sectionVisibility().reviews && (
     <section class="section" id="reviews" aria-labelledby="reviews-title">
       <div class="container">
-        <SectionTitle id="reviews-title" overline={tr(reviews.overline, lang)} title={tr(reviews.title, lang)} subtitle={tr(reviews.subtitle, lang)} />
-        <Carousel id="reviews-list" count={Math.min(reviews.items.length, reviews.visible)} cols={{ tablet: 2, desktop: 3, wide: 3 }} label={tr(reviews.title, lang)}>
+        <SectionTitle id="reviews-title" lang={lang} head={reviews} />
+        <Carousel id="reviews-list" count={reviews.items.length} visible={reviews.visible} cols={{ tablet: 2, desktop: 3 }} label={tr(reviews.title, lang)} moreLabel={tr(ui.buttons.showMore, lang)}>
           {reviews.items.map((r, i) => (
             <li class:list={["review glass card", i >= reviews.visible && "is-hidden-extra"]}>
               <Icon name="quote" size={28} class="review__quote" />
-              <blockquote class="t-body-m review__text">{tr(r.text, lang)}</blockquote>
+              <blockquote class="t-body-m t-pre review__text">{tr(r.text, lang)}</blockquote>
               <div class="review__author">
-                <span class="review__avatar t-label" aria-hidden="true">
+                <span class="icon-round icon-round--subtle review__avatar t-label" aria-hidden="true">
                   {initials(tr(r.name, lang))}
                 </span>
                 <span class="review__who">
                   <span class="t-label">{tr(r.name, lang)}</span>
-                  {r.company.ru && <span class="t-body-s c-secondary">{tr(r.company, lang)}</span>}
+                  {hasText(r.company) && <span class="t-body-s c-secondary">{tr(r.company, lang)}</span>}
                 </span>
               </div>
             </li>
           ))}
         </Carousel>
-        {reviews.items.length > reviews.visible && <ShowMore target="reviews-list" label={tr(ui.buttons.showMore, lang)} />}
 
         {clients.length > 0 && (
           <div class="clients">
@@ -79,21 +79,10 @@ const clients = reviews.clients.items.map((c) => ({ ...c, image: getImage(c.logo
     align-items: center;
     gap: 12px;
     padding-top: 16px;
-    border-top: 1px solid var(--color-border-glass-strong);
-  }
-
-  :root[data-theme="light"] .review__author {
-    border-top-color: var(--color-divider);
+    border-top: 1px solid var(--color-separator);
   }
 
   .review__avatar {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--color-bg-accent-subtle);
     color: var(--color-text-accent);
   }
 

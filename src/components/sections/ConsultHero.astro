@@ -1,8 +1,9 @@
 ---
 import Icon from "../ui/Icon.astro";
 import Btn from "../ui/Btn.astro";
-import Messenger from "../ui/Messenger.astro";
-import { lines, tr, url } from "../../lib/i18n.ts";
+import AccentTitle from "../ui/AccentTitle.astro";
+import MessengerPair from "../ui/MessengerPair.astro";
+import { tr, url } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
 import { contactLinks } from "../../lib/links.ts";
@@ -20,20 +21,17 @@ const links = contactLinks();
 <section class="c-hero" aria-labelledby="consult-title">
   <div class="container c-hero__row">
     <div class="c-hero__main">
-      <Btn href={url(lang, "home")} variant="ghost" icon={null} iconStart="arrow-left" class="c-hero__back">{tr(ui.buttons.back, lang)}</Btn>
+      <Btn href={url(lang, "home")} variant="ghost" icon={null} iconStart="arrow-left" class="c-hero__back">
+        {tr(ui.buttons.back, lang)}
+      </Btn>
       <p class="chip">{tr(hero.badge, lang)}</p>
-      <h1 class="t-display" id="consult-title">
-        <span set:html={lines(hero.title, lang)} />
-        <br />
-        <span class="gradient-text" set:html={lines(hero.titleAccent, lang)} />
-      </h1>
-      <p class="t-body-l c-secondary">{tr(hero.subtitle, lang)}</p>
+      <AccentTitle as="h1" id="consult-title" class="t-display" lang={lang} title={hero.title} accent={hero.titleAccent} stacked />
+      <p class="t-body-l t-pre c-secondary">{tr(hero.subtitle, lang)}</p>
       <div class="c-hero__actions">
-        <Btn href={links.form} external>{tr(hero.button, lang)}</Btn>
-        <div class="c-hero__messengers">
-          <Messenger platform="telegram" />
-          <Messenger platform="whatsapp" />
-        </div>
+        <Btn href={links.form} external>
+          {tr(hero.button, lang)}
+        </Btn>
+        <MessengerPair inlineFromTablet />
       </div>
     </div>
 
@@ -43,7 +41,7 @@ const links = contactLinks();
         {
           hero.get.map((g) => (
             <li class="t-body-m">
-              <span class="get__check">
+              <span class="icon-round icon-round--subtle get__check">
                 <Icon name="check" size={16} />
               </span>
               <span>{tr(g, lang)}</span>
@@ -90,12 +88,6 @@ const links = contactLinks();
     width: 100%;
   }
 
-  .c-hero__messengers {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
   .get {
     display: flex;
     flex-direction: column;
@@ -117,14 +109,7 @@ const links = contactLinks();
   }
 
   .get__check {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--color-bg-accent-subtle);
-    color: var(--color-icon-accent);
+    --round-size: 28px;
   }
 
   .get__conf {
@@ -147,10 +132,6 @@ const links = contactLinks();
       flex-direction: row;
       align-items: center;
       width: auto;
-    }
-
-    .c-hero__messengers {
-      display: flex;
     }
   }
 

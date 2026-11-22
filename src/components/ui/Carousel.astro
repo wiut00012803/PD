@@ -1,44 +1,56 @@
 ---
+import Btn from "./Btn.astro";
+
 interface Props {
   id: string;
   count: number;
-  cols: { tablet: number; desktop: number; wide: number };
+  visible?: number;
+  cols: { tablet: number; desktop: number };
   label: string;
-  class?: string;
+  moreLabel?: string;
 }
 
-const { id, count, cols, label, class: className } = Astro.props;
+const { id, count, visible = count, cols, label, moreLabel } = Astro.props;
+const hasMore = count > visible && Boolean(moreLabel);
 ---
 
-<ul class:list={["carousel", "cards-track", className]} id={id} data-carousel aria-label={label} style={`--cols-tablet:${cols.tablet};--cols-desktop:${cols.desktop};--cols-wide:${cols.wide}`}>
+<ul class="carousel" id={id} data-carousel aria-label={label} style={`--cols-tablet:${cols.tablet};--cols-desktop:${cols.desktop}`}>
   <slot />
 </ul>
 {
   count > 1 && (
     <div class="dots" data-carousel-dots={id}>
       {Array.from({ length: count }, (_, i) => (
-        <button type="button" aria-label={`${i + 1} / ${count}`} aria-current={i === 0 ? "true" : "false"} />
+        <button type="button" class:list={[i >= visible && "is-hidden-extra"]} aria-label={`${i + 1} / ${count}`} aria-current={i === 0 ? "true" : "false"} />
       ))}
+    </div>
+  )
+}
+{
+  hasMore && (
+    <div class="show-more" data-show-more-wrap>
+      <Btn variant="secondary" icon="chevron-down" data-show-more={id} aria-controls={id}>
+        {moreLabel}
+      </Btn>
     </div>
   )
 }
 
 <style>
+  .show-more {
+    display: flex;
+    justify-content: center;
+  }
+
   @media (min-width: 600px) {
-    .cards-track {
+    .carousel {
       --cols: var(--cols-tablet);
     }
   }
 
   @media (min-width: 900px) {
-    .cards-track {
+    .carousel {
       --cols: var(--cols-desktop);
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .cards-track {
-      --cols: var(--cols-wide);
     }
   }
 </style>

@@ -1,0 +1,30 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  id: string;
+  closeLabel: string;
+  bodyClass?: string;
+}
+
+const { id, closeLabel, bodyClass } = Astro.props;
+---
+
+<dialog class="dialog" id={id} aria-labelledby={`${id}-title`}>
+  <div class="dialog__head">
+    <slot name="head" />
+    <button type="button" class="round-btn round-btn--touch" data-dialog-close aria-label={closeLabel}>
+      <Icon name="x" />
+    </button>
+  </div>
+  <div class:list={["dialog__body", bodyClass]}>
+    <slot />
+  </div>
+  {
+    Astro.slots.has("foot") && (
+      <div class="dialog__foot">
+        <slot name="foot" />
+      </div>
+    )
+  }
+</dialog>

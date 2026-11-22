@@ -13,7 +13,7 @@ export default defineConfig({
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   integrations: [
     sitemap({
-      i18n: { defaultLocale: "ru", locales: { ru: "ru-RU", uz: "uz-UZ", en: "en-US" } },
+      i18n: { defaultLocale: "ru", locales: { ru: "ru", uz: "uz", en: "en" } },
     }),
   ],
   image: {

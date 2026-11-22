@@ -1,26 +1,47 @@
+import type { SiteContent } from "../content/schema.ts";
 import { getContent } from "./content.ts";
 import { tr, url } from "./i18n.ts";
 import type { Lang, PageKey } from "./i18n.ts";
 
+export function sectionVisibility(c: SiteContent = getContent()) {
+  return {
+    services: c.services.enabled && c.services.practices.length > 0,
+    about: c.home.about.enabled,
+    cases: c.cases.enabled && c.cases.items.length > 0,
+    team: c.team.enabled && c.team.members.length > 0,
+    reviews: c.reviews.enabled && c.reviews.items.length > 0,
+    faq: c.faq.enabled && c.faq.items.length > 0,
+    contacts: c.home.contacts.enabled,
+  };
+}
+
+type SectionId = keyof ReturnType<typeof sectionVisibility>;
+
+const SECTIONS: { id: SectionId; inHeader: boolean; compactHidden: boolean; footer: "sections" | "clients" }[] = [
+  { id: "services", inHeader: true, compactHidden: false, footer: "sections" },
+  { id: "about", inHeader: true, compactHidden: true, footer: "sections" },
+  { id: "cases", inHeader: true, compactHidden: false, footer: "sections" },
+  { id: "team", inHeader: true, compactHidden: false, footer: "sections" },
+  { id: "reviews", inHeader: false, compactHidden: false, footer: "clients" },
+  { id: "faq", inHeader: false, compactHidden: false, footer: "sections" },
+  { id: "contacts", inHeader: true, compactHidden: false, footer: "clients" },
+];
+
 export interface NavLink {
-  id: string;
+  id: SectionId;
   label: string;
   href: string;
   inHeader: boolean;
   compactHidden: boolean;
+  footer: "sections" | "clients";
 }
 
 export function navLinks(lang: Lang, page: PageKey): NavLink[] {
   const c = getContent();
-  const anchor = (id: string) => (page === "home" ? `#${id}` : url(lang, "home", id));
-  const all: (NavLink & { visible: boolean })[] = [
-    { id: "services", label: tr(c.ui.nav.services, lang), href: anchor("services"), inHeader: true, compactHidden: false, visible: c.services.enabled },
-    { id: "about", label: tr(c.ui.nav.about, lang), href: anchor("about"), inHeader: true, compactHidden: true, visible: c.home.about.enabled },
-    { id: "cases", label: tr(c.ui.nav.cases, lang), href: anchor("cases"), inHeader: true, compactHidden: false, visible: c.cases.enabled && c.cases.items.length > 0 },
-    { id: "team", label: tr(c.ui.nav.team, lang), href: anchor("team"), inHeader: true, compactHidden: false, visible: c.team.enabled },
-    { id: "reviews", label: tr(c.ui.nav.reviews, lang), href: anchor("reviews"), inHeader: false, compactHidden: false, visible: c.reviews.enabled && c.reviews.items.length > 0 },
-    { id: "faq", label: tr(c.ui.nav.faq, lang), href: anchor("faq"), inHeader: false, compactHidden: false, visible: c.faq.enabled },
-    { id: "contacts", label: tr(c.ui.nav.contacts, lang), href: anchor("contacts"), inHeader: true, compactHidden: false, visible: c.home.contacts.enabled },
-  ];
-  return all.filter((l) => l.visible).map(({ visible: _visible, ...l }) => l);
+  const visible = sectionVisibility(c);
+  return SECTIONS.filter((s) => visible[s.id]).map((s) => ({
+    ...s,
+    label: tr(c.ui.nav[s.id], lang),
+    href: page === "home" ? `#${s.id}` : url(lang, "home", s.id),
+  }));
 }

@@ -1,33 +1,33 @@
 ---
 import { Picture } from "astro:assets";
 import Icon from "../ui/Icon.astro";
-import { lines, tr } from "../../lib/i18n.ts";
+import { hasText, lines, tr } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent, getImage } from "../../lib/content.ts";
+import { sectionVisibility } from "../../lib/nav.ts";
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
-const { home } = getContent();
-const { about, advantages } = home;
+const { about, advantages } = getContent().home;
+const showAbout = sectionVisibility().about;
+const showAdvantages = advantages.enabled && advantages.items.length > 0;
 const photo = getImage(about.photo);
-const caption = tr(about.photoCaption, lang);
-const note = tr(about.photoNote, lang);
 ---
 
 {
-  (about.enabled || advantages.enabled) && (
-    <section class="section about" id="about" aria-labelledby={about.enabled ? "about-title" : undefined}>
+  (showAbout || showAdvantages) && (
+    <section class="section" id="about" aria-labelledby={showAbout ? "about-title" : undefined}>
       <div class="container">
-        {about.enabled && (
+        {showAbout && (
           <div class="about__row">
             <div class="about__text">
               <p class="t-overline">{tr(about.overline, lang)}</p>
               <h2 class="t-h1" id="about-title" set:html={lines(about.title, lang)} />
-              <p class="t-body-l c-secondary">{tr(about.lead, lang)}</p>
-              {about.text.ru && <p class="t-body-m c-secondary">{tr(about.text, lang)}</p>}
+              <p class="t-body-l t-pre c-secondary">{tr(about.lead, lang)}</p>
+              {hasText(about.text) && <p class="t-body-m t-pre c-secondary">{tr(about.text, lang)}</p>}
               {about.badges.length > 0 && (
                 <ul class="about__badges">
                   {about.badges.map((b) => (
@@ -50,10 +50,10 @@ const note = tr(about.photoNote, lang);
                   class="photo-card__img"
                   loading="lazy"
                 />
-                {caption && (
+                {hasText(about.photoCaption) && (
                   <figcaption class="photo-card__plate glass-strong">
-                    <span class="t-label">{caption}</span>
-                    {note && <span class="t-body-s c-secondary">{note}</span>}
+                    <span class="t-label">{tr(about.photoCaption, lang)}</span>
+                    {hasText(about.photoNote) && <span class="t-body-s c-secondary">{tr(about.photoNote, lang)}</span>}
                   </figcaption>
                 )}
               </figure>
@@ -61,7 +61,7 @@ const note = tr(about.photoNote, lang);
           </div>
         )}
 
-        {advantages.enabled && advantages.items.length > 0 && (
+        {showAdvantages && (
           <ul class="advantages" style={`--count:${advantages.items.length}`}>
             {advantages.items.map((a) => (
               <li class="advantage glass card">
@@ -70,7 +70,7 @@ const note = tr(about.photoNote, lang);
                 </span>
                 <div class="advantage__text">
                   <h3 class="t-h4">{tr(a.title, lang)}</h3>
-                  <p class="t-body-m c-secondary">{tr(a.text, lang)}</p>
+                  <p class="t-body-m t-pre c-secondary">{tr(a.text, lang)}</p>
                 </div>
               </li>
             ))}

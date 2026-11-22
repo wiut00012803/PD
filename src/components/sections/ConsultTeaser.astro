@@ -1,6 +1,7 @@
 ---
 import Btn from "../ui/Btn.astro";
-import { lines, tr, url } from "../../lib/i18n.ts";
+import AccentTitle from "../ui/AccentTitle.astro";
+import { tr, url } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
 import { contactLinks } from "../../lib/links.ts";
@@ -10,8 +11,7 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const { home } = getContent();
-const c = home.consult;
+const c = getContent().home.consult;
 const links = contactLinks();
 ---
 
@@ -22,20 +22,22 @@ const links = contactLinks();
         <div class="teaser__card glass-strong">
           <div class="teaser__main">
             <p class="chip">{tr(c.badge, lang)}</p>
-            <h2 class="t-h1" id="teaser-title">
-              <span set:html={lines(c.title, lang)} /> <span class="gradient-text" set:html={lines(c.titleAccent, lang)} />
-            </h2>
-            <p class="t-body-l c-secondary">{tr(c.text, lang)}</p>
+            <AccentTitle as="h2" id="teaser-title" class="t-h1" lang={lang} title={c.title} accent={c.titleAccent} />
+            <p class="t-body-l t-pre c-secondary">{tr(c.text, lang)}</p>
             <div class="teaser__actions">
-              <Btn href={links.form} external>{tr(c.button, lang)}</Btn>
-              <Btn href={url(lang, "consultation")} variant="ghost">{tr(c.link, lang)}</Btn>
+              <Btn href={links.form} external>
+                {tr(c.button, lang)}
+              </Btn>
+              <Btn href={url(lang, "consultation")} variant="ghost">
+                {tr(c.link, lang)}
+              </Btn>
             </div>
           </div>
           {c.steps.length > 0 && (
             <ol class="teaser__steps">
               {c.steps.map((s, i) => (
                 <li class="step glass">
-                  <span class="step__num t-label">{i + 1}</span>
+                  <span class="icon-round icon-round--accent t-label">{i + 1}</span>
                   <span class="step__text">
                     <span class="t-label">{tr(s.title, lang)}</span>
                     <span class="t-body-s c-secondary">{tr(s.text, lang)}</span>
@@ -89,17 +91,6 @@ const links = contactLinks();
     gap: 14px;
     padding: 14px 18px 14px 14px;
     border-radius: var(--radius-lg);
-  }
-
-  .step__num {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--color-bg-accent);
-    color: var(--color-text-on-accent);
   }
 
   .step__text {

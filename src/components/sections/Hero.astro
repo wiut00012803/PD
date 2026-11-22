@@ -1,7 +1,8 @@
 ---
 import Btn from "../ui/Btn.astro";
-import Messenger from "../ui/Messenger.astro";
-import { lines, tr, url } from "../../lib/i18n.ts";
+import AccentTitle from "../ui/AccentTitle.astro";
+import MessengerPair from "../ui/MessengerPair.astro";
+import { hasText, tr, url } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
 
@@ -10,25 +11,17 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const { home } = getContent();
-const { hero, stats } = home;
+const { hero, stats } = getContent().home;
 ---
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="container hero__inner">
     <p class="chip">{tr(hero.badge, lang)}</p>
-    <h1 class="t-display hero__title" id="hero-title">
-      <span set:html={lines(hero.title, lang)} />
-      <br />
-      <span class="gradient-text" set:html={lines(hero.titleAccent, lang)} />
-    </h1>
-    <p class="t-body-l hero__sub">{tr(hero.subtitle, lang)}</p>
+    <AccentTitle as="h1" id="hero-title" class="t-display" lang={lang} title={hero.title} accent={hero.titleAccent} stacked />
+    <p class="t-body-l t-pre hero__sub">{tr(hero.subtitle, lang)}</p>
     <div class="hero__actions">
-      <Btn href={url(lang, "consultation")} class="hero__cta">{tr(hero.button, lang)}</Btn>
-      <div class="hero__messengers">
-        <Messenger platform="telegram" />
-        <Messenger platform="whatsapp" />
-      </div>
+      <Btn href={url(lang, "consultation")}>{tr(hero.button, lang)}</Btn>
+      <MessengerPair inlineFromTablet />
     </div>
 
     {
@@ -38,7 +31,7 @@ const { hero, stats } = home;
             <li class="stat glass card">
               <span class="t-stat">{tr(s.value, lang)}</span>
               <span class="t-body-s c-secondary stat__caption">{tr(s.caption, lang)}</span>
-              <span class="t-body-s c-secondary stat__caption-short">{tr(s.captionShort?.ru ? s.captionShort : s.caption, lang)}</span>
+              <span class="t-body-s c-secondary stat__caption-short">{tr(hasText(s.captionShort) ? s.captionShort : s.caption, lang)}</span>
             </li>
           ))}
         </ul>
@@ -76,12 +69,6 @@ const { hero, stats } = home;
     padding-top: 8px;
   }
 
-  .hero__messengers {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
   .hero__stats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -116,10 +103,6 @@ const { hero, stats } = home;
       align-items: center;
       justify-content: center;
       width: auto;
-    }
-
-    .hero__messengers {
-      display: flex;
     }
 
     .hero__stats {

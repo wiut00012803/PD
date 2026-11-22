@@ -1,12 +1,14 @@
 ---
 import Icon from "../ui/Icon.astro";
 import Btn from "../ui/Btn.astro";
-import Messenger from "../ui/Messenger.astro";
+import MessengerPair from "../ui/MessengerPair.astro";
 import SectionTitle from "../ui/SectionTitle.astro";
 import { tr, url } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
 import { contactLinks } from "../../lib/links.ts";
+import { externalLink } from "../../lib/html.ts";
+import { sectionVisibility } from "../../lib/nav.ts";
 
 interface Props {
   lang: Lang;
@@ -24,10 +26,10 @@ const rows = [
 ---
 
 {
-  home.contacts.enabled && (
+  sectionVisibility().contacts && (
     <section class="section" id="contacts" aria-labelledby="contacts-title">
       <div class="container">
-        <SectionTitle id="contacts-title" overline={tr(home.contacts.overline, lang)} title={tr(home.contacts.title, lang)} />
+        <SectionTitle id="contacts-title" lang={lang} head={home.contacts} />
         <div class="contacts">
           <div class="contacts__info glass">
             <ul class="contacts__rows">
@@ -39,7 +41,7 @@ const rows = [
                   <span class="contacts__text">
                     <span class="t-body-s c-secondary">{r.label}</span>
                     {r.href ? (
-                      <a class="t-label contacts__value" href={r.href} target={r.external ? "_blank" : undefined} rel={r.external ? "noopener" : undefined}>
+                      <a class="t-label contacts__value" href={r.href} {...externalLink(r.external)}>
                         {r.value}
                       </a>
                     ) : (
@@ -49,24 +51,14 @@ const rows = [
                 </li>
               ))}
             </ul>
-            <div class="contacts__messengers">
-              <Messenger platform="telegram" />
-              <Messenger platform="whatsapp" />
-            </div>
+            <MessengerPair />
             <Btn href={url(lang, "consultation")} icon={null} block>
               {tr(home.hero.button, lang)}
             </Btn>
           </div>
 
           <div class="map glass-strong">
-            <iframe
-              class="map__frame"
-              title={tr(ui.labels.address, lang)}
-              data-src={`${links.mapEmbed}&hl=${lang}`}
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              allowfullscreen
-            />
+            <iframe class="map__frame" title={tr(ui.labels.address, lang)} data-src={`${links.mapEmbed}&hl=${lang}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen />
           </div>
         </div>
       </div>
@@ -112,16 +104,6 @@ const rows = [
     color: var(--color-text-accent);
   }
 
-  .contacts__messengers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .contacts__messengers :global(.btn) {
-    flex: 1 1 140px;
-  }
-
   .map {
     position: relative;
     overflow: hidden;
@@ -136,7 +118,6 @@ const rows = [
     border: 0;
     filter: var(--map-filter);
   }
-
 
   @media (min-width: 600px) {
     .contacts__info {

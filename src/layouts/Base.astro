@@ -9,24 +9,29 @@ import MobileMenu from "../components/MobileMenu.astro";
 import Footer from "../components/Footer.astro";
 import Glow from "../components/Glow.astro";
 import FloatingMessengers from "../components/FloatingMessengers.astro";
-import { HTML_LANG, LANGS, OG_LOCALE, asset, tr, url } from "../lib/i18n.ts";
+import { LANGS, LANG_META, asset, tr, url } from "../lib/i18n.ts";
 import type { Lang, PageKey } from "../lib/i18n.ts";
 import { getContent } from "../lib/content.ts";
+import { contactLinks } from "../lib/links.ts";
+import { jsonForScript } from "../lib/html.ts";
+import { LANG_KEY, THEME_KEY } from "../lib/storage-keys.ts";
 
 interface Props {
   lang: Lang;
   page: PageKey;
   title: string;
   description: string;
-  noindex?: boolean;
 }
 
-const { lang, page, title, description, noindex = false } = Astro.props;
+const { lang, page, title, description } = Astro.props;
+const indexable = page !== "notFound";
 const { settings, ui, team } = getContent();
-const site = Astro.site ?? new URL("https://example.com");
-const canonical = new URL(url(lang, page), site).href;
-const alternates = LANGS.map((l) => ({ lang: l, href: new URL(url(l, page), site).href }));
-const altPaths = Object.fromEntries(LANGS.map((l) => [l, url(l, page)]));
+const { phoneDigits } = contactLinks();
+if (!Astro.site) throw new Error("В astro.config.mjs не задан site — canonical и og-ссылки нельзя построить");
+const site = Astro.site;
+const altPaths = Object.fromEntries(LANGS.map((l) => [l, url(l, page)])) as Record<Lang, string>;
+const alternates = LANGS.map((l) => ({ hreflang: LANG_META[l].hreflang, href: new URL(altPaths[l], site).href }));
+const canonical = new URL(altPaths[lang], site).href;
 const ogImage = new URL(asset("og.png"), site).href;
 const founder = team.members[0];
 
@@ -36,7 +41,7 @@ const jsonLd = {
   name: settings.siteName,
   url: new URL(url(lang, "home"), site).href,
   description: tr(settings.seo.description, lang),
-  telephone: settings.phone.replace(/[^\d+]/g, ""),
+  telephone: phoneDigits,
   email: settings.email,
   address: { "@type": "PostalAddress", streetAddress: tr(settings.address, lang), addressLocality: "Tashkent", addressCountry: "UZ" },
   areaServed: { "@type": "Country", name: "Uzbekistan" },
@@ -48,33 +53,37 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={HTML_LANG[lang]} data-theme="light">
+<html lang={LANG_META[lang].htmlLang} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <script is:inline define:vars={{ lang, altPaths }}>
-      (function () {
-        var theme = null;
-        var stored = null;
-        try {
-          theme = localStorage.getItem("pd-theme");
-          stored = localStorage.getItem("pd-lang");
-        } catch (e) {}
-        if (theme !== "light" && theme !== "dark") theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        document.documentElement.dataset.theme = theme;
-        if (!window.__pdBooted && stored && stored !== lang && altPaths[stored] && location.hash === "") {
-          window.__pdBooted = true;
-          location.replace(altPaths[stored]);
-        }
-        window.__pdBooted = true;
-      })();
+    <script is:inline define:vars={{ lang, altPaths, indexable, themeKey: THEME_KEY, langKey: LANG_KEY }}>
+      var theme = null;
+      var stored = null;
+      try {
+        theme = localStorage.getItem(themeKey);
+        stored = localStorage.getItem(langKey);
+      } catch (e) {}
+      if (theme !== "light" && theme !== "dark") theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
+      var target = stored && altPaths[stored];
+      var shouldRedirect = !window.__pdBooted && indexable && stored !== lang && target && target !== location.pathname && location.hash === "";
+      window.__pdBooted = true;
+      if (shouldRedirect) location.replace(target + location.search);
     </script>
     <title>{title}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex" />}
-    <link rel="canonical" href={canonical} />
-    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
-    <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+    {
+      indexable ? (
+        <>
+          <link rel="canonical" href={canonical} />
+          {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+          <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+        </>
+      ) : (
+        <meta name="robots" content="noindex" />
+      )
+    }
     <meta name="theme-color" content="#EFF1F5" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0E1A2B" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href={asset("favicon.svg")} type="image/svg+xml" />
@@ -86,9 +95,9 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:locale" content={OG_LOCALE[lang]} />
+    <meta property="og:locale" content={LANG_META[lang].ogLocale} />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" set:html={jsonForScript(jsonLd)} />
     <ClientRouter />
   </head>
   <body>

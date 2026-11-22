@@ -1,51 +1,72 @@
 import { parse, YAMLParseError } from "yaml";
 import { z } from "zod";
-import { CONTENT_FILES, LANGS, createSchemas } from "./schema.ts";
-import type { ContentKey, SchemaContext, SiteContent } from "./schema.ts";
+import { CONTENT_FILES, CONTENT_KEYS, DEFAULT_LANG, LANGS, LANG_META, TEXT_TOKENS, createSchemas, isLang, isLocalizedText } from "./schema.ts";
+import type { ContentKey, FieldMeta, SchemaContext, SiteContent } from "./schema.ts";
 
-export interface ContentProblem {
+export interface ContentIssue {
   file: string;
   where: string;
   message: string;
+  detail?: string;
 }
 
-export interface ContentWarning {
-  file: string;
-  where: string;
-  message: string;
+export type ValidationResult =
+  | { ok: true; data: SiteContent; warnings: ContentIssue[] }
+  | { ok: false; problems: ContentIssue[]; warnings: ContentIssue[] };
+
+export interface ValidateOptions {
+  strict?: boolean;
 }
 
-export interface ValidationResult {
-  data?: SiteContent;
-  problems: ContentProblem[];
-  warnings: ContentWarning[];
-}
-
-type JsonNode = {
-  label?: string;
-  itemLabel?: string;
-  i18n?: boolean;
-  properties?: Record<string, JsonNode>;
-  items?: JsonNode;
-  [key: string]: unknown;
+export type SchemaNode = Partial<FieldMeta> & {
+  type?: string | string[];
+  enum?: string[];
+  default?: unknown;
+  properties?: Record<string, SchemaNode>;
+  items?: SchemaNode;
+  minLength?: number;
+  maxLength?: number;
+  minItems?: number;
+  maxItems?: number;
+  minimum?: number;
+  maximum?: number;
 };
 
-const PLACEHOLDER_MARKERS: { test: RegExp; message: string }[] = [
-  { test: /000-00-00|998000000000/, message: "номер телефона — заглушка" },
-  { test: /zaglushka/i, message: "ссылка или имя — заглушка" },
-  { test: /Имя Фамилия|Ism Familiya|Full Name/, message: "имя юриста — заглушка" },
-  { test: /Примерная|Namuna ko|Primernaya|Sample St/i, message: "адрес — заглушка" },
-  { test: /ООО «Пример»|«Namuna» MChJ|Primer LLC/, message: "отзыв — заглушка" },
-  { test: /^Логотип \d+$|^Logo \d+$/, message: "логотип клиента — заглушка" },
-  { test: /info@pravoedelo\.uz/, message: "email — заглушка" },
+interface Marker {
+  test: RegExp;
+  message: string;
+  contact: boolean;
+}
+
+const PLACEHOLDER_MARKERS: Marker[] = [
+  { test: /000-00-00|998000000000/, message: "номер телефона — заглушка", contact: true },
+  { test: /zaglushka/i, message: "ссылка или имя — заглушка", contact: true },
+  { test: /Имя Фамилия|Ism Familiya|Full Name/, message: "имя юриста — заглушка", contact: false },
+  { test: /Примерная|Namuna ko|Sample St/i, message: "адрес — заглушка", contact: true },
+  { test: /ООО «Пример»|«Namuna» MChJ|Primer LLC/, message: "отзыв — заглушка", contact: false },
+  { test: /^Логотип \d+$|^Logo \d+$/, message: "логотип клиента — заглушка", contact: false },
 ];
 
-export function jsonSchemas(): Record<ContentKey, JsonNode> {
-  const schemas = createSchemas({ imageExists: () => true });
-  const out = {} as Record<ContentKey, JsonNode>;
-  for (const key of Object.keys(schemas) as ContentKey[]) {
-    out[key] = z.toJSONSchema(schemas[key], { io: "input", unrepresentable: "any" }) as JsonNode;
+const YAML_REASONS: Record<string, string> = {
+  DUPLICATE_KEY: "одно и то же поле указано дважды",
+  TAB_AS_INDENT: "для отступов использованы табуляции вместо пробелов",
+  BAD_INDENT: "нарушены отступы",
+  MULTIPLE_DOCS: "в файле несколько документов (строка ---)",
+};
+
+const TOKEN_PATTERN = /\{([^{}]*)\}/g;
+const RU_PLURAL = new Intl.PluralRules("ru");
+
+let cachedJsonSchemas: Record<ContentKey, SchemaNode> | undefined;
+
+export function jsonSchemas(): Record<ContentKey, SchemaNode> {
+  if (cachedJsonSchemas) return cachedJsonSchemas;
+  const schemas = createSchemas({ uploadStatus: () => "ok" });
+  const out = {} as Record<ContentKey, SchemaNode>;
+  for (const key of CONTENT_KEYS) {
+    out[key] = z.toJSONSchema(schemas[key], { io: "input", unrepresentable: "any" }) as SchemaNode;
   }
+  cachedJsonSchemas = out;
   return out;
 }
 
@@ -58,16 +79,14 @@ function getAt(data: unknown, path: PropertyKey[]): unknown {
   return cur;
 }
 
-function itemSummary(item: unknown): string {
-  if (!item || typeof item !== "object") return typeof item === "string" ? item : "";
-  const record = item as Record<string, unknown>;
-  if (typeof record.ru === "string") return record.ru;
-  for (const key of ["title", "name", "question", "label", "value", "category", "text", "network"]) {
-    const v = record[key];
-    if (typeof v === "string" && v) return v;
-    if (v && typeof v === "object" && typeof (v as Record<string, unknown>).ru === "string") return (v as Record<string, string>).ru;
-  }
-  return "";
+export function renderSummary(template: string, item: unknown, index: number): string {
+  return template
+    .replace(/\{index\}/g, String(index + 1))
+    .replace(/\{(?:fields\.)?([\w.]+)\}/g, (_m, path: string) => {
+      const value = getAt(item, path.split("."));
+      return typeof value === "string" || typeof value === "number" ? String(value) : "";
+    })
+    .trim();
 }
 
 function shorten(s: string, n = 40): string {
@@ -75,9 +94,9 @@ function shorten(s: string, n = 40): string {
   return one.length > n ? `${one.slice(0, n - 1)}…` : one;
 }
 
-export function describePath(key: ContentKey, path: PropertyKey[], schema: JsonNode, data: unknown): string {
-  const parts = [CONTENT_FILES[key].label];
-  let node: JsonNode | undefined = schema;
+function describePath(key: ContentKey, path: PropertyKey[], schema: SchemaNode, data: unknown): string {
+  const parts: string[] = [CONTENT_FILES[key].label];
+  let node: SchemaNode | undefined = schema;
   for (let i = 0; i < path.length; i++) {
     const seg = path[i];
     if (!node) {
@@ -85,16 +104,20 @@ export function describePath(key: ContentKey, path: PropertyKey[], schema: JsonN
       continue;
     }
     if (typeof seg === "number") {
-      const summary = shorten(itemSummary(getAt(data, path.slice(0, i + 1))));
+      const summary = node.summary ? shorten(renderSummary(node.summary, getAt(data, path.slice(0, i + 1)), seg)) : "";
       parts.push(`${node.itemLabel ?? "Элемент"} №${seg + 1}${summary ? ` «${summary}»` : ""}`);
       node = node.items;
     } else {
-      const child: JsonNode | undefined = node.properties?.[String(seg)];
-      parts.push(child?.label ?? String(seg));
+      const child: SchemaNode | undefined = node.properties?.[String(seg)];
+      parts.push(child?.label ?? (isLang(seg) ? `${LANG_META[seg].short} · ${LANG_META[seg].name}` : String(seg)));
       node = child;
     }
   }
   return parts.join(" → ");
+}
+
+function quoted(value: unknown): string {
+  return typeof value === "string" ? `«${shorten(value, 30)}»` : String(value);
 }
 
 function describeIssue(issue: z.core.$ZodIssue, value: unknown): string {
@@ -109,18 +132,22 @@ function describeIssue(issue: z.core.$ZodIssue, value: unknown): string {
       return `число должно быть не больше ${issue.maximum}`;
     case "invalid_type":
       if (value === undefined || value === null) return "поле не заполнено";
+      if (issue.expected === "int") return "здесь нужно целое число, без дробной части";
       if (issue.expected === "number") return "здесь нужно число";
       if (issue.expected === "boolean") return "здесь нужен переключатель «да / нет»";
+      if (issue.expected === "string") return "здесь нужен текст — возьмите значение в кавычки";
       if (issue.expected === "array") return "здесь нужен список";
       if (issue.expected === "object") return "неверная структура — верните поле к прежнему виду";
       return "неверный формат значения";
     case "invalid_value":
-      return "выберите вариант из списка";
+      return `${quoted(value)} — такого варианта нет, выберите из списка`;
+    case "unrecognized_keys":
+      return `лишнее поле ${issue.keys.map((k) => `«${k}»`).join(", ")} — сайт его не знает. Если это опечатка, исправьте название, иначе удалите`;
     case "custom":
     case "invalid_format":
       return issue.message;
     default:
-      return issue.message;
+      return `неожиданная ошибка проверки (${issue.code}) — отправьте ссылку на этот отчёт разработчику`;
   }
 }
 
@@ -130,73 +157,98 @@ function collectStrings(value: unknown, path: PropertyKey[], out: { path: Proper
   else if (value && typeof value === "object") for (const [k, v] of Object.entries(value)) collectStrings(v, [...path, k], out);
 }
 
-function collectMissingTranslations(value: unknown, path: PropertyKey[], out: Record<string, number>) {
-  if (Array.isArray(value)) value.forEach((v, i) => collectMissingTranslations(v, [...path, i], out));
-  else if (value && typeof value === "object") {
-    const rec = value as Record<string, unknown>;
-    if (typeof rec.ru === "string" && "uz" in rec && "en" in rec) {
-      if (rec.ru) for (const lang of LANGS.slice(1)) if (!rec[lang]) out[lang] = (out[lang] ?? 0) + 1;
-      return;
-    }
-    for (const [k, v] of Object.entries(rec)) collectMissingTranslations(v, [...path, k], out);
-  }
+function countMissingTranslations(value: unknown, out: Record<string, number>) {
+  if (Array.isArray(value)) value.forEach((v) => countMissingTranslations(v, out));
+  else if (isLocalizedText(value)) {
+    if (value[DEFAULT_LANG]) for (const lang of LANGS) if (lang !== DEFAULT_LANG && !value[lang]) out[lang] = (out[lang] ?? 0) + 1;
+  } else if (value && typeof value === "object") for (const v of Object.values(value)) countMissingTranslations(v, out);
 }
 
-export function validateContent(raw: Partial<Record<ContentKey, string>>, ctx: SchemaContext): ValidationResult {
+function fieldWord(count: number): string {
+  return RU_PLURAL.select(count) === "one" ? "поле" : "полях";
+}
+
+function withoutLangSegment(path: PropertyKey[]): PropertyKey[] {
+  return isLang(path[path.length - 1]) ? path.slice(0, -1) : path;
+}
+
+export function validateContent(raw: Partial<Record<ContentKey, string>>, ctx: SchemaContext, options: ValidateOptions = {}): ValidationResult {
   const schemas = createSchemas(ctx);
-  const json = jsonSchemas();
-  const problems: ContentProblem[] = [];
-  const warnings: ContentWarning[] = [];
+  const problems: ContentIssue[] = [];
+  const warnings: ContentIssue[] = [];
   const data = {} as Record<ContentKey, unknown>;
 
-  for (const key of Object.keys(CONTENT_FILES) as ContentKey[]) {
+  for (const key of CONTENT_KEYS) {
     const { file, label } = CONTENT_FILES[key];
     const source = raw[key];
     if (source === undefined) {
       problems.push({ file, where: label, message: `файл src/content/${file} не найден` });
       continue;
     }
+
     let parsed: unknown;
     try {
       parsed = parse(source, { prettyErrors: true });
     } catch (error) {
-      const line = error instanceof YAMLParseError && error.linePos ? `, строка ${error.linePos[0].line}` : "";
-      problems.push({ file, where: `${label} (файл ${file}${line})`, message: "файл повреждён: нарушен формат YAML. Откатите последнюю правку этого файла в истории репозитория" });
+      const yamlError = error instanceof YAMLParseError ? error : null;
+      const line = yamlError?.linePos ? `, строка ${yamlError.linePos[0].line}` : "";
+      const reason = (yamlError && YAML_REASONS[yamlError.code]) || "нарушен формат YAML";
+      problems.push({
+        file,
+        where: `${label} (файл ${file}${line})`,
+        message: `файл повреждён: ${reason}. Откатите последнюю правку этого файла в истории репозитория`,
+        detail: error instanceof Error ? error.message : String(error),
+      });
       continue;
     }
-    const result = schemas[key].safeParse(parsed ?? {}, { reportInput: true });
+
+    if (parsed === null || parsed === undefined) {
+      problems.push({ file, where: `${label} (файл ${file})`, message: "файл пустой — верните предыдущую версию из истории репозитория" });
+      continue;
+    }
+
+    const result = schemas[key].safeParse(parsed, { reportInput: true });
     if (!result.success) {
+      const json = jsonSchemas()[key];
       for (const issue of result.error.issues) {
-        problems.push({ file, where: describePath(key, issue.path, json[key], parsed), message: describeIssue(issue, getAt(parsed, issue.path)) });
+        problems.push({ file, where: describePath(key, issue.path, json, parsed), message: describeIssue(issue, issue.input ?? getAt(parsed, issue.path)), detail: issue.message });
       }
       continue;
     }
     data[key] = result.data;
 
+    const json = jsonSchemas()[key];
     const strings: { path: PropertyKey[]; value: string }[] = [];
     collectStrings(result.data, [], strings);
     const seen = new Set<string>();
     for (const { path, value } of strings) {
+      for (const match of value.matchAll(TOKEN_PATTERN)) {
+        if (!(TEXT_TOKENS as readonly string[]).includes(match[1])) {
+          problems.push({ file, where: describePath(key, path, json, result.data), message: `неизвестная вставка {${match[1]}} — можно использовать только ${TEXT_TOKENS.map((t) => `{${t}}`).join(" и ")}` });
+        }
+      }
       const marker = PLACEHOLDER_MARKERS.find((m) => m.test.test(value));
       if (!marker) continue;
-      const last = path[path.length - 1];
-      const fieldPath = typeof last === "string" && (LANGS as readonly string[]).includes(last) ? path.slice(0, -1) : path;
-      const where = describePath(key, fieldPath, json[key], result.data);
+      const where = describePath(key, withoutLangSegment(path), json, result.data);
       if (seen.has(where)) continue;
       seen.add(where);
-      warnings.push({ file, where, message: marker.message });
+      const issue = { file, where, message: marker.message };
+      if (options.strict && marker.contact) problems.push({ ...issue, message: `${marker.message} — перед запуском сайта замените на настоящие данные` });
+      else warnings.push(issue);
     }
+
     const missing: Record<string, number> = {};
-    collectMissingTranslations(result.data, [], missing);
+    countMissingTranslations(result.data, missing);
     for (const [lang, count] of Object.entries(missing)) {
-      const fields = count % 10 === 1 && count % 100 !== 11 ? "поле" : "полях";
-      warnings.push({ file, where: label, message: `нет перевода ${lang.toUpperCase()} в ${count} ${fields} — на сайте там будет показан русский текст` });
+      const short = isLang(lang) ? LANG_META[lang].short : lang.toUpperCase();
+      warnings.push({ file, where: label, message: `нет перевода ${short} в ${count} ${fieldWord(count)} — на сайте там будет показан русский текст` });
     }
   }
 
-  return { data: problems.length ? undefined : (data as SiteContent), problems, warnings };
+  if (problems.length) return { ok: false, problems, warnings };
+  return { ok: true, data: data as SiteContent, warnings };
 }
 
-export function formatProblems(problems: ContentProblem[]): string {
-  return problems.map((p) => `• ${p.where}: ${p.message}`).join("\n");
+export function formatIssues(issues: ContentIssue[]): string {
+  return issues.map((p) => `• ${p.where}: ${p.message}`).join("\n");
 }

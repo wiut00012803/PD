@@ -1,5 +1,6 @@
 import { mkdirSync } from "node:fs";
 import { chromium } from "playwright";
+import { LANG_KEY, THEME_KEY } from "../src/lib/storage-keys.ts";
 
 const BASE = process.env.SHOTS_URL ?? "http://localhost:4321/PD/";
 const OUT = process.env.SHOTS_DIR ?? "screenshots";
@@ -33,12 +34,13 @@ for (const width of widths) {
       hasTouch: width <= 820,
       isMobile: width < 600,
     });
-    await context.addInitScript((t) => {
-      try {
-        localStorage.setItem("pd-theme", t);
-        localStorage.removeItem("pd-lang");
-      } catch {}
-    }, theme);
+    await context.addInitScript(
+      ({ t, themeKey, langKey }) => {
+        localStorage.setItem(themeKey, t);
+        localStorage.removeItem(langKey);
+      },
+      { t: theme, themeKey: THEME_KEY, langKey: LANG_KEY },
+    );
     const page = await context.newPage();
     for (const lang of langs) {
       for (const p of pages) {

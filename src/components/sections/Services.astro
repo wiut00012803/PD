@@ -1,25 +1,28 @@
 ---
 import Icon from "../ui/Icon.astro";
 import Btn from "../ui/Btn.astro";
+import Dialog from "../ui/Dialog.astro";
 import SectionTitle from "../ui/SectionTitle.astro";
 import { tr, url } from "../../lib/i18n.ts";
 import type { Lang } from "../../lib/i18n.ts";
 import { getContent } from "../../lib/content.ts";
+import { sectionVisibility } from "../../lib/nav.ts";
 
 interface Props {
   lang: Lang;
 }
 
 const { lang } = Astro.props;
-const { services, ui } = getContent();
-const dialogId = (i: number) => `practice-${i + 1}`;
+const { services, ui, home } = getContent();
+const ctaLabel = tr(home.hero.button, lang);
+const practices = services.practices.map((p, i) => ({ ...p, dialog: `practice-${i + 1}` }));
 ---
 
 {
-  services.enabled && (
-    <section class="section services" id="services" aria-labelledby="services-title">
+  sectionVisibility().services && (
+    <section class="section" id="services" aria-labelledby="services-title">
       <div class="container">
-        <SectionTitle id="services-title" overline={tr(services.overline, lang)} title={tr(services.title, lang)} subtitle={tr(services.subtitle, lang)} />
+        <SectionTitle id="services-title" lang={lang} head={services} />
 
         {services.general.items.length > 0 && (
           <div class="general glass">
@@ -36,22 +39,23 @@ const dialogId = (i: number) => `practice-${i + 1}`;
         )}
 
         <ul class="practices">
-          {services.practices.map((p, i) => (
+          {practices.map((p) => (
             <li class="practice glass card card--hover">
               <span class="icon-box">
                 <Icon name={p.icon} />
               </span>
               <h3 class="t-h4 practice__title">{tr(p.title, lang)}</h3>
-              <p class="t-body-s c-secondary practice__desc">{tr(p.description, lang)}</p>
+              <p class="t-body-s t-pre c-secondary practice__desc">{tr(p.description, lang)}</p>
               <p class="t-body-s c-secondary practice__short">{tr(p.short, lang)}</p>
               {p.items.length > 0 && (
-                <button type="button" class="btn btn--ghost btn--s practice__more" data-dialog-open={dialogId(i)} aria-haspopup="dialog">
-                  <span>{tr(ui.buttons.more, lang)}</span>
-                  <Icon name="arrow-right" />
-                </button>
+                <>
+                  <Btn variant="ghost" size="s" class="practice__more" data-dialog-open={p.dialog} aria-haspopup="dialog">
+                    {tr(ui.buttons.more, lang)}
+                  </Btn>
+                  <button type="button" class="practice__hit" data-dialog-open={p.dialog} aria-label={`${tr(p.title, lang)} — ${tr(ui.buttons.more, lang)}`} />
+                  <Icon name="arrow-right" class="practice__arrow" />
+                </>
               )}
-              {p.items.length > 0 && <button type="button" class="practice__hit" data-dialog-open={dialogId(i)} aria-label={`${tr(p.title, lang)} — ${tr(ui.buttons.more, lang)}`} />}
-              <Icon name="arrow-right" class="practice__arrow" />
             </li>
           ))}
         </ul>
@@ -59,43 +63,42 @@ const dialogId = (i: number) => `practice-${i + 1}`;
         <div class="services-cta glass-strong">
           <div class="services-cta__text">
             <h3 class="t-h4">{tr(services.cta.title, lang)}</h3>
-            <p class="t-body-m c-secondary">{tr(services.cta.text, lang)}</p>
+            <p class="t-body-m t-pre c-secondary">{tr(services.cta.text, lang)}</p>
           </div>
-          <Btn href={url(lang, "consultation")}>{tr(getContent().home.hero.button, lang)}</Btn>
+          <Btn href={url(lang, "consultation")}>{ctaLabel}</Btn>
         </div>
       </div>
 
-      {services.practices.map((p, i) => (
-        <dialog class="dialog" id={dialogId(i)} aria-labelledby={`${dialogId(i)}-title`}>
-          <div class="dialog__head">
-            <span class="icon-box">
+      {practices
+        .filter((p) => p.items.length > 0)
+        .map((p) => (
+          <Dialog id={p.dialog} closeLabel={tr(ui.buttons.close, lang)}>
+            <span class="icon-box" slot="head">
               <Icon name={p.icon} />
             </span>
-            <h3 class="t-h3" id={`${dialogId(i)}-title`}>{tr(p.title, lang)}</h3>
-            <button type="button" class="round-btn round-btn--touch" data-dialog-close aria-label={tr(ui.buttons.close, lang)}>
-              <Icon name="x" />
-            </button>
-          </div>
-          <div class="dialog__body">
-            <p class="t-body-m c-secondary">{tr(p.description, lang)}</p>
+            <h3 class="t-h3" id={`${p.dialog}-title`} slot="head">
+              {tr(p.title, lang)}
+            </h3>
+            <p class="t-body-m t-pre c-secondary">{tr(p.description, lang)}</p>
             <p class="t-overline practice-list__title">{tr(ui.labels.practiceList, lang)}</p>
             <ul class="practice-list">
               {p.items.map((item) => (
                 <li class="t-body-m">
-                  <span class="practice-list__dot">
+                  <span class="icon-round icon-round--subtle practice-list__dot">
                     <Icon name="check" size={14} />
                   </span>
                   <span>{tr(item, lang)}</span>
                 </li>
               ))}
             </ul>
-          </div>
-          <div class="dialog__foot">
-            <p class="t-body-s c-secondary">{tr(ui.labels.dialogCta, lang)}</p>
-            <Btn href={url(lang, "consultation")} data-dialog-close>{tr(getContent().home.hero.button, lang)}</Btn>
-          </div>
-        </dialog>
-      ))}
+            <Fragment slot="foot">
+              <p class="t-body-s c-secondary">{tr(ui.labels.dialogCta, lang)}</p>
+              <Btn href={url(lang, "consultation")} data-dialog-close>
+                {ctaLabel}
+              </Btn>
+            </Fragment>
+          </Dialog>
+        ))}
     </section>
   )
 }
@@ -159,7 +162,7 @@ const dialogId = (i: number) => `practice-${i + 1}`;
   }
 
   .practice__desc,
-  .practice__more {
+  .practice :global(.practice__more) {
     display: none;
   }
 
@@ -215,15 +218,8 @@ const dialogId = (i: number) => `practice-${i + 1}`;
   }
 
   .practice-list__dot {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 24px;
-    height: 24px;
+    --round-size: 24px;
     margin-top: 1px;
-    border-radius: 50%;
-    background: var(--color-bg-accent-subtle);
-    color: var(--color-icon-accent);
   }
 
   @media (min-width: 600px) {
@@ -269,12 +265,12 @@ const dialogId = (i: number) => `practice-${i + 1}`;
       display: none;
     }
 
-    .practice__more {
+    .practice :global(.practice__more) {
       display: inline-flex;
       margin-top: auto;
     }
 
-    .practice__more::after {
+    .practice :global(.practice__more)::after {
       content: "";
       position: absolute;
       inset: 0;
